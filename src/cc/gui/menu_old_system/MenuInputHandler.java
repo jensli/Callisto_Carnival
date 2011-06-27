@@ -1,16 +1,16 @@
-package cc.gui.menu;
+package cc.gui.menu_old_system;
 
 import org.lwjgl.input.Keyboard;
 
 public class MenuInputHandler
 {
 	Menu menu;
-	
+
 	public MenuInputHandler( Menu menu )
     {
 		this.menu = menu;
     }
-	
+
 	public void update()
 	{
 		while ( Keyboard.next() ) {
@@ -20,7 +20,7 @@ public class MenuInputHandler
 			}
 			// Do menu action depending on key
 			switch ( Keyboard.getEventKey() ) {
-				
+
 				case Keyboard.KEY_UP:
 					menu.selectUp();
 					break;
@@ -36,7 +36,7 @@ public class MenuInputHandler
 				case Keyboard.KEY_SPACE:
 					menu.spacePress();
 					break;
-				
+
 				default:
 					// Check if this was a normal printable char, then send it to the menu.
 					char ch = Keyboard.getEventCharacter();
@@ -46,5 +46,5 @@ public class MenuInputHandler
 			}
 		}
 	}
-	
+
 }

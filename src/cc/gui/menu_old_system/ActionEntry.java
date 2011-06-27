@@ -1,4 +1,4 @@
-package cc.gui.menu;
+package cc.gui.menu_old_system;
 
 public class ActionEntry extends MenuEntry
 {
@@ -9,9 +9,9 @@ public class ActionEntry extends MenuEntry
     }
 
 	@Override
-    public void select() 
+    public void select()
 	{
 		listener.informChange( null );
     }
-	
+
 }

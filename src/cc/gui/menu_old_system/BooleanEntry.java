@@ -1,9 +1,9 @@
-package cc.gui.menu;
+package cc.gui.menu_old_system;
 
 public class BooleanEntry extends MenuEntry
 {
 	private boolean value = false;
-	
+
 	public BooleanEntry( String text )
     {
 	    super( text );
@@ -26,7 +26,7 @@ public class BooleanEntry extends MenuEntry
 	protected void setValue( boolean value ) {
     	this.value = value;
     }
-	
-	
-	
+
+
+
 }

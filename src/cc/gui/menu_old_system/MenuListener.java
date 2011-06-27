@@ -1,4 +1,4 @@
-package cc.gui.menu;
+package cc.gui.menu_old_system;
 
 public interface MenuListener
 {

@@ -1,4 +1,4 @@
-package cc.gui.menu;
+package cc.gui.menu_old_system;
 
 import java.util.regex.Pattern;
 
@@ -8,8 +8,8 @@ public class InputEntry extends MenuEntry
 	private String value = "";
 	private boolean isEditing = false;
 	private MenuListener listener2;
-	
-	
+
+
 	public InputEntry( String text )
     {
 	    super( text );
@@ -29,16 +29,16 @@ public class InputEntry extends MenuEntry
     }
 
 	@Override
-    public void spacePress() 
+    public void spacePress()
 	{
 		// TODO
     }
-	
+
 	private boolean isValidInput()
 	{
 		return true;
 	}
-	
+
 	public void setValidRegex( String validRegex ) {
 		validPattern = Pattern.compile( validRegex );
 	}
@@ -55,5 +55,5 @@ public class InputEntry extends MenuEntry
     }
 
 
-	
+
 }

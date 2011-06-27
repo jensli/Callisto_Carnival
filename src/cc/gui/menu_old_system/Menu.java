@@ -1,4 +1,4 @@
-package cc.gui.menu;
+package cc.gui.menu_old_system;
 
 
 import java.util.ArrayList;
@@ -16,46 +16,46 @@ import cc.util.math.Vec;
 public class Menu
 {
 	private List<MenuEntry> entryList = new ArrayList<MenuEntry>();
-	
+
 	private Vec pos;
 	private String title;
 	private MenuSettings settings = new MenuSettings();
-	
+
 	private int activeIndex = 0;
-	
+
 	enum Key {
-		ENTER, BACKSPACE, ESC, SPACE 
+		ENTER, BACKSPACE, ESC, SPACE
 	}
 //	public double rowHeight = 0.02,
 //		width = 0.3;
-	
+
 	public Menu( String title )
     {
 	    super();
 	    this.title = title;
     }
 
-	public void update( double dT ) 
+	public void update( double dT )
 	{
 		for ( MenuEntry entry : entryList ) {
 			entry.update( dT );
 		}
 	}
-	
-	public void draw() 
+
+	public void draw()
 	{
 		GL11.glPushMatrix();
 		Graphics.get().enterOrthoProjection();
-		
+
 		GL11.glTranslated( pos.x, pos.y, 0 );
-		
+
 		GL11.glScalef( settings.size, settings.size, settings.size );
-		
+
 		GL11.glColor3d( 0.4, 1, 1 );
 		settings.font.drawString( title, 0, 0 );
 
 		GL11.glTranslated( 0.01, -settings.rowHeight*1.2, 0 );
-		
+
 		ListIterator<MenuEntry> itr = entryList.listIterator();
 		while ( itr.hasNext() ) {
 			MenuEntry entry = itr.next();
@@ -70,7 +70,7 @@ public class Menu
 
 			GL11.glTranslated( 0, -settings.rowHeight, 0 );
 		}
-		
+
 		Graphics.get().leaveOrthoProjection();
 		GL11.glPopMatrix();
 	}
@@ -94,20 +94,20 @@ public class Menu
     {
     	this.activeIndex = activeIndex;
     }
-	
+
 	public void selectUp() {
 		activeIndex = ( activeIndex + entryList.size() - 1 ) % entryList.size();
 	}
 	public void selectDown() {
 		activeIndex = ( activeIndex + 1 ) % entryList.size();
 	}
-	
-	
+
+
 //		activeIndex++;
 //		if ( activeIndex >= entryList.size() ) {
 //			activeIndex = 0;
 //		}
-	
+
 //		activeIndex--;
 //		if ( activeIndex < 0 ) {
 //			activeIndex = entryList.size() - 1;
@@ -115,7 +115,7 @@ public class Menu
 	public MenuEntry getActive() {
 		return entryList.get( activeIndex );
 	}
-	
+
 	public void goBack()
 	{}
 	public void select() {
@@ -133,9 +133,9 @@ public class Menu
 	public void spacePress() {
 		getActive().spacePress();
 	}
-	
-	
-	public void addEntry( MenuEntry entry ) 
+
+
+	public void addEntry( MenuEntry entry )
 	{
 		entry.setSettings( settings );
 		entryList.add( entry );
@@ -144,7 +144,7 @@ public class Menu
 	protected void setPos( Vec pos ) {
     	this.pos = pos;
     }
-	
+
 }
-	
+
 

@@ -1,4 +1,4 @@
-package cc.gui.menu;
+package cc.gui.menu_old_system;
 
 
 public abstract class MenuEntry
@@ -6,16 +6,16 @@ public abstract class MenuEntry
 	private String titel;
 	protected MenuListener listener;
 	protected MenuSettings settings;
-	
+
 	MenuEntry( String text ) {
 		this.titel = text;
 	}
-	
-	public void draw() 
+
+	public void draw()
 	{
 		settings.font.drawString( titel, 0, 0 );
 	}
-	
+
 	public void update( double dT ) {}
 	public void charInput( char ch ) {}
 	public void backspacePress() {}
@@ -36,5 +36,5 @@ public abstract class MenuEntry
 	public void spacePress() {
 		this.select();
 	}
-	
+
 }
