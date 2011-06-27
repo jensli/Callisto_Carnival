@@ -14,12 +14,12 @@ public class StationBehavior extends Behavior
 //	private Ship collider = null;
 	private boolean hasCollided = false;
 //	private double realRadius;
-	
+
 	private List<GameObject> dockedObjectList = new LinkedList<GameObject>();
 
 	private static Behavior.Type type  = Behavior.Type.STATION;
 	private double dockSpeed = 500.0;
-	
+
 
 	public StationBehavior( double realRadius )
     {
@@ -29,46 +29,46 @@ public class StationBehavior extends Behavior
 	@Override
 	public void perform( GameObject controlled, double dT )
 	{
-		
+
 //		if ( !this.hasCollided() ) {
 //			return;
 //		}
 //		this.clearCollider();
-//		
+//
 //		if ( this.collider.getPhysicalModel().getMass() < 1.0 ) {
 //			return;
 //		}
-//		
-//		Vector2d 
+//
+//		Vector2d
 ////			contPos = controlled.getPosition(),
 ////			colPos = collider.getPosition(),
 //			dVel = new Vector2d();
-//		
+//
 //		dVel.sub( controlled.getPhysicalModel().getVelocity(), collider.getPhysicalModel().getVelocity() );
-//		
+//
 //		if ( dVel.length() < 300 && !dockedObjectList.contains( collider ) ) {
-//			
+//
 //			dockedObjectList.add( collider );
-//			
+//
 ////			dPos.sub( collider.getPosition(), controlled.getPosition() );
 ////			collider.setVelocity( new Vector2d(0, 0) );
-////			
+////
 ////			collider.receiveEvent( new ThrustEvent(0, Event.SWITCH_OFF ) );
 ////			collider.setRotation( 0.0 );
-//			
-//			
+//
+//
 //			DockedBehavior db = new DockedBehavior();
 //			db.dock( (Ship) collider, (SpaceStation) controlled );
-//			
-//			
+//
+//
 ////			List<Behavior> list = new LinkedList<Behavior>();
 ////			list.add(  new DockedBehavior( ( Ship ) collider,
-////					controlled, dPos, 
+////					controlled, dPos,
 ////					this, collider.getForward() ) );
-////			
+////
 ////			collider.setBehaviorList( list );
-//		} 
-		
+//		}
+
 	}
 
 //	@Override
@@ -77,19 +77,19 @@ public class StationBehavior extends Behavior
 //		collider = event.getObject();
 //		hasCollided = true;
 //    }
-	
+
 	public void dock( Ship ship, GameObject me )
 	{
 		dockedObjectList.add( ship );
-		
+
 		DockedBehavior db = new DockedBehavior();
 		db.dock( ship, (SpaceStation) me );
 
-		
+
 //		collider = ship;
 //		hasCollided = true;
 	}
-	
+
 	public boolean isDocked( GameObject obj ) {
 		return dockedObjectList.contains( obj );
 	}
@@ -100,7 +100,7 @@ public class StationBehavior extends Behavior
 		hasCollided = false;
 	}
 
-	@Override 
+	@Override
 	public void receiveEvent( Event event ) {
 		event.dispatch( this );
 	}
@@ -112,11 +112,11 @@ public class StationBehavior extends Behavior
     public Behavior.Type getType() {
     	return type;
     }
-	
+
 	public double getDockSpeed() {
 		return dockSpeed;
 	}
-	
-	
-	
+
+
+
 }

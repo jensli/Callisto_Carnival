@@ -14,19 +14,19 @@ public abstract class Weapon
 	protected String name;
 	protected double ammo;
 	protected double maxAmmo = 100.0;
-	
+
 	public Weapon()
 	{
-		
+
 	}
-	
+
 	/**
 	 * Called each game loop
 	 * @param controlled TODO
 	 * @param dT
 	 */
 	public abstract void update( GameObject controlled, double dT );
-	
+
 	/**
 	 * Called when someone wants to fire the weapon. If this is allowed a projectile
 	 * is created.

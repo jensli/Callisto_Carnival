@@ -21,6 +21,6 @@ public class SoundEvent extends Event
     {
     	return type;
     }
-	
-	
+
+
 }

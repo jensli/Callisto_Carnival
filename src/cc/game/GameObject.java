@@ -15,7 +15,7 @@ import cc.util.math.Vec;
 
 public class GameObject extends EventReceiver implements Drawable
 {
-	public static final int 
+	public static final int
 		// Can't collide with anything
 		COLLIDE_GROUP_0 = 0,
 		// Can never collide with something in the same group, e.g. planets, moons
@@ -26,46 +26,46 @@ public class GameObject extends EventReceiver implements Drawable
 	private static int nextID = 1;
 
 	private String name;  // Name to identify the obj
-		
+
 	// Obj that contains pos, velocity, mass itd.
-	private PhysicalModel physicalModel = new PhysicalModel();  
-	
+	private PhysicalModel physicalModel = new PhysicalModel();
+
 	// Object that draws this object
 	private GraphicalModel graphicalModel;
-	
+
 	// Obj used to make actions to objects that collids with this.
 	private Collider collider;
-	
+
 	@SuppressWarnings( "unused" )
 	// TODO: Start using this?
     private Health health = new ShieldedHealth();
-	
+
 	// Behavior that decides how this obj moves
 	private Behavior movementBehavior = Behavior.getEmpty();
-	
+
 	private Behavior extraBehavior = Behavior.getEmpty();
-	
+
 	private ObjectCathegory cathegory = ObjectCathegory.DEFAULT;
-	
-	private int collideGroup = GameObject.COLLIDE_GROUP_2; 
-	
-	private double 
+
+	private int collideGroup = GameObject.COLLIDE_GROUP_2;
+
+	private double
 		life = 1.0,
 		maxLife = 100.0;
-	
+
 	private boolean
 		alive = true,
 		killable = true;
-	
+
 	private int	objectID;
-	
+
 
 	public GameObject( String name )
 	{
 		this.name = name;
 		objectID = GameObject.getNewID();
 	}
-	
+
 	public void addExtraBehavior( Behavior behavior )
 	{
 		extraBehavior = extraBehavior.makeGroupWith( behavior );
@@ -76,7 +76,7 @@ public class GameObject extends EventReceiver implements Drawable
 //		} else if ( !extraBehavior.isGroup()  ) {
 //			extraBehavior = new BehaviorGroup( extraBehavior );
 //		}
-//		
+//
 //		extraBehavior.add( behavior );
 	}
 
@@ -84,49 +84,49 @@ public class GameObject extends EventReceiver implements Drawable
 	{
 		graphicalModel = graphicalModel.makeGroupWith( model );
 	}
-	
+
 	public void update( double dT )
 	{
 		if ( life <= 0.0 ) {
 			EventHandler.get().postEvent( new KillEvent( this.getID() ) );
 		}
-		
+
 		movementBehavior.perform( this, dT );
 		extraBehavior.perform( this, dT );
 		physicalModel.update( this, dT );
 		graphicalModel.update( dT );
 	}
-	
+
 	protected void onCreate() {}
-	
+
 	protected void onDeath()
 	{
 		setAlive( false );
 	}
-	
+
 	@Override
     public void receiveEvent( Event event ) {
 		event.dispatch(  this );
 	}
-	
+
 	public void draw()
 	{
 		graphicalModel.draw( getPos(), getForward() );
 	}
-	
-	@Override 
+
+	@Override
 	public void receiveKillEvent( KillEvent event )
 	{
 		setAlive( false );
 	}
-	
-	@Override 
+
+	@Override
 	public void receiveCollisionEvent( CollisionEvent event )
 	{
 //		collider.collideMe( this, event.getObject() );
 		collide( event.getObject() );
 	}
-	
+
 	/**
 	 * This method should call a collideXXX method on the collider of the obj passed
 	 * in as other. That method should be called with 'this' pointer as 'other' argument,
@@ -136,7 +136,7 @@ public class GameObject extends EventReceiver implements Drawable
 	{
 		other.getCollider().collideDefault( this, other );
 	}
-	
+
 	private static int getNewID()
 	{
 		return nextID++;
@@ -148,12 +148,12 @@ public class GameObject extends EventReceiver implements Drawable
 		life += dL;
 		if ( life < 0.0 ) life = 0.0;
 	}
-	
+
 	public void changeLifeClamped( double dL )
 	{
 		life = Util.clamp( life + dL, 0, maxLife );
 	}
-	
+
 	/*
 	 * Getters and setters, absolutely no logic.
 	 */
@@ -180,7 +180,7 @@ public class GameObject extends EventReceiver implements Drawable
 	public ObjectCathegory getCathegory() { return cathegory; }
 	public void setCathegory( ObjectCathegory cathegory ) { this.cathegory = cathegory; }
 
-	
+
 	/**
 	 * Shortcuts to corresponding method in physicalModel
 	 */
@@ -193,6 +193,6 @@ public class GameObject extends EventReceiver implements Drawable
 	 * Shortcuts to corresponding method in physicalModel
 	 */
 	public final double getRadius() { return getPhysModel().getRadius(); }
-	
+
 }
 

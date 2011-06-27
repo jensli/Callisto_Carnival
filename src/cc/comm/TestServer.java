@@ -7,19 +7,19 @@ import cc.event.Event;
 
 
 public class TestServer {
-	
+
 	private ConnectionServer server;
 	// private TestClient app;
-	
+
 	private Event e1 = Event.make("thrust 0");
-	
+
 //	public static void main(String[] argc)
 //	{
 //		System.out.println("*** TEST SERVER");
 //		(new TestServer()).test();
 //		System.out.println("*** MAIN THREAD ENDING");
 //	}
-	
+
 	public void test()
 	{
 		try {
@@ -27,11 +27,11 @@ public class TestServer {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
+
 		ArrayList<Event> adsf = new ArrayList<Event>();
 		ArrayList<Event> rec = new ArrayList<Event>();
 		adsf.add(e1);
-		
+
 		while(true)
 		{
 
@@ -45,11 +45,11 @@ public class TestServer {
 			rec.addAll( server.receive() );
 			for(Event fitta:rec)
 				System.out.println("Servah: Event received: "+fitta.serialize());
-			
+
 //			System.out.println("Server: Sending an event");
 			server.send(rec);
 			rec.clear();
 		}
 	}
-	
+
 }

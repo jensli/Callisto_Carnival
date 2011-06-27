@@ -14,10 +14,10 @@ public class Name
 		SETTINGS_FILE = "Game.ini",
 		LAST_IP = "last_ip"
 		;
-	
+
 	public static List<String> images = new ArrayList<String>();
-	
-	public static final String 
+
+	public static final String
 		FOLDER = "res/",
 		PIC_TYPE1 = ".png",
 	//	SHIP_YELLOW = makeImageName( "ship_yellow" ),
@@ -61,8 +61,8 @@ public class Name
 		if ( save ) images.add( filename );
 		return filename;
 	}
-	
-//	public static final String 
+
+//	public static final String
 //	FOLDER = "res/",
 //	PIC_TYPE1 = ".png",
 ////	SHIP_YELLOW = makeImageName( "ship_yellow" ),
@@ -94,9 +94,9 @@ public class Name
 //	STATION2 = FOLDER + "newconstantinople" + PIC_TYPE1,
 //	SPLASH = FOLDER + "splash_screen" + PIC_TYPE1;
 
-	
-		
-		
+
+
+
 	public static final String
 		FOLDER2 = "res/",
 		SND_TYPE1 = ".ogg",
@@ -104,5 +104,5 @@ public class Name
 		LARGE_EXPLOSION_SOUND = FOLDER2 + "explosion1" + SND_TYPE1,
 		SMALL_EXPLOSION_SOUND = FOLDER2 + "hit" + SND_TYPE1;
 
-	
+
 }

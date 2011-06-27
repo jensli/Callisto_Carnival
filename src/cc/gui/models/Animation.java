@@ -16,31 +16,31 @@ import cc.util.Texture;
 public class Animation extends TextureSquare
 {
 	private List<Texture> imageList = new ArrayList<Texture>();
-	
+
 	public static final int NO_REPEAT = 0, REPEAT = 1, BACK_AND_FORTH = 2;
-	
+
 	private int repeatStyle = NO_REPEAT;
 	private boolean dirForward = true;  // for BACK_AND_FORTH
-	
+
 	private int currentImage = 0;
 	private double changeTime,
 		timeToChange;
-	
-	
+
+
 	public Animation( GameObject object, List<Texture> imageList, double lifeTime )
 	{
 		super( object,  imageList.get( 0 ));
-		
+
 		if ( imageList.size() < 2 ) {
 			throw new RuntimeException("Cant have animation with less than 2 images.");
 		}
-		
+
 		this.imageList = imageList;
 		this.changeTime = lifeTime / imageList.size();
 		timeToChange = changeTime;
 		currentImage = 1;
 	}
-	
+
 	@Override
     public void update( double dT )
     {
@@ -49,7 +49,7 @@ public class Animation extends TextureSquare
 		if ( timeToChange > 0.0 ) {
 			return;
 		}
-		
+
 		timeToChange += changeTime;
 
 		// Bläää, ugly!
@@ -84,7 +84,7 @@ public class Animation extends TextureSquare
 				}
 				break;
 		}
-		
+
 		super.setTexture( imageList.get( currentImage ) );
     }
 
@@ -98,6 +98,6 @@ public class Animation extends TextureSquare
     {
     	this.repeatStyle = repeatStyle;
     }
-	
-	
+
+
 }

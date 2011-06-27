@@ -4,7 +4,7 @@ import cc.game.GameObject;
 
 /**
  * Makes the SpaceObject float freely in space, affected by gravity.
- * 
+ *
  */
 
 public class FreeFloatBehavior extends Behavior
@@ -13,7 +13,7 @@ public class FreeFloatBehavior extends Behavior
 
 	private static FreeFloatBehavior instance = new FreeFloatBehavior();
 	/**
-	 * Calculates gravity force exercised on this GameObject by all other 
+	 * Calculates gravity force exercised on this GameObject by all other
 	 * GameObjects. Then accelerate the object with this force.
 	 */
 	@Override
@@ -26,7 +26,7 @@ public class FreeFloatBehavior extends Behavior
     public Behavior.Type getType() {
     	return type;
     }
-	
+
 	public static FreeFloatBehavior make()
 	{
 		return instance;

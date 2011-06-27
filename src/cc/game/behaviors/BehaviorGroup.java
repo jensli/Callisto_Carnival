@@ -13,39 +13,39 @@ import cc.util.Util;
 public class BehaviorGroup extends Behavior
 {
 	private Collection<Behavior> behaviorList = new LinkedList<Behavior>();
-	
+
 	public BehaviorGroup( Behavior... behaviors )
 	{
 		for ( Behavior b : behaviors ) {
 			add( b );
 		}
 	}
-	
-	@Override 
-	public void perform( GameObject controlled, double dT ) 
+
+	@Override
+	public void perform( GameObject controlled, double dT )
 	{
 		Iterator<Behavior> itr = behaviorList.iterator();
-			
+
 		while ( itr.hasNext() ) {
-			
+
 			Behavior behavior = itr.next();
 
 			behavior.perform( controlled, dT );
-			
+
 			if ( behavior.isFinished() ) {
 				itr.remove();
 			}
 		}
 	}
-	
-	@Override 
-	public void receiveEvent( Event event ) 
+
+	@Override
+	public void receiveEvent( Event event )
 	{
 	    for ( Behavior behavior : behaviorList ) {
 	    	behavior.receiveEvent( event );
 	    }
     }
-	
+
 	public void add( Behavior b )
 	{
 		Util.verifyNotNull( b, "Behavior.add: b"  );
@@ -53,7 +53,7 @@ public class BehaviorGroup extends Behavior
 
 		behaviorList.add( b );
     }
-	
+
 //	public boolean isGroup() {
 //		return true;
 //	}

@@ -1,10 +1,9 @@
 package cc.util.logger;
 
 public enum LogType {
-	WARNING, 
-	ERROR, 
+	WARNING,
+	ERROR,
 	INFO,
 	;
-	
+
 }
- 

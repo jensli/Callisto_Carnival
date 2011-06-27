@@ -7,10 +7,10 @@ package cc.util.math;
  */
 public class CyclicDouble extends AbstractDouble
 {
-    private double 
+    private double
     	value,
 		maxValue;
-	
+
 	public CyclicDouble( double value, double maxValue ) {
 	    this.value = value;
 	    this.maxValue = maxValue;
@@ -20,7 +20,7 @@ public class CyclicDouble extends AbstractDouble
     public double value() {
     	return value;
     }
-	
+
 	public void inc( double d ) {
 		value = (value + d) % maxValue;
 	}
@@ -28,6 +28,6 @@ public class CyclicDouble extends AbstractDouble
 	public void setValue( double value ) {
     	this.value = value % maxValue;
     }
-	
+
     private static final long serialVersionUID = 1L;
 }

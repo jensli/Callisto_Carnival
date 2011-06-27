@@ -3,57 +3,57 @@ package cc.game;
 
 public class ShieldedHealth implements Health
 {
-	private double 
+	private double
 		healthLevel = 100,
 		sheild = 0,
 		normalHealth = 100,
 		normalSheild = 0,
 		sheildRechargeRate = 0.1;
-	
+
 	@Override
 	public void energyDamage( double d )
 	{
 	}
-	
+
 	@Override
 	public boolean isAlive()
 	{
 		return healthLevel > 0;
 	}
-	
+
 	@Override
 	public void kill()
 	{
 	}
-	
+
 	@Override
     public void update( double dT )
 	{
 		sheild += sheildRechargeRate * dT;
 	}
-	
+
 	@Override
 	public void normalDamage( double d )
 	{
 		sheild -= d;
-		
+
 		if ( sheild < 0 ) {
 			healthLevel += sheild;
 			sheild = 0;
 			healthLevel = Math.max( 0, healthLevel );
 		}
 	}
-	
+
 	@Override
 	public void radiationDamage( double d )
 	{
 		healthLevel -= d;
 		healthLevel = Math.max( 0, healthLevel );
 	}
-	
 
-	/* 
-	 * Setters and getters 
+
+	/*
+	 * Setters and getters
 	 */
 	public double getHealthLevel() {
 		return healthLevel;
@@ -81,5 +81,5 @@ public class ShieldedHealth implements Health
 	}
 	public void setNormalSheild( double normalSheild ) {
 		this.normalSheild = normalSheild;
-	}	
+	}
 }

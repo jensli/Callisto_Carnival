@@ -11,7 +11,7 @@ public class Shot extends GameObject
     {
     	setCathegory( ObjectCathegory.SHOT );
     }
-	
+
 	public Shot( String name )
 	{
 	    super( name );
@@ -20,11 +20,11 @@ public class Shot extends GameObject
 	public GameObject getFireingObject() {
     	return firingObject;
     }
-	
+
 //	@Override
 //    public void receiveKillEvent( KillEvent event ) {
 //		addExtraBehavior( DeathFaderBehavior.make() );
 ////	    super.receiveKillEvent( event );
 //    }
-	
+
 }

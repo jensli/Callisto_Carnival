@@ -8,11 +8,11 @@ public class ThrustEvent extends Event
 {
 	private static final Cathegory type = Cathegory.GAME;
 	private  boolean switchOn;
-	
+
 	{ setName( Event.THRUST ); }
 
 	public ThrustEvent() {}
-	
+
 	public ThrustEvent( boolean switchOn ) {
 		this.switchOn = switchOn;
 	}
@@ -28,7 +28,7 @@ public class ThrustEvent extends Event
 		String parameter[] = parameters.split( " " );
 		this.switchOn = Boolean.valueOf( parameter[3] );
 	}
-	
+
 	@Override
     public ThrustEvent clone() {
 		ThrustEvent copy = (ThrustEvent) super.clone();
@@ -52,6 +52,6 @@ public class ThrustEvent extends Event
 	public void setSwitchOn( boolean switchOn ) {
 		this.switchOn = switchOn;
 	}
-	
-	
+
+
 }

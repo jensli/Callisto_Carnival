@@ -5,18 +5,18 @@ import cc.event.handlers.EventReceiver;
 
 // Serialization not fixed!!! Has no data, no serializ!
 
-public class FireEvent extends Event 
+public class FireEvent extends Event
 {
 	private static final Cathegory type = Cathegory.GAME;
 	private boolean switchOn = false;
-	
+
 	{ setName( Event.FIRE ); }
-	
+
 	public FireEvent(int newReceiverID)
 	{
 		super();
 	}
-	
+
 	public FireEvent( int newReceiverID, boolean switchOn )
 	{
 		this(newReceiverID);
@@ -28,7 +28,7 @@ public class FireEvent extends Event
 	}
 
     @Override
-    public FireEvent clone() 
+    public FireEvent clone()
     {
         FireEvent copy = (FireEvent)super.clone();
         return copy;
@@ -67,5 +67,5 @@ public class FireEvent extends Event
     {
     	this.switchOn = switchOn;
     }
-	
+
 }

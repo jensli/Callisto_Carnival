@@ -8,11 +8,11 @@ import cc.game.objects.Ship;
  */
 public class PowerupCollider extends DefaultCollider
 {
-	private double 
+	private double
 		extraLife,
 		extraAmmo,
 		extraFuel;
-	
+
 	public PowerupCollider( double extraLife, double extraAmmo, double extraFuel )
 	{
 	    this.extraLife = extraLife;

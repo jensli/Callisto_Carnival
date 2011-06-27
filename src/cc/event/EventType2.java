@@ -5,7 +5,7 @@ import cc.event.handlers.EventReceiver;
 
 // Experiment, not used.
 
-public enum EventType2 
+public enum EventType2
 {
 		HOST_GAME( Event.Cathegory.APPLICATION, new StandardEvent() {
 			@Override
@@ -25,29 +25,29 @@ public enum EventType2
 				receiver.receiveZoomEvent( this );
 			}
 		});
-		
-		
-		
+
+
+
 //		PAUSE,
 //		EXIT_PROGRAM
 //		;
-		
+
 		private final StandardEvent event;
-		@SuppressWarnings("unchecked")
+		@SuppressWarnings( "rawtypes" )
 		private final StandardValueEvent valueEvent;
-		
+
 		EventType2( Event.Cathegory cat, StandardEvent event ) {
 			event.setType( cat );
-			 this.event = event; 
+			 this.event = event;
 			 this.valueEvent = null;
 		}
-		@SuppressWarnings("unchecked")
+		@SuppressWarnings("rawtypes")
 		EventType2( Event.Cathegory cat, StandardValueEvent event ) {
 			event.setType( cat );
-			this.valueEvent = event; 
+			this.valueEvent = event;
 			this.event = null;
 		}
-		
+
 		public StandardEvent make() {
 			return event.clone();
 		}
@@ -56,8 +56,8 @@ public enum EventType2
 			valueEvent.setValue( value );
 			return event.clone();
 		}
-		
 
-	
-	
+
+
+
 }

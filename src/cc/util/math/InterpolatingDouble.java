@@ -7,7 +7,7 @@ public abstract class InterpolatingDouble extends AbstractDouble
 {
     private static final double EPSILON = 0.0001;
 	private double value, targetValue, startValue;
-	
+
 	public InterpolatingDouble( double value ) {
 		this( value, Double.NaN );
 	}
@@ -16,7 +16,7 @@ public abstract class InterpolatingDouble extends AbstractDouble
 		this.targetValue = value;
 		this.startValue = startValue;
 	}
-	
+
 	public abstract void update( double dT );
 
 	public double targetValue() {
@@ -29,22 +29,22 @@ public abstract class InterpolatingDouble extends AbstractDouble
     public double value() {
 		return value;
 	}
-	
+
 	public void restart() {
 		value = startValue;
 	}
-	
+
 	public void setValue( double value ) {
 		this.value = value;
 	}
-	
+
 	public void changeValue( double delta ) {
 		value += delta;
 	}
-	
+
 	public boolean isAtTarget() {
 		return Math.abs( value - targetValue ) < EPSILON;
 	}
-	
+
     private static final long serialVersionUID = 1L;
 }

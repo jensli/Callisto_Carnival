@@ -4,19 +4,19 @@ package cc.game.collision;
 public class ShipCollider_NOT_USED extends DefaultCollider
 {
 //	private boolean rotationDir = true;
-	
+
 //	@Override
 //    public void collideMe( GameObject me, GameObject other )
 //	{
 //		other.getCollider().collideShip( (Ship) me, other );
 //	}
-	
-	
+
+
 //	@Override public void receiveEvent( Event event ) {
 //	   event.dispatch( this );
 //    }
-	
-	
+
+
 //	@Override
 //    public void collideShip( GameObject other, GameObject me )
 //    {
@@ -35,9 +35,9 @@ public class ShipCollider_NOT_USED extends DefaultCollider
 //
 //		other.addVelocity( punch );
 //		other.impulseAccelerate( punch );
-//		
+//
 //		other.setRotation( (rotationDir = !rotationDir) ? 20.0 : -20.0 );
 //	}
-	
-	
+
+
 }

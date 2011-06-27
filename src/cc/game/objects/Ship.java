@@ -17,102 +17,102 @@ import cc.gui.models.ParticleSystem;
 import cc.gui.models.TextureSquare;
 import cc.util.Texture;
 
-public class Ship extends GameObject 
+public class Ship extends GameObject
 {
 	private ControlledBehavior controlledBehavior;
 	private BehaviorGroup extraBehaviors = new BehaviorGroup();
-	
+
     {
     	setCathegory( ObjectCathegory.ACTOR );
     }
 
-	
+
 	public Ship( String name, Texture texture, Texture flameTexture )
 	{
 		super( name );
 		makeShip( texture, flameTexture );
 	}
-	
+
 	private void makeShip( Texture texture, Texture flameTexture )
 	{
 		getPhysModel().setMass( 3.0 );
 		getPhysModel().setRadius( 10.0 );
 //		this.setDamage( 1.0 );
-		
+
 		setMovementBehavior( FreeFloatBehavior.make() );
-		
+
 		setLife( 100.0 );
 		setCollider( new DefaultCollider() );
 //		setCollider( new ShipCollider() );
 		setControlledBehavior( new ControlledBehavior() );
-		
+
 		// Graphicas model
 		GraphicalModelGroup group = new GraphicalModelGroup( this );
-		
+
 		TextureSquare ts = new TextureSquare( this, texture, 32, 32 );
 		ts.setDirectionOffset( 0.5*Math.PI );
 		ts.getColor().a = 0;
 		group.add( ts );
-		
+
 		ParticleSystem ps = new ParticleSystem( this, flameTexture, 250 );
 		ps.setController( controlledBehavior );
 		group.add( ps );
-		
+
 		addExtraBehavior( new FadeInBehavior( 2 ) );
 
-		
+
 		setGraphicalModel( group );
 	}
-	
-	@Override 
+
+	@Override
 	public void update( double dT )
 	{
 		super.update( dT );
 		controlledBehavior.perform( this, dT );
 		extraBehaviors.perform( this, dT );
     }
-	
-	@Override 
-	public void receiveEvent( Event event ) 
+
+	@Override
+	public void receiveEvent( Event event )
 	{
 		super.receiveEvent( event );
 		controlledBehavior.receiveEvent( event );
 		extraBehaviors.receiveEvent( event );
     }
-	
-	@Override 
+
+	@Override
 	public void collide( GameObject other )
 	{
 		other.getCollider().collideActor( this, other );
     }
 
-	@Override 
+	@Override
 	public void onDeath()
 	{
 		super.onDeath();
 		GameObject exp = GameFactory.get().createExplosion();
 		exp.getPhysModel().setPos( getPos() );
-		
+
 		EventHandler.get().postEvent( new CreateEvent( exp ) );
 	}
-	
+
 	public ControlledBehavior getControlledBehavior() {
 		return controlledBehavior;
 	}
-	
+
 	public void setControlledBehavior( ControlledBehavior controlledBehavior ) {
 		this.controlledBehavior = controlledBehavior;
 	}
-	
+
 	@Override
     public void addExtraBehavior( Behavior behavior ) {
 		extraBehaviors.add( behavior );
 	}
-	
+
 	public BehaviorGroup getExtraBehaviors() {
 		return extraBehaviors;
 	}
-	
+
 	public void setExtraBehaviors( BehaviorGroup extraBehaviors ) {
 		this.extraBehaviors = extraBehaviors;
 	}

@@ -10,11 +10,11 @@ import cc.util.math.Vec;
 public class BounceCollider extends DefaultCollider
 {
 	private static boolean rotationDir = true;
-	
-	private double 
+
+	private double
 		rotationStrength = 20.0,
 		pushStrength = 0.3;
-	
+
 	public BounceCollider( double damage )
     {
 	    super( damage );
@@ -25,7 +25,7 @@ public class BounceCollider extends DefaultCollider
 //	{
 //		other.getCollider().collideDefault( me, other );
 //	}
-	
+
 	@Override
     public void collideActor( Ship other, GameObject me )
     {
@@ -36,7 +36,7 @@ public class BounceCollider extends DefaultCollider
 		punch.scale( pushStrength );
 
 		other.getPhysModel().addVelocity( punch );
-		
+
 		other.getPhysModel().setRotation( rotationDir ? rotationStrength : -rotationStrength );
     }
 

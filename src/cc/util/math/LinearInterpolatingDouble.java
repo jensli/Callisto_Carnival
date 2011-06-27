@@ -3,7 +3,7 @@ package cc.util.math;
 public class LinearInterpolatingDouble extends InterpolatingDouble
 {
 	private double speed;
-	
+
 	public LinearInterpolatingDouble( double value, double speed )
     {
 	    super( value );
@@ -16,19 +16,19 @@ public class LinearInterpolatingDouble extends InterpolatingDouble
 	    this.speed = speed;
     }
 
-	@Override 
-	public void update( double dT ) 
+	@Override
+	public void update( double dT )
 	{
-		double 
+		double
 			t = speed * dT,
 			delta = value() - targetValue();
-		
+
 		if ( Math.abs( delta ) > t ) {
 			changeValue( delta > 0.0 ? -t : t );
 		} else {
 			setValue( targetValue() );
 		}
     }
-	
+
     private static final long serialVersionUID = 1L;
 }

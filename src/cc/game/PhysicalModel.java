@@ -5,30 +5,30 @@ import cc.util.math.Vec;
 
 public class PhysicalModel
 {
-	private final Vec 
-		position = new Vec(), 
+	private final Vec
+		position = new Vec(),
 		forward = new Vec(0.0, 1.0),
 		velocity = new Vec(),
 		acceleration = new Vec();
 
-	private double 
+	private double
 		rotation = 0.0,
 		radius = 0.0,
 		mass = 0.0;
-	
+
 	// Vector used as temp variable to reduce garbage
-	// 
+	//
 //	private static Vec tempVector = new Vec();
-	
+
 	public final void update( GameObject obj, double dT )
 	{
 		this.accelerate( dT );
 		this.move( dT );
 		this.rotate( dT );
-		
+
 		acceleration.set( 0, 0 );
 	}
-	
+
 	protected void accelerate( double dT )
 	{
 //		tempVector.scale( dT, acceleration );
@@ -42,28 +42,28 @@ public class PhysicalModel
 //		position.add( tempVector );
 		position.addScaled( velocity, dT );
 	}
-	
+
 	protected void rotate( double dT )
 	{
 		forward.rotate( rotation * dT );
 	}
-	
+
 	public final void dampenRotation( double value, double dT )
 	{
 		rotation /= ( 1 + Math.abs( value ) * dT );
 	}
-	
-	
-	//	
-	////	
-	//////	
-	////////	
+
+
+	//
+	////
+	//////
+	////////
 	//////////	SETTERS AND GETTERS
-	////////	
-	//////	
-	////	
-	//	
-	
+	////////
+	//////
+	////
+	//
+
 	public final void accelerate( Vec v ) {
 		acceleration.add( v );
 	}

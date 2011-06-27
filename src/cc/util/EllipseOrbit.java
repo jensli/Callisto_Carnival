@@ -9,30 +9,30 @@ import cc.util.Util;
  */
 public class EllipseOrbit
 {
-	private final Vec 
+	private final Vec
 		center = new Vec(),
 		dir = new Vec();
-	
-	private double 
+
+	private double
 		ecce,
 		major,
 		minor,
 		smoothFactor;
-	
+
 	public EllipseOrbit( Vec center, Vec dir, double dist )
 	{
 		this( center, dir, dist, dist );
     }
-	
+
 	public EllipseOrbit( Vec center, Vec dir, double perihelionDist, double aphelionDist )
 	{
 		Util.verifyArgInRange( ecce, 0, 0.9999999, "ecce" );
-	
+
 		this.center.set( center );
 	    this.major = (perihelionDist + aphelionDist) / 2;
 	    this.ecce = (aphelionDist - perihelionDist) / (2*major);
 	    this.dir.set( dir );
-	    
+
 	    this.smoothFactor = ecce;
 	    this.minor = major * sqrt( 1 - ecce*ecce );
 	}
@@ -45,12 +45,12 @@ public class EllipseOrbit
 //	    this.ecce = ecce;
 //	    this.dir = dir;
 ////	    this.periDist = periDist;
-//	    
+//
 //	    major = 2 * periDist /( 1 - ecce );
 //	    minor = major * sqrt( 1 - ecce*ecce );
 //    }
-	
-	
+
+
 	/**
 	 * Returns the position on this ellipse corresponding to how large part
 	 * of one cycle it has completed (d)
@@ -62,15 +62,15 @@ public class EllipseOrbit
 			V_eff = Util.sinSmoothIter( V_in, smoothFactor, (int) round( smoothFactor * 5 ) ),
 	    	y = cos( V_eff ) * major - major*ecce,  // Last term is the correction to place the focus right
 	    	x = sin( V_eff ) * minor;
-    	
+
 	    Vec vec = new Vec( y, x );
 	    vec.rotate( dir );
 	    vec.add( center );
-	    
+
 	    return vec;
     }
-	
-	
+
+
 	public Vec getCenter() {
     	return center;
     }
@@ -92,5 +92,5 @@ public class EllipseOrbit
 	public double getMinor() {
     	return minor;
     }
-	
+
 }

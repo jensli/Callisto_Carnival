@@ -10,7 +10,7 @@ import java.util.EnumSet;
  * Singleton class used to log program info, either to stdout, a file or something else.
  * Messages logged either as info, warning or error.
  * an init() method must be called before use, finish() method should be called before program exit.
- * 
+ *
  * @author jens
  */
 
@@ -18,12 +18,12 @@ public abstract class Logger
 {
 	private static Logger instance;
 	private static boolean initPerformed = false;
-	
+
 	// How much logging should performed, how important a message should be
 	// to be printed.
 	private LogLevel logLevel = LogLevel.LOW;
 	private EnumSet<LogPlace> cathegorys = EnumSet.allOf( LogPlace.class );
-	
+
 	// Log level levels
 //	public static final int LOW = 1, MED = 2, HIGH = 3;
 //	public static final int ALL = Integer.MAX_VALUE, NET = 1, APP = 2, GAME = 4, GUI = 8, LOAD = 16;
@@ -31,12 +31,12 @@ public abstract class Logger
 //		ERROR = "Error: ",
 //		WARNING = "Warning: ",
 //		INFO = "Info: ";
-		
+
 	/**
 	 * Init the logger with a Logger object allready created.
 	 * Tought to be called from the other init() methods.
 	 */
-	private static void init( Logger logger, LogLevel level ) 
+	private static void init( Logger logger, LogLevel level )
 	{
 		if ( initPerformed ) {
 			logger.dispose();
@@ -65,7 +65,7 @@ public abstract class Logger
 	{
 		init( new StreamLogger( System.out ), level );
 	}
-	
+
 	public void setCathegors( LogPlace... t1 )
 	{
 		cathegorys = EnumSet.copyOf( Arrays.asList( t1 ) );
@@ -76,7 +76,7 @@ public abstract class Logger
 	public static void initDisabledLogger() {
 		init( new EmptyLogger(), LogLevel.DISABLED );
 	}
-	
+
 	public static Logger get()
 	{
 		if ( !initPerformed ) {
@@ -84,12 +84,12 @@ public abstract class Logger
 		}
 		return instance;
 	}
-	
-	
+
+
 	protected abstract void printLogging( LogPlace place, LogType type, String str );
-	
+
 	/**
-	 * Logges str as type type and level level 
+	 * Logges str as type type and level level
 	 */
 	public void log( LogPlace place, LogType type, LogLevel level, String str )
 	{
@@ -97,9 +97,9 @@ public abstract class Logger
 				printLogging( place, type, str ); // Call prototype method in subclass
 			}
 	}
-	
+
 	/**
-	 * Log function with different default values 
+	 * Log function with different default values
 	 */
 	public void log( LogPlace place, LogType type, String str ) {
 		log( place, type, LogLevel.MED, str );
@@ -110,21 +110,21 @@ public abstract class Logger
 	public void log( LogPlace place, String str ) {
 		log( place, LogType.INFO, LogLevel.LOW, str );
 	}
-	
-//	public void info( String message ) 
+
+//	public void info( String message )
 //	{
 //		log( LogPlace.APP, LogType.INFO, LogLevel.MED, message );
 //	}
-	
-	public void info( LogPlace place, String message ) 
+
+	public void info( LogPlace place, String message )
 	{
 		log( place, LogType.INFO, LogLevel.MED, message );
 	}
-	public void warn( LogPlace place, String message ) 
+	public void warn( LogPlace place, String message )
 	{
 		log( place, LogType.WARNING, LogLevel.MED, message );
 	}
-	public void error( LogPlace place, String message ) 
+	public void error( LogPlace place, String message )
 	{
 		log( place, LogType.ERROR, LogLevel.MED, message );
 	}
@@ -132,15 +132,15 @@ public abstract class Logger
 	public PlacedLogger createPlaced( LogPlace place ) {
 		return new PlacedLogger( this, place );
 	}
-	
+
 	public void setLogLevel( LogLevel level ) {
 		this.logLevel = level;
 	}
-	
+
 	/**
-	 * To e.g. close stream to log file 
+	 * To e.g. close stream to log file
 	 */
-	public void dispose() 
+	public void dispose()
 	{}
 }
 
@@ -150,7 +150,7 @@ public abstract class Logger
  */
 class StreamLogger extends Logger
 {
-	private PrintStream stream; 
+	private PrintStream stream;
 
 //		StreamLogger( String streamFilename, int level ) throws FileNotFoundException {
 //			stream = new PrintStream( new File( streamFilename ) );
@@ -160,7 +160,7 @@ class StreamLogger extends Logger
 	}
 
 	@Override
-    public void dispose() 
+    public void dispose()
 	{
 		if ( stream != System.out && stream != System.err ) {
 			stream.close();
@@ -173,7 +173,7 @@ class StreamLogger extends Logger
 	{
 		stream.println( place + " " + type + ": " + str );
 	}
-	
+
 
 }
 

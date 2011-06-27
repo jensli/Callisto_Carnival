@@ -7,5 +7,5 @@ import cc.event.Event;
 //
 public abstract class GameEvent extends Event
 {
-	
+
 }

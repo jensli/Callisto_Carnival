@@ -8,15 +8,15 @@ import org.lwjgl.input.Mouse;
 public class GuiInputHandler
 {
 	private int lastButtonDown = -1;
-	
+
 	public void update ( Display display )
 	{
 		readBufferedKeyboard( display );
 		readBufferedMouse( display );
 	}
-	
+
 	public void readBufferedKeyboard( Display desk ) {
-		
+
 	      //check keys, buffered
 	      Keyboard.poll();
 
@@ -32,22 +32,22 @@ public class GuiInputHandler
 			}
 		}
 	}
-	
+
 	  /**
 	   * reads a mouse in buffered mode
 	   */
-	  public void readBufferedMouse( Display desk ) 
+	  public void readBufferedMouse( Display desk )
 	  {
 		int x = Mouse.getX();
 		int y = Mouse.getY();
-		
+
 		boolean hitGUI = false;
 		// @todo the click count is not considered in LWJGL! #
-		
+
 		if ( lastButtonDown != -1 && Mouse.isButtonDown( lastButtonDown ) ) {
 			hitGUI |= desk.fireMouseDraggedEvent( x, y, EventHelper.getMouseButton( lastButtonDown ) );
 		} else {
-			
+
 			if ( Mouse.getDX() != 0 || Mouse.getDY() != 0 ) {
 				hitGUI |= desk.fireMouseMovedEvent( x, y );
 			}
@@ -55,9 +55,9 @@ public class GuiInputHandler
 				hitGUI |= desk.fireMouseReleasedEvent( x, y, EventHelper.getMouseButton( lastButtonDown ), 1 );
 				lastButtonDown = -1;
 			}
-			
+
 			while ( Mouse.next() ) {
-				
+
 				if ( Mouse.getEventButton() != -1 && Mouse.getEventButtonState() ) {
 					lastButtonDown = Mouse.getEventButton();
 					hitGUI |= desk.fireMousePressedEvent( x, y, EventHelper.getMouseButton( lastButtonDown ), 1 );
@@ -68,7 +68,7 @@ public class GuiInputHandler
 				// }
 			}
 		}
-	}  
+	}
 
-	
+
 }

@@ -17,25 +17,25 @@ import cc.gui.models.GraphicalModelIterator;
 public class GuiResetEvent extends Event
 {
 	private static final Cathegory type = Cathegory.GUI;
-	
+
 	private Player focusPlayer;
 	// This is just thee different way to do the same thing,
 	// experimenting
 	private Collection<GameObject> objectList;
 	private Collection<? extends Drawable> objectList2;
 	private GraphicalModelIterator itr;
-	
-	
-	
 
-	public GuiResetEvent( Player focusPlayer, Collection<GameObject> objectList, 
+
+
+
+	public GuiResetEvent( Player focusPlayer, Collection<GameObject> objectList,
 			Collection<? extends Drawable> objectList2, GraphicalModelIterator itr )
     {
 	    super();
 	    this.focusPlayer = focusPlayer;
 	    this.objectList = objectList;
 	    this.objectList2 = objectList2;
-	    
+
 	    this.itr = itr;
     }
 
@@ -69,7 +69,7 @@ public class GuiResetEvent extends Event
     {
     	return itr;
     }
-	
-	
-	
+
+
+
 }

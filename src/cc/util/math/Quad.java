@@ -5,18 +5,18 @@ public class Quad
 {
 	public Vec p1, p2, p3, p4;
 
-	public Quad() 
+	public Quad()
 	{
 		;
 	}
-	
+
 	public Quad( Vec p1, Vec p2, Vec p3, Vec p4 ) {
 	    this.p1 = p1;
 	    this.p2 = p2;
 	    this.p3 = p3;
 	    this.p4 = p4;
     }
-	
+
 	public Quad( Quad q )
 	{
 		this.p1 = new Vec( q.p1 );
@@ -24,27 +24,27 @@ public class Quad
 		this.p3 = new Vec( q.p3 );
 		this.p4 = new Vec( q.p4 );
 	}
-	
+
 	public void rotateAround( Vec p, Vec dir )
 	{
 		sub( p );
 		rotate( dir );
 		add( p );
 	}
-	
+
 //	public void rotate( final Vec dir )
 //	{
 //		doToAll( Vec.rotateAction( dir ) );
 //	}
-	
+
 	public void rotate( Vec dir )
 	{
-		p1.rotate( dir ); 
-		p2.rotate( dir ); 
-		p3.rotate( dir ); 
-		p4.rotate( dir ); 
+		p1.rotate( dir );
+		p2.rotate( dir );
+		p3.rotate( dir );
+		p4.rotate( dir );
 	}
-	
+
 //	public <T> void doToAll( Action1<Vec> a )
 //	{
 //		a.run( p1 );
@@ -52,14 +52,14 @@ public class Quad
 //		a.run( p3 );
 //		a.run( p4 );
 //	}
-	
+
 	public Quad rotated( Vec dir )
 	{
 		Quad q = new Quad( this );
 		q.rotate( dir );
 		return q;
 	}
-	
+
 	public void add( Vec p )
 	{
 		p1.add( p );
@@ -75,7 +75,7 @@ public class Quad
 		p3.sub( p );
 		p4.sub( p );
 	}
-	
+
 	@Override
     public String toString()
 	{

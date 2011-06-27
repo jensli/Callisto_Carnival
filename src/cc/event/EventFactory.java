@@ -10,30 +10,30 @@ import cc.event.handlers.EventReceiver;
 // Not used.
 //
 public class EventFactory  {
-	
+
 	public enum Type {
 		HOST_GAME, START_SINGELPLAYER,
 		ZOOM, PAUSE,
 		EXIT_PROGRAM
 		;
-		
+
 	}
-	
-	@SuppressWarnings("unchecked")
-	public static Events<EventFactory.Type> events = new Events<EventFactory.Type>( 
-			new EnumMap<EventFactory.Type, StandardEvent>( EventFactory.Type.class ), 
+
+	@SuppressWarnings( "rawtypes" )
+	public static Events<EventFactory.Type> events = new Events<EventFactory.Type>(
+			new EnumMap<EventFactory.Type, StandardEvent>( EventFactory.Type.class ),
 			new EnumMap<EventFactory.Type, StandardValueEvent>( EventFactory.Type.class ) );
-	
-	
+
+
 	public ArrayList<String> list;
-	
+
 	public static StandardEvent makeEvent( EventFactory.Type c ) {
 		return events.makeEvent( c );
 	}
 	public static <T> StandardValueEvent<T> makeEvent( EventFactory.Type type, T value ) {
 		return events.makeEvent( type, value );
 	}
-	
+
 	public static void makeEventTypes()
 	{
 		events.makeEventType( EventFactory.Type.HOST_GAME, Event.Cathegory.APPLICATION, new StandardEvent() {
@@ -66,7 +66,7 @@ public class EventFactory  {
 				receiver.receiveExitProgramEvent( this );
 			}
 		});
-		
+
 
 	}
 }

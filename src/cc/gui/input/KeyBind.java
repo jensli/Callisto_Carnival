@@ -10,11 +10,11 @@ public abstract class KeyBind
 		CTRL = 1,
 		SHIFT = 2,
 		ALT = 4;
-	
+
 	private boolean pressed = false;
 
 	private int modifyers = 0;
-	
+
 	public Event doKeyPress() {
 		return null;
 	}
@@ -24,8 +24,8 @@ public abstract class KeyBind
 	public Event doKeyHoldDown() {
 		return null;
 	}
-	
-	public int getModifyers() { 
+
+	public int getModifyers() {
 		return modifyers;
 	}
 	public void setModifyers( int modifyers ) {
@@ -37,11 +37,11 @@ public abstract class KeyBind
 	public void setPressed( boolean pressed ) {
     	this.pressed = pressed;
     }
-	
+
 	public boolean validMods( int mods )
 	{
-//		return mods == getModifyers();		
-		return ( mods & getModifyers() ) == getModifyers();		
+//		return mods == getModifyers();
+		return ( mods & getModifyers() ) == getModifyers();
 	}
 }
 
@@ -50,21 +50,21 @@ class StandardBind extends KeyBind
 	private Event onEvent;
 	private Event offEvent;
 	private Event holdEvent;
-	
-	
+
+
     public StandardBind( Event onEvent, Event offEvent, Event holdEvent ) {
 	    this.onEvent = onEvent;
 	    this.offEvent = offEvent;
 	    this.holdEvent = holdEvent;
     }
-    
-    
-    
+
+
+
 	public StandardBind( Event onEvent, Event offEvent, Event holdEvent, int modifyers ) {
 	    this.onEvent = onEvent;
 	    this.offEvent = offEvent;
 	    this.holdEvent = holdEvent;
-	    
+
 	    setModifyers( modifyers );
     }
 
@@ -74,7 +74,7 @@ class StandardBind extends KeyBind
     public StandardBind( Event onEvent ) {
     	this( onEvent, null );
     }
-    
+
 	@Override
     public Event doKeyPress()
 	{
@@ -86,11 +86,11 @@ class StandardBind extends KeyBind
 		return doPost( offEvent );
     }
 	@Override
-    public Event doKeyHoldDown() 
+    public Event doKeyHoldDown()
 	{
 		return doPost( holdEvent );
 	}
-	private Event doPost( Event event ) 
+	private Event doPost( Event event )
 	{
 //		if ( event != null ) {
 //			EventHandler.get().postEvent( Events.cloneEvent( event ) );
@@ -100,7 +100,7 @@ class StandardBind extends KeyBind
 		} else {
 			return null;
 		}
-		
+
 	}
 
 }
@@ -127,13 +127,13 @@ class StandardBind extends KeyBind
 //		newEvent.setOn( false );
 //		EventHandler.get().postEvent( newEvent );
 //	}
-//	
+//
 //	public void doKeyHoldDown() {}
 //}
 //
 //class StearingBind extends KeyBind
 //{
-//	String onEventString, offEventString; 
+//	String onEventString, offEventString;
 //
 //	public StearingBind( String eventString )
 //    {
@@ -142,12 +142,12 @@ class StandardBind extends KeyBind
 //    }
 //    public void doKeyPress()
 //    {
-//		EventHandler.get().postEvent( 
+//		EventHandler.get().postEvent(
 //				new RequestEvent( Event.NO_RECEIVER, onEventString ) );
 //    }
 //    public void doKeyRelease()
 //    {
-//		EventHandler.get().postEvent( 
+//		EventHandler.get().postEvent(
 //				new RequestEvent( Event.NO_RECEIVER, offEventString ) );
 //    }
 //}

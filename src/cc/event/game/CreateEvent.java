@@ -16,18 +16,18 @@ public class CreateEvent extends Event
 
 	private final Cathegory type = Cathegory.GAME;
 
-	
+
 	public CreateEvent(int newReceiverID)
 	{
 		super( newReceiverID );
 	}
-	
+
 	public CreateEvent(GameObject newObjectToCreate)
 	{
 		this( Event.NO_RECEIVER );
 		objectToCreate = newObjectToCreate;
 	}
-	
+
 	public GameObject getObject()
     {
     	return objectToCreate;
@@ -37,7 +37,7 @@ public class CreateEvent extends Event
     {
     	this.serializedObject = serializedObject;
     }
-	
+
 	@Override
 	public void dispatch( EventReceiver receiver )
 	{

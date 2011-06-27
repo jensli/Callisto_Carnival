@@ -1,7 +1,9 @@
 package cc.event;
 
+import j.util.eventhandler.GroupName;
 import j.util.functional.Action0;
 import cc.event.handlers.EventReceiver;
+import cc.event2.EventGroups;
 
 public final class EventType
 {
@@ -13,7 +15,7 @@ public final class EventType
 				receiver.receiveZoomEvent( this );
 			}
 		};
-	
+
 	public static final StandardValueEvent<Event> REQUEST
 		=  new StandardValueEvent<Event>() {
 			{ setType( Event.Cathegory.REQUEST ); }
@@ -21,6 +23,11 @@ public final class EventType
 			public void dispatch( EventReceiver receiver ) {
 				receiver.receiveRequestEvent( this );
 			}
+
+			@Override public GroupName getRecveiverGroup() {
+				return EventGroups.REQUEST;
+			}
+
 		};
 	public static final StandardValueEvent<String> JOIN_GAME
 		=  new StandardValueEvent<String>() {
@@ -40,14 +47,14 @@ public final class EventType
 		};
 
 	public static final StandardEvent
-		HOST_GAME = new StandardEvent() { 
+		HOST_GAME = new StandardEvent() {
 			{ setType( Event.Cathegory.APPLICATION ); }
 			@Override
             public void dispatch( EventReceiver receiver ) {
 				receiver.receiveHostGameEvent( this );
 			}
 		},
-		CANCEL_HOST_MULTIPLAYER = new StandardEvent() { 
+		CANCEL_HOST_MULTIPLAYER = new StandardEvent() {
 			{ setType( Event.Cathegory.APPLICATION ); }
 			@Override
             public void dispatch( EventReceiver receiver ) {
@@ -96,28 +103,28 @@ public final class EventType
 				receiver.receiveCancelJoinMultiplayerEvent( this );
 			}
 		};
-		
-	
-	
-	
+
+
+
+
 	public static Event makeGuiEvent( final Action0 fun )
 	{
 		return new StandardEvent() {
-			
+
 			public boolean hasRun = false;
-			
+
 			{ setType( Event.Cathegory.GUI ); }
-			
-			@Override 
-			
+
+			@Override
+
 			public void dispatch( EventReceiver receiver ) {
-				if ( !hasRun ) { 
+				if ( !hasRun ) {
 					fun.run();
 					hasRun = false;
 				}
 			}
 		};
 	}
-	
-	
+
+
 }

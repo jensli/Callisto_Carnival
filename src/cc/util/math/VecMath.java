@@ -76,8 +76,8 @@ public class VecMath {
 	    return Double.doubleToLongBits(d);
 	}
     }
-    
-    
+
+
     public static Vec sub( Vec v1, Vec v2 )
     {
     	return new Vec( v1.x - v2.x, v1.y - v2.y );
@@ -87,8 +87,8 @@ public class VecMath {
     {
     	return new Vec( v1.x + v2.x, v1.y + v2.y );
     }
-    
-    public static Vec makeUnit( final double a ) 
+
+    public static Vec makeUnit( final double a )
     {
     	return new Vec( cos( a ), sin( a ) );
     }
@@ -110,7 +110,7 @@ public class VecMath {
 	public static double angleBetween( Vec v1, Vec v2 )
     	{
     //	      double vDot = v1.x / v1.length();
-    //	      
+    //
     ////	      if( vDot < -1.0) vDot = -1.0;
     ////	      if( vDot >  1.0) vDot =  1.0;
     //
@@ -119,15 +119,15 @@ public class VecMath {
     //	      if ( v1.y < 0.0 ) {
     //	    	  ret = 2*Math.PI - ret;
     //	      }
-    
+
     	      return v1.angle() - v2.angle();
     	}
-	
+
 	public static boolean equals( Vec v1, Vec v2, double delta )
 	{
 		return abs( v1.x - v2.x ) < delta && abs( v1.y - v2.y ) < delta;
 	}
-	
+
 }
 
 

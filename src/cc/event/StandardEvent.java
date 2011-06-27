@@ -19,11 +19,11 @@ public abstract class StandardEvent extends Event
     public cc.event.Event.Cathegory getType() {
 	    return type;
     }
-	
+
 	void setType( Cathegory type ) {
     	this.type = type;
     }
-	
+
 	@Override
     public StandardEvent clone() {
 		return (StandardEvent) super.clone();
@@ -31,6 +31,6 @@ public abstract class StandardEvent extends Event
 	public StandardEvent make() {
 		return clone();
 	}
-	
+
 }
 

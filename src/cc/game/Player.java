@@ -8,38 +8,38 @@ import cc.util.Random;
 
 /**
  * Class containing information about the players, and logic to handle tasks
- * not directly associated with the in-game behavior. 
+ * not directly associated with the in-game behavior.
  */
 public class Player
 {
 	public static final int NO_PLAYER = -1;
-	
+
 	public String name;
-	
+
 	private Ship controlledObject;
-	
-	private int 
+
+	private int
 		controlledID = Player.NO_PLAYER, // TODO: Is this really used? What does it do?
 		playerID = Player.NO_PLAYER;
-	
+
 	private double
 		respawnTime = 0.5,
 		timeToRespawn = 0;
-	
+
 	public enum Color {
 		BLUE, GREEN, RED, YELLOW
 	}
-	
+
 	private static int colorNr = Random.getGameRandom().nextInt( Color.values().length );
-	
+
 	private Color color = Color.values()[ colorNr++ % Color.values().length ];
-	
+
 	public Player( String name, int id )
 	{
 		this.name = name;
 		this.playerID = id;
 	}
-	
+
 	/**
 	 * Updates the player. Most importantly respawns player if it has been dead
 	 * long enough.
@@ -49,21 +49,21 @@ public class Player
 	{
 		if ( !hasLivingObject() ) {
 			timeToRespawn -= dT;
-			
+
 			if ( timeToRespawn <= 0.0 ) {
 				respawn();
 				timeToRespawn = respawnTime;
 			}
 		}
 	}
-	
+
 	public void routeToObject( Event event )
 	{
 		if ( hasLivingObject() ) {
 			controlledObject.receiveEvent( event );
 		}
 	}
-	
+
 	public boolean hasLivingObject()
 	{
 		return controlledObject != null && controlledObject.isAlive();
@@ -79,7 +79,7 @@ public class Player
 
 		EventHandler.get().postEvent( new CreateEvent( controlledObject ) );
 	}
-	
+
 	/////////////////////////////////////////////////////////////////
 	/////////////////////////////////////////////////////////////////
 	/////
@@ -87,7 +87,7 @@ public class Player
 	/////
 	/////////////////////////////////////////////////////////////////
 	/////////////////////////////////////////////////////////////////
-	
+
     public int getPlayerID() { return playerID; }
 
 	public Ship getControlledObject() {

@@ -5,9 +5,9 @@ import cc.event.handlers.EventReceiver;
 /**
  * Singnals that a player should be added to the game
  */
-public class JoinEvent extends Event 
+public class JoinEvent extends Event
 {
-	
+
 	String nick = "no nick";
 	boolean isBot = false;
 	boolean isMe = false;
@@ -24,7 +24,7 @@ public class JoinEvent extends Event
 	}
 
 	@Override
-	public void deserialize( String parameters ) 
+	public void deserialize( String parameters )
 	{
 		super.deserialize(parameters);
 		String parameter[] = parameters.split(" ");
@@ -32,20 +32,20 @@ public class JoinEvent extends Event
 		this.isBot = Boolean.valueOf(parameter[4]);
 		this.isMe = Boolean.valueOf(parameter[5]);
 	}
-	
+
 //	public Object clone()
     @Override
     public JoinEvent clone()
     {
         JoinEvent copy = (JoinEvent)super.clone();
 //        copy.nick = this.nick;
-//        copy.isMe = 
+//        copy.isMe =
 //        copy.isBot = this.isBot;
         return copy;
     }
-    
+
 	@Override
-    public String serialize() 
+    public String serialize()
 	{
 		return super.serialize() + " " + this.nick + " " + this.isBot + " " + this.isMe;
 	}
@@ -72,5 +72,5 @@ public class JoinEvent extends Event
 	public void setMe( boolean isMe ) {
 		this.isMe = isMe;
 	}
-	
+
 }

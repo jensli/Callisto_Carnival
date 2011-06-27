@@ -2,7 +2,7 @@ package cc.util.sound;
 
 /**
  * A sound that can be played through OpenAL
- * 
+ *
  * @author Kevin Glass
  */
 public class Sound {
@@ -10,10 +10,10 @@ public class Sound {
 	private SoundLoader store;
 	/** The buffer containing the sound */
 	private int buffer;
-	
+
 	/**
 	 * Create a new sound
-	 * 
+	 *
 	 * @param store The sound store from which the sound was created
 	 * @param buffer The buffer containing the sound data
 	 */
@@ -21,10 +21,10 @@ public class Sound {
 		this.store = store;
 		this.buffer = buffer;
 	}
-	
+
 	/**
 	 * Play this sound as a sound effect
-	 * 
+	 *
 	 * @param pitch The pitch of the play back
 	 * @param gain The gain of the play back
 	 */

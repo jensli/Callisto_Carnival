@@ -19,7 +19,7 @@ import com.jcraft.jorbis.Info;
  * Decode an OGG file to PCM data. This class is based on the example
  * code that accompanies the Java OGG libraries (hence the lack of detailed)
  * explanation.
- * 
+ *
  * @author Kevin Glass
  */
 public class OggDecoder {
@@ -27,28 +27,28 @@ public class OggDecoder {
 	private int convsize = 4096 * 2;
 	/** The buffer used to read OGG file */
 	private byte[] convbuffer = new byte[convsize]; // take 8k out of the data segment, not the stack
-	
+
 	/**
 	 * Create a new OGG decoder
 	 */
 	public OggDecoder() {
 	}
-	
+
 	/**
-	 * Get the data out of an OGG file 
-	 * 
+	 * Get the data out of an OGG file
+	 *
 	 * @param input The input stream from which to read the OGG file
 	 * @return The data describing the OGG thats been read
 	 */
 	public OggData getData(InputStream input) throws IOException {
 		// the following code come from an example in the Java OGG library.
-		// Its extremely complicated and a good example of a library 
+		// Its extremely complicated and a good example of a library
 		// thats potentially to low level for average users. I'd suggest
 		// accepting this code as working and not thinking too hard
 		// on what its actually doing
-		
+
 		ByteArrayOutputStream dataout = new ByteArrayOutputStream();
-		
+
 		SyncState oy = new SyncState(); // sync and verify incoming physical bitstream
 		StreamState os = new StreamState(); // take physical pages, weld into a logical stream of packets
 		Page og = new Page(); // one Ogg bitstream page.  Vorbis packets are inside
@@ -248,7 +248,7 @@ public class OggDecoder {
 											}
 											if (val < 0)
 												val = val | 0x8000;
-				
+
 											if (bigEndian) {
 												convbuffer[ptr] = (byte) (val >>> 8);
 												convbuffer[ptr + 1] = (byte) (val);
@@ -301,16 +301,16 @@ public class OggDecoder {
 
 		// OK, clean up the framer
 		oy.clear();
-		
+
 		OggData ogg = new OggData();
 		ogg.channels = vi.channels;
 		ogg.rate = vi.rate;
-		
+
 		byte[] data = dataout.toByteArray();
 		ogg.data = ByteBuffer.allocateDirect(data.length);
 		ogg.data.put(data);
 		ogg.data.rewind();
-		
+
 		return ogg;
 	}
 }

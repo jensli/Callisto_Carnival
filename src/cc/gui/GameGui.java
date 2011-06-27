@@ -1,5 +1,6 @@
 package cc.gui;
 
+import j.util.eventhandler.EventHandler;
 import j.util.functional.Action0;
 
 import java.util.List;
@@ -7,6 +8,7 @@ import java.util.List;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.Display;
 
+import cc.app.AppContext;
 import cc.event.Event;
 import cc.event.EventType;
 import cc.event.QuitEvent;
@@ -14,7 +16,7 @@ import cc.event.game.FireEvent;
 import cc.event.game.KillEvent;
 import cc.event.game.RotateEvent;
 import cc.event.game.ThrustEvent;
-import cc.event.handlers.IEventHandler;
+import cc.event2.EventGroups;
 import cc.gui.game_display.GameDisplay;
 import cc.gui.game_display.GameScreen;
 import cc.gui.input.GameInputHandler;
@@ -22,23 +24,25 @@ import cc.gui.input.GameInputHandler;
 public class GameGui
 {
 	private GameDisplay gameDisplay;
-	
+
 	private GameInputHandler bindingInputHandler;
-	private IEventHandler eventHandler;
-	
+//	private IEventHandler eventHandler;
+	private EventHandler eventHandler;
+
 //	private GUIInputHandler guiInputHandler;
-	
-	public GameGui( IEventHandler eventHandler )
+
+	public GameGui( AppContext context )
 	{
 		gameDisplay = new GameDisplay();
 		bindingInputHandler = new GameInputHandler();
-		
-		this.eventHandler = eventHandler;
+
+		this.eventHandler = context.getEventHandlerNew();
+//		this.eventHandler = context.getEventHandler();
 		// For gui elements added to the game view
 //		guiInputHandler = new GUIInputHandler();
 		init();
 	}
-	
+
 	public void init()
 	{
 		// Init the key bindings for the game
@@ -56,45 +60,50 @@ public class GameGui
 			kill = Event.make( EventType.REQUEST, new KillEvent() ),
 			paus = Event.make( EventType.PAUSE ),
 			restart = Event.make( EventType.RESTART );
-		
+
 		bindingInputHandler.addStandardBind( Keyboard.KEY_RIGHT, turnRightOn, turnRightOff );
 		bindingInputHandler.addStandardBind( Keyboard.KEY_LEFT, turnLeftOn, turnLeftOff );
 		bindingInputHandler.addStandardBind( Keyboard.KEY_UP, thrustOn, thrustOff );
-		bindingInputHandler.addStandardBind( Keyboard.KEY_ESCAPE, new QuitEvent() );
-		bindingInputHandler.addStandardBind( Keyboard.KEY_P, paus );
 		bindingInputHandler.addStandardBind( Keyboard.KEY_Z, zoomIn, stopZoom );
 		bindingInputHandler.addStandardBind( Keyboard.KEY_X, zoomOut, stopZoom );
 		bindingInputHandler.addStandardBind( Keyboard.KEY_SPACE, fireOn, fireOff );
+
+		bindingInputHandler.addStandardBind( Keyboard.KEY_ESCAPE, new QuitEvent() );
+		bindingInputHandler.addStandardBind( Keyboard.KEY_P, paus );
 		bindingInputHandler.addStandardBind( Keyboard.KEY_K, kill  );
 
 		bindingInputHandler.addStandardBind( Keyboard.KEY_R, EventType.makeGuiEvent( new Action0() {
 			public void run() { gameDisplay.resetFocusObject(); }
 		}) );
 		bindingInputHandler.addStandardBind( Keyboard.KEY_Q, restart );
-		
+
 		bindingInputHandler.addStandardBind( Keyboard.KEY_TAB, EventType.makeGuiEvent( new Action0() {
 			public void run() { gameDisplay.nextFocusObject(); }
 		}) );
-		
+
 	}
-	
-	
+
+
 	public void update( double localDT )
 	{
 		if ( Display.isCloseRequested() ) {
-			eventHandler.postEvent( Event.make( EventType.EXIT_PROGRAM ) );
+			// TODO: remove
+//			eventHandler.postEvent( Event.make( EventType.EXIT_PROGRAM ) );
+			eventHandler.postEmpty( EventGroups.EXIT );
 			return;
 		}
-		
+
 		gameDisplay.update( localDT );
-		
+
 		List<Event> events = bindingInputHandler.update();
-		eventHandler.postEvents( events );
-		
+		for ( Event e : events ) {
+			eventHandler.post( e.getRecveiverGroup(), e );
+		}
+
 		// TODO:
 //		guiInputHandler.update(  null );
 	}
-	
+
 	/**
 	 * Called when app switched from another view the game view
 	 */
@@ -109,7 +118,7 @@ public class GameGui
 	 */
 	public void deactivate()
 	{
-		
+
 	}
 	/**
 	 * Called when app exits (typically)
@@ -118,7 +127,7 @@ public class GameGui
 	{
 //		gameDisplay.destroyDisplay();
 	}
-	
-	
+
+
 }
 

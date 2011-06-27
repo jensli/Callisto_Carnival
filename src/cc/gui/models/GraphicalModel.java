@@ -7,29 +7,20 @@ import cc.util.math.Vec;
 public abstract class GraphicalModel
 {
 	private GameObject object;
-	
-//	public GraphicalModel()
-//	{
-//		
-//	}
-	
+
 	public static final GraphicalModel EMPTY = new EmptyGraphicalModel();
-	
+
 	public GraphicalModel( GameObject object )
     {
 	    this.object = object;
     }
-	
-	public GraphicalModel()
-	{
-		this.object = null;
-	}
+
 
 	public abstract void draw( Vec pos, Vec forward );
-	
-	
+
+
 	// NOT USED YET!!!
-	public void drawMini( Vec pos, Vec forward ) 
+	public void drawMini( Vec pos, Vec forward )
 	{
 		// If subclass not override this, it is not painted on radar
 	}
@@ -51,7 +42,7 @@ public abstract class GraphicalModel
 	{
 		;
 	}
-	
+
 	public boolean isFinished()
 	{
 		return false;
@@ -66,7 +57,7 @@ public abstract class GraphicalModel
     {
 	    return object.getPhysModel().getPos();
     }
-	
+
 	public GraphicalModel makeGroupWith( GraphicalModel model )
 	{
 		GraphicalModelGroup group = new GraphicalModelGroup( getObject() );
@@ -83,7 +74,7 @@ public abstract class GraphicalModel
 	public static GraphicalModel getEmpty() {
     	return EMPTY;
     }
-	
+
 	/**
 	 * Makes the model more or less transparent
 	 */
@@ -91,6 +82,10 @@ public abstract class GraphicalModel
 		return Color.getWhite();
 	}
 
-	public void setColor( Color c ) {}
-	
+	/**
+	 * Sets the color on the model IF IT HAS ONE. Otherwise no effect.
+	 */
+	public void setColor( Color c ) {
+	}
+
 }

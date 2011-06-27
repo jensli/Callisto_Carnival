@@ -6,7 +6,7 @@ import cc.event.handlers.EventReceiver;
 public class KillEvent extends Event
 {
 	private static final Cathegory type = Cathegory.GAME;
-	
+
 	public KillEvent(int newReceiverID)
 	{
 		super(newReceiverID);

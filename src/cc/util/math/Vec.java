@@ -12,13 +12,13 @@ public class Vec extends VecMathVector2d
 {
 //	public static Vec tempVector = new Vec();
     static final long serialVersionUID = 1L;
-    
-    private static final Vec 
+
+    private static final Vec
     	LEFT = new Vec( 1, 0 ),
     	RIGHT = new Vec( -1, 0 ),
     	UP = new Vec( 0, 1 ),
     	DOWN = new Vec( 0, -1 );
-    
+
     public static Vec makeUp() {
     	return UP.copy();
     }
@@ -41,8 +41,8 @@ public class Vec extends VecMathVector2d
 //		tempVector.set( x, y );
 //		return tempVector;
 //	}
-	
-    
+
+
     private static class RotateAction implements Action1<Vec>
     {
     	private final Vec dir;
@@ -56,63 +56,63 @@ public class Vec extends VecMathVector2d
 			arg.rotate( dir );
         }
     }
-    
+
 //    public final static ActionD<Vec> RotateAction = new ActionD<Vec>() {
 //		@Override
 //		public void run( Vec vec, Vec dir ) {
 //			vec.rotate( dir );
 //		}
 //	};
-	
-    
+
+
     public Vec copy()
     {
     	return new Vec( this );
     }
-	
+
 	public static Action1<Vec> rotateAction( final Vec dir )
 	{
 		return new RotateAction( dir );
 	}
-	
+
 	public Vec()
 	{
 		;
 	}
-	
+
 	public Vec(double x, double y)
 	{
 		super(x, y);
 	}
-	
+
 	public Vec( Tuple2d t )
 	{
 		super( t );
 	}
-	
-	
+
+
 	public final Vec normalized()
 	{
 		Vec v = new Vec( this );
 		v.normalize();
 		return v;
 	}
-	
+
 	/**
 	 * Rotates this vector conter clockwise.
-	 * 
+	 *
 	 * THIS METHOD ARE TO BE USED ON NORMALIZED VECTORS ONLY!
-	 * 
+	 *
 	 * @param a angel to rotate (radians)
 	 */
 	public void rotateNormalized(double a)
 	{
 		double a2 = this.angle() + a;
-		
+
 		set( Math.cos( a2 ), Math.sin( a2 ) );
 	}
-	
-	
+
+
 	/**
 	 * Rotates this vector counter clockwise
 	 * @param a angel to rotate (radians)
@@ -126,52 +126,52 @@ public class Vec extends VecMathVector2d
 //		if ( this.y < 0.0 ) {
 //			ret = 2 * Math.PI - ret;
 //		}
-//		
+//
 //		double a2 = this.angle() + a;
-//		
+//
 //		this.set( l*Math.cos( a2 ), l*Math.sin( a2 ) );
 //	}
 
-	
+
 	/**
-	 * Rotates vector by angle determened by v. 
-	 * 
+	 * Rotates vector by angle determened by v.
+	 *
 	 * Rotation angle is equal to arcsin(v.y) = arccos(v.x)
-	 * 
+	 *
 	 * v MUST BE A NORMAL VECTOR!
 	 */
 	public final void rotate( Vec v )
 	{
 		rotate( v.x, v.y );
 	}
-	
+
 
 	/**
-	 * Rotates vector by angle determened by ax and ay. 
-	 * 
+	 * Rotates vector by angle determened by ax and ay.
+	 *
 	 * Rotation angle is equal to arcsin(ay) = arccos(ax)
-	 * 
+	 *
 	 * ax and ay must satisfy arcsin(ay) = arccos(ax)
 	 */
 	public final void rotate( final double ax, final double ay )
 	{
 		final double oldX = x;
-		
+
 		x = x*ax - y*ay;
 		y = oldX*ay + y*ax;
 	}
-	
+
 	/**
-	 * Rotates vector by d radians 
+	 * Rotates vector by d radians
 	 */
 	public final void rotate( final double a )
 	{
 		rotate( cos( a ), sin( a ) );
-//		final double 
+//		final double
 //			sinA = sin( a ),
 //			cosA = cos( a ),
 //			oldX = x;
-//		
+//
 //		this.x = x*cosA - y*sinA;
 //		this.y = oldX*sinA + y*cosA;
 	}
@@ -189,21 +189,21 @@ public class Vec extends VecMathVector2d
 		v.rotate( dir );
 		return v;
 	}
-	
+
 	public final Vec negated()
 	{
 		return new Vec( -x, -y );
 	}
-	
+
 	/**
 	 * @return the from positive x axis to this vector, counter clockwise
 	 *         (radians)
 	 */
-	
+
 	public double angle()
 	{
 	      double vDot = this.x / this.length();
-	      
+
 //	      if( vDot < -1.0) vDot = -1.0;
 //	      if( vDot >  1.0) vDot =  1.0;
 
@@ -215,24 +215,24 @@ public class Vec extends VecMathVector2d
 
 	      return ret;
 	}
-	
+
 	public final void addScaled( Vec v, double scale )
 	{
 		x += v.x*scale;
 		y += v.y*scale;
 	}
-	
+
 	public double angleNormalized()
 	{
 		double ret = Math.acos( this.x );
-		
+
 		if ( this.y < 0.0 ) {
 			ret = 2*PI - ret;
 		}
-		
+
 		return ret;
 	}
-	
+
 	/**
 	 * Returns the distance between this vector and v, interpreted as coordinates.
 	 */
@@ -243,13 +243,13 @@ public class Vec extends VecMathVector2d
 //		return Math.sqrt(dx*dx + dy*dy );
 		return VecMath.distance( this, v );
 	}
-	
+
 	@Override
     public String toString()
 	{
 		return "" + x + " " + y;
 	}
-	
+
 	public void fromString(String param)
 	{
 		String[] params = param .split(" ");

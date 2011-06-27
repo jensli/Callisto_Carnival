@@ -6,10 +6,10 @@ import java.util.concurrent.LinkedBlockingQueue;
 
 /**
  * OutputThread, a PrintWriter decorator class
- * 
- * Calls to write-methods are asynchronous (The program will not halt waiting for the 
+ *
+ * Calls to write-methods are asynchronous (The program will not halt waiting for the
  * stream to flush the outgoing data)
- * 
+ *
  * @author Bj�rn
  *
  */
@@ -23,54 +23,55 @@ public class OutputThread
 	private BlockingQueue<String> buffer = new LinkedBlockingQueue<String>();
 	private boolean isClosing;
 	Thread thread;
-	
+
 	Runnable loopRunner = new Runnable() {
 		@Override public void run() {
-			runOutputLoop();
+			try {
+                while ( !Thread.interrupted() && !isClosing ) {
+                	String out = buffer.take();
+                	do {
+	                	stream.println( out );
+	                	out = buffer.poll();
+                	} while ( out != null );
+            		stream.flush();
+                }
+            } catch ( InterruptedException e ) {
+                ;//e.printStackTrace();
+            } finally {
+            	// Close stream on exit
+            	stream.close();
+            }
 		}
 	};
-	
-	public OutputThread( PrintWriter s ) 
+
+//	Runnable loopRunner = new Runnable() {
+//		@Override public void run() {
+//			try {
+//                while ( !Thread.interrupted() && !isClosing ) {
+//
+//                	String out = buffer.take();
+//
+//                	stream.println( out );
+//            		stream.flush();
+//                }
+//            } catch ( InterruptedException e ) {
+//                ;//e.printStackTrace();
+//            } finally {
+//            	// Close stream on exit
+//            	stream.close();
+//            }
+//		}
+//	};
+
+	public OutputThread( PrintWriter s )
 	{
 		stream = s;
 		isClosing = false;
 
-		//		initThread();
-//		thread.start();
-		
 		thread = new Thread( loopRunner, "Network output" );
 		thread.start();
 	}
-	
-	/**
-	 * Initiates the thread:
-	 * 
-	 * Writes data to output stream every 10ms,
-	 * critical for class operation.
-	 */
-//	private void initThread()
-//	{
-//		thread = new Thread( "OutputThread" ) {
-//			
-//			public void run() {
-//				doOutputLoop();
-//			}
-//			
-//		}; // End of inner class
-//	}
-	
-	
-	/**
-	 * Write a String to the stream + newline
-	 * @param s
-	 */
-//	public void println( String s )
-//	{
-//		synchronized ( buffer ) {
-//			buffer.addFirst( s );
-//		}
-//	}
-	
+
 	public void println( String s )
 	{
 		buffer.add( s );
@@ -84,68 +85,6 @@ public class OutputThread
 		isClosing = true;
 		thread.interrupt();
 	}
-	
 
-	private void runOutputLoop()
-	{
-	    try {
-
-		    while ( !Thread.interrupted() && !isClosing ) {
-	        	
-		    	String out = buffer.take();
-
-		    	stream.println( out );
-        		stream.flush();
-	        }
-	        
-	    } catch ( InterruptedException e ) {
-	        ;//e.printStackTrace();
-	    } finally {
-	    	// Close stream on exit
-	    	stream.close();
-	    }
-    }
-	
-//	private void runOutputLoop()
-//	{
-//	    
-//	    try {
-//		    
-//
-//		    while ( !Thread.interrupted() && !isClosing ) {
-//	        	
-//		    	String out = buffer.take();
-////	                	synchronized ( buffer ) {
-////	                		
-////	                		if ( !buffer.isEmpty() ) {
-////	                			out = buffer.take();
-////	                		} else {
-////	                			out = null;
-////	                		}
-////	                	}
-//	        	
-//	        	if ( out != null ) {
-//	        		// Write data to stream (or buffer for writing)
-//	        		stream.println( out );
-//	        		stream.flush();
-//	        	} else {
-//	        		// Force writing of data to stream
-//	        		stream.flush();
-//	        		
-////						try {
-////							Thread.sleep( 10 );
-////						} catch ( InterruptedException e ) {
-////							;
-////						}
-//	        	}
-//	        }
-//	        
-//	    } catch ( InterruptedException e ) {
-//	        ;//e.printStackTrace();
-//	    } finally {
-//	    	// Close stream on exit
-//	    	stream.close();
-//	    }
-//    }
 
 }

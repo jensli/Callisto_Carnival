@@ -14,19 +14,19 @@ import cc.game.objects.DeathFaderBehavior;
  */
 public class TimerBehavior extends Behavior
 {
-	private double 
+	private double
 		timeToLive = 0.0,
 		initTime;
-	
+
 	private boolean isRepeating = false;
-		
+
 	private static Behavior.Type type = Behavior.Type.TIMER;
-	
+
 	private Action1<GameObject> action;
-	
+
 	public TimerBehavior( double newTimeToLive )
 	{
-		this( newTimeToLive, DEATH_ACTION ); 
+		this( newTimeToLive, DEATH_ACTION );
 	}
 
 	public TimerBehavior( double newTimeToLive, Action1<GameObject> action )
@@ -35,11 +35,11 @@ public class TimerBehavior extends Behavior
 		initTime = newTimeToLive;
 		this.action = action;
 	}
-	
-	@Override 
+
+	@Override
 	public void receiveEvent( Event event )
 	{}
-	
+
 	/**
 	 * Sends a KillEvent when the time is up
 	 */
@@ -47,11 +47,11 @@ public class TimerBehavior extends Behavior
 	public void perform( GameObject controlled, double dT )
 	{
 		timeToLive -= dT;
-		
+
 		if (timeToLive <= 0.0 ) {
 			action.run( controlled );
 //			EventHandler.get().postEvent( new KillEvent( controlled.getID() ) );
-			
+
 			if ( isRepeating ) {
 				timeToLive = initTime;
 			} else {
@@ -59,19 +59,19 @@ public class TimerBehavior extends Behavior
 			}
 		}
 	}
-	
+
 	@Override
     public Behavior.Type getType() {
     	return type;
     }
-	
-	public static Action1<GameObject> 
+
+	public static Action1<GameObject>
 		DEATH_ACTION = new Action1<GameObject>() {
 			public void run( GameObject arg ) {
 				EventHandler.get().postEvent( new KillEvent( arg.getID() ) );
 			}
 		};
-	
+
 //	private static class FADE_ACTION implements Action1<GameObject>
 //	{
 //		private double fadeSpeed;
@@ -82,8 +82,8 @@ public class TimerBehavior extends Behavior
 //			arg.addExtraBehavior( new DeathFaderBehavior( fadeSpeed ) );
 //		}
 //	};
-		
-	
+
+
 	public static TimerBehavior makeDeathFader( double time, final double fadeSpeed )
 	{
 		Action1<GameObject> action = new Action1<GameObject>() {
@@ -91,7 +91,7 @@ public class TimerBehavior extends Behavior
 				arg.addExtraBehavior( new DeathFaderBehavior( fadeSpeed ) );
 			}
 		};
-		
+
 		return new TimerBehavior( time, action );
 	}
 }

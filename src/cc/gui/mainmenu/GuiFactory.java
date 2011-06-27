@@ -1,4 +1,4 @@
-package cc.gui;
+package cc.gui.mainmenu;
 
 import org.fenggui.Button;
 import org.fenggui.Label;
@@ -12,7 +12,7 @@ import org.fenggui.util.Spacing;
 
 public class GuiFactory
 {
-	private Font 
+	private Font
 		buttonFont,
 		titleFont;
 
@@ -28,25 +28,25 @@ public class GuiFactory
 		button.addButtonPressedListener( listener );
 		return button;
 	}
-	
+
 	public Font getTitleFont() {
 		return titleFont;
 	}
-	
+
 	public Font getFont1() {
     	return buttonFont;
     }
-	
-	public Label makeLabel( String text ) 
+
+	public Label makeLabel( String text )
 	{
 		Label label = new Label( text );
 		label.getAppearance().setFont( getFont1() );
 		label.getAppearance().setTextColor( Color.WHITE );
-		
+
 		return label;
 	}
-	
-	public Window makeDialogWindow( String title, Point pos ) 
+
+	public Window makeDialogWindow( String title, Point pos )
 	{
 		Window window = new Window( false, false, false, false );
 		window.getTitleLabel().getAppearance().setFont( getTitleFont() );
@@ -55,13 +55,13 @@ public class GuiFactory
 		window.setPosition( pos );
 		window.getContentContainer().getAppearance().setPadding( new Spacing( 15, 15 ) );
 		window.getContentContainer().getAppearance().add( new PlainBackground( new Color(145, 0, 100, 128 ) ) );
-		
+
 		// Window has to be in the widget tree for this
 //		window.setResizable( false );
 //		window.setMovable( false );
-		
+
 		return window;
 	}
-	
+
 
 }

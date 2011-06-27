@@ -22,83 +22,83 @@ import cc.util.math.Vec;
 /**
  * Displays the game view = the acctual game, the minimap, the Hud with Armour, fuel etc.
  * Receives a GuiResetEvent to get a ref to the Player object te be able to read info there for
- * the Hud and the list of all GameObjects 
+ * the Hud and the list of all GameObjects
  * @author jens
  */
 
-public class GameDisplay extends EventReceiver 
+public class GameDisplay extends EventReceiver
 {
 	private GameScreen gameScreen;
 	private Minimap minimap;
 	private Hud hud;
 	private FadeOverlay fadeOverlay;
-	
+
 	private GraphicalModelIterator itr;
 
 	//	private Collection<GameObject> objectList_OLD = new LinkedList<GameObject>();
 
 	// Init to dummy list to avoid NullPointer
 	private Collection<GameObject> objectList = new LinkedList<GameObject>();
-	
+
 	private GameObject focusObject = null;
-	
+
 	private Player focusPlayer = new Player( "Dummy", -1 );
-	
+
 	boolean hasPlayerFocus = true;
-	
+
 	public GameDisplay()
 	{
 		EventHandler.get().addEventReceiver( this, Event.Cathegory.GUI );
-		
+
 		gameScreen = new GameScreen();
 		minimap = new Minimap();
 		hud = new Hud();
 		fadeOverlay = new FadeOverlay( 0.0005 );
 	}
-	
+
 	public void update( double dT )
 	{
 		if ( !Display.isActive() ) {
 			return;
 		}
-		
+
 		Vec focusPoint = findFocusPoint();
-		
+
 		gameScreen.draw( dT, focusPoint, objectList );
 		minimap.draw( focusPoint, itr, objectList );
 		hud.draw( focusPlayer );
-		
+
 		fadeOverlay.update( dT );
 		fadeOverlay.draw();
-		
+
 		Display.update();
 	}
 
 	private Vec findFocusPoint()
 	{
 	    Vec focusPoint = new Vec( 0, 0 );
-		
+
 		// Render, protect for null for player, object or object list
 		if ( hasPlayerFocus && focusPlayer != null && focusPlayer.getControlledObject() != null ) {
 			focusObject = focusPlayer.getControlledObject();
 		}
-		
+
 		if ( focusObject != null ) {
 			focusPoint = focusObject.getPos();
 		}
-		
+
 	    return focusPoint;
     }
 
-	
+
 	public void resetFocusObject()
 	{
 		hasPlayerFocus = true;
 	}
-	
+
 	/**
 	 * Update the obj that have the focus in the game, to enable cycling
-	 * through all game objs. 
+	 * through all game objs.
 	 */
 	public void nextFocusObject()
 	{
@@ -107,16 +107,16 @@ public class GameDisplay extends EventReceiver
 		GameObject first = null;
 
 		Iterator<GameObject> itr = objectList.iterator();
-		
+
 		while ( itr.hasNext() ) {
-			
+
 			GameObject obj = itr.next();
-			
+
 			// Skip all shots
 			if ( obj.getCathegory() == ObjectCathegory.SHOT ) {
 				continue;
 			}
-			
+
 			// Save the first found obj to warp around the list
 			if ( first == null ) {
 				first = obj;
@@ -130,18 +130,18 @@ public class GameDisplay extends EventReceiver
 				break;
 			}
 		}
-		
+
 		// If focusObject is not found, e.g. have died, choose first obj
 		if ( !isFound ) {
 			focusObject = first;
 		}
 	}
-	
+
 	@Override
     public void receiveEvent( Event event ) {
 		event.dispatch( this );
 	}
-	
+
 	@Override
     public void receiveGuiResetEvent( GuiResetEvent event )
     {
@@ -150,13 +150,13 @@ public class GameDisplay extends EventReceiver
 		objectList = event.getObjectList();
 		itr = event.getItr();
     }
-	
+
 	@Override
-    public void receiveZoomEvent( StandardValueEvent<Integer> event ) 
+    public void receiveZoomEvent( StandardValueEvent<Integer> event )
 	{
 		gameScreen.setZoom( event.getValue() );
     }
-	
+
 	public void activate() {
 		fadeOverlay.startFade();
 	}

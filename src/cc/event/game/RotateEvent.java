@@ -6,29 +6,29 @@ import cc.event.handlers.EventReceiver;
 
 public class RotateEvent extends Event
 {
-	public static final boolean 
+	public static final boolean
 		RIGHT = false, LEFT = true;
-	
+
 	private boolean rotateClockwise = false;
 	private static final Cathegory type = Cathegory.GAME;
 	private boolean switchOn = true;
-	
-	
+
+
 	{ setName( Event.ROTATE ); }
-	
+
 	public RotateEvent() {}
-	
+
 	public RotateEvent( int newReceiverID )
 	{
 		super( newReceiverID );
 	}
-	
+
 	public RotateEvent(int newReceiverID, boolean clockwise)
 	{
 		this(newReceiverID);
 		rotateClockwise = clockwise;
 	}
-	
+
 	public RotateEvent(int newReceiverID, boolean clockwise, boolean switchOn )
 	{
 		this(newReceiverID, clockwise );
@@ -39,12 +39,12 @@ public class RotateEvent extends Event
 		this.rotateClockwise = clockwise;
 		this.switchOn = switchOn;
 	}
-	
+
 	public boolean isRotateClockwise()
 	{
 		return rotateClockwise;
 	}
-	
+
 	@Override
 	public void deserialize( String parameters )
 	{
@@ -53,13 +53,13 @@ public class RotateEvent extends Event
 		this.rotateClockwise = Boolean.valueOf( parameter[3] );
 		this.switchOn = Boolean.valueOf( parameter[4] );
 	}
-	
+
 	@Override
     public RotateEvent clone()
 	{
 		return ( RotateEvent ) super.clone();
 	}
-	
+
 	@Override
 	public String serialize()
 	{
@@ -87,7 +87,7 @@ public class RotateEvent extends Event
     {
     	this.switchOn = switchOn;
     }
-	
-	
+
+
 
 }

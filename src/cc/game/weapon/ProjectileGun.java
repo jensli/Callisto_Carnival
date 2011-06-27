@@ -12,16 +12,16 @@ import cc.util.sound.Sound;
 
 /**
  * Weapon that fire small circular shots.
- * 
+ *
  * This is the standard weapon in Callisto Carneval.
  *
  */
 public class ProjectileGun extends Weapon
 {
 	Sound sound;
-	
+
 	private ShotCreator shotCreator;
-	
+
 	private double
 		refireTime = 0.1,
 		timeToFire = refireTime;
@@ -32,7 +32,7 @@ public class ProjectileGun extends Weapon
 		this.shotCreator = shotCreator;
 		sound = ResourceHandler.get().getSound( Name.LASER_SOUND );
 	}
-	
+
 //	public ProjectileGun()
 //	{
 //		sound = ResourceHandler.getInstance().getSound( ResourceHandler.LASER_SOUND );
@@ -52,18 +52,18 @@ public class ProjectileGun extends Weapon
 			return;
 		}
 		timeToFire = shotCreator.refireTime();
-		
+
 		if ( super.ammo <= 0.0 ) {
 			return;
 		}
 		super.ammo -= shotCreator.dAmmo();
-		
+
 		PhysicalModel physical = controller.getPhysModel();
-		
+
 		// Get a SpaceObject with bahaviors and all
 //		GameObject shot = GameCreator.getInstance().createBallShot();
 		GameObject shot = shotCreator.createShot();
-		
+
 		// Calculate the velocity and directon
 		Vec
 			contrForw = new Vec( physical.getForward() ),
@@ -73,35 +73,35 @@ public class ProjectileGun extends Weapon
 		// Sets posision, making sure the shot and the shooter don't collide.
 		// Note: if the shoter accelarate to fast they will collide
 //		double shooterVel = physical.getVelocity().length();
-		
+
 		shotPos.scale( physical.getRadius() + shot.getPhysModel().getRadius()
 				+  1 );
 		shotPos.add( physical.getPos() );
 		shot.getPhysModel().setPos( shotPos );
 
 		// Speed = shot speed + controlled speed
-		
+
 		shotVel = contrForw;
 		shotVel.scale( shotCreator.speed() );
 		shotVel.add( physical.getVel() );
-		
+
 		shot.getPhysModel().setVelocity( shotVel );
-		
+
 		shotVel.normalize();
-		shot.getPhysModel().setForward( shotVel );  
+		shot.getPhysModel().setForward( shotVel );
 
 		EventHandler.get().postEvent( new CreateEvent( shot ) );
-		
+
 		sound.play( 0.8f, 0.1f );
     }
-	
-	
-	
+
+
+
 	public static abstract class ShotCreator {
 		protected double refireTime,
 			speed,
 			dAmmo;
-		
+
 		public abstract GameObject createShot();
 		public double speed() {
 			return speed;
@@ -113,7 +113,7 @@ public class ProjectileGun extends Weapon
 			return dAmmo;
 		}
 	}
-	
+
 	public static class PlasmaBallCreator extends ShotCreator {
 		{
 			refireTime = 0.15;
@@ -136,8 +136,8 @@ public class ProjectileGun extends Weapon
         public GameObject createShot(){
 			return GameFactory.get().createLaserShot();
 		}
-		
+
 	}
-	
-	
+
+
 }

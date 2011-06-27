@@ -2,8 +2,8 @@ package cc.game;
 
 /**
  * Objects of this class reacts to collision, one object gets the other objs
- * Health object and invoke a method on it.  
- * 
+ * Health object and invoke a method on it.
+ *
  * If isAlive() returns true the
  * game engine removes the GameObject from the game.
  */

@@ -25,40 +25,43 @@ public class Test
         	System.out.println( "FIN!" );
         }
 	}
-	
-	
+
+
 	public static class Asdf
 	{
-		Object[] arr = new Object[] 
+		Object[] arr = new Object[]
 		   { new Double( 1 ), new Vec( 1, 3 ), new Asdf2() };
 	}
-	
-	
+
+
 	public static class Asdf2
 	{
 		Object[] arr2 = new Object[]
 		   { new Vec(), "asdf" };
 	}
-	
+
+	public int a;
+	public int a() { return a; }
+
 	public static void main( String[] args ) throws IOException
 	{
 //		Object d = GameFactory.get().createPlayerShip( "Tjo", Player.Color.BLUE );
 		GraphicalModelGroup d = new GraphicalModelGroup( new GameObject( "tjo" ) );
-		
-		d.add( new GraphicalModel() {
+
+		d.add( new GraphicalModel( null ) {
 			@Override
             public void draw( Vec pos, Vec forward ) {
             }
-		}, 
-		new GraphicalModel() {
+		},
+		new GraphicalModel( null ) {
 			@Override
             public void draw( Vec pos, Vec forward ) {
             }
 		}
 		);
-		
+
 		Object o = new Asdf();
-		
+
 		System.out.println( "v = " + Util.deepToString( o ) );
 	}
 }

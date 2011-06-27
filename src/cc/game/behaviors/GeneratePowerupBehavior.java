@@ -15,11 +15,11 @@ import cc.util.Random;
  */
 public class GeneratePowerupBehavior extends Behavior
 {
-		
-	
+
+
 	private double freq;
 	private PowerupType powerupType;
-	
+
 	public GeneratePowerupBehavior( double freq, PowerupType powerupType )
 	{
 	    this.freq = freq;
@@ -30,11 +30,11 @@ public class GeneratePowerupBehavior extends Behavior
     public void perform( GameObject controlled, double dT )
 	{
 		if ( Random.getGameRandom().nextDouble()  <= dT*freq ) {
-			
+
 			Powerup p = GameFactory.get().createPowerup( controlled, powerupType );
 			EventHandler.get().postEvent( new CreateEvent( p ) );
 		}
     }
-	
-	
+
+
 }

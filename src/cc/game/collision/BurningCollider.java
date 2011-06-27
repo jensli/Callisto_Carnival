@@ -11,14 +11,14 @@ public class BurningCollider extends DefaultCollider
 {
 	private Collection<GameObject> burningList = new ArrayList<GameObject>();
 
-	private double 
+	private double
 		realRadius,
 		burnDamage = 0.3;
-	
+
 //	@Override
 //    public void collideMe( GameObject me, GameObject other )
 //    {
-//		
+//
 //    }
 
 	public BurningCollider( double burnDamage, double realRadius )
@@ -27,10 +27,10 @@ public class BurningCollider extends DefaultCollider
 	    this.realRadius = realRadius;
     }
 
-	@Override 
+	@Override
 	public void collideDefault( GameObject other, GameObject me )
 	{
-		double distance = me.getPos().distance( 
+		double distance = me.getPos().distance(
 				other.getPos() );
 
 		if ( distance <= other.getRadius() + realRadius ) {
@@ -40,32 +40,32 @@ public class BurningCollider extends DefaultCollider
 
 	@Override
     public void collideActor( Ship other, GameObject me )
-    {	
-		double distance = me.getPos().distance( 
+    {
+		double distance = me.getPos().distance(
 				other.getPos() );
-		
+
 		if ( distance > other.getRadius() + realRadius ) {
-			
+
 			// To giv burning targets to the particle system,
 			// emptied every update by particle system.
 			burningList.add( other );
 
-			other.changeLife( -burnDamage * 
+			other.changeLife( -burnDamage *
 					( me.getRadius()/distance - 1 ) );
-				
+
     	} else {
-			
+
     		this.collideDefault( other, me );
 		}
-		
+
     }
 
 
 	public Collection<GameObject> getBurningList() {
     	return burningList;
     }
-	
-	
+
+
 }
 
 

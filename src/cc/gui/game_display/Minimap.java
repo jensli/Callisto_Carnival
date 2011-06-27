@@ -24,16 +24,16 @@ import cc.util.resources.ResourceHandler;
 public class Minimap
 {
 	private Player focusPlayer;
-	
+
 	private Texture texture;
 	private Vec pos;
 	private float width, height,
 		halfWidth, halfHeight;
-	
+
 	private final float VIEW_DIST = 3800,
 		MINIFY_FACTOR;
-	
-	
+
+
 	public Minimap()
 	{
 		pos = new Vec( 0.16, 0.825 );
@@ -44,27 +44,27 @@ public class Minimap
 		halfWidth = 0.5f*width;
 
 		MINIFY_FACTOR = 0.43f*height/VIEW_DIST;
-		
+
 		texture = ResourceHandler.get().getTexture( Name.RADAR );
 
 		// Dummy objs to avoid nullpex if the real ones havent arrived yet
 		focusPlayer = new Player( "Dummy", -1 );
 		focusPlayer.setControlledObject( new Ship("Dummy minimap object", null, null ) );
 	}
-	
-	
+
+
 	public void draw( Vec focusPoint, GraphicalModelIterator itr, Collection<GameObject> objectList )
 	{
 //		Vector2d focusPoint = focusPlayer.getControlledObject().getPosition();
-		
+
 		Graphics.get().enterOrthoProjection();
-		
+
 		texture.bind();
 		GL11.glColor4f( 1, 1, 1, 0.7f );
-		
+
 		GL11.glTranslatef( (float)pos.x, (float)pos.y, 0 );
-		
-		
+
+
 		// Draw radar background
 		glBegin( GL_QUADS );
 			glTexCoord2f( 0, 0 );
@@ -76,21 +76,21 @@ public class Minimap
 			glTexCoord2f( 1, 0 );
 			glVertex2f( halfWidth, -halfHeight );
 		glEnd();
-		
+
 		glDisable( GL_TEXTURE_2D );
 		glEnable( GL_POINT_SMOOTH );
-		
-		
+
+
 		Vec v = new Vec();
-		
+
 		// Draw dots on radar
 //		for ( GraphicalModel model = itr.first(); itr.isValid(); model = itr.next() ) {
 		for ( GameObject obj : objectList ) {
-			
+
 			GraphicalModel model = obj.getGraphicalModel();
 			float x = (float) (model.getPosition().x - focusPoint.x),
 			y = (float) (model.getPosition().y - focusPoint.y);
-			
+
 			v.setSub( obj.getPos(), focusPoint );
 
 			// Continue if object is to far away to been seen on the minimap
@@ -98,14 +98,14 @@ public class Minimap
 					obj.getPos().distance( focusPoint ) > VIEW_DIST) {
 				continue;
 			}
-			
+
 			v.scale( MINIFY_FACTOR );
-			
+
 			x *= MINIFY_FACTOR;
 			y *= MINIFY_FACTOR;
-			
+
 			double radius = model.getRadius();
-			
+
 			// Set color and size depending on obj radius
 			if ( radius < 8 ) {
 				continue;  // To small obj, do not draw
@@ -121,25 +121,25 @@ public class Minimap
 				glColor3f( 0.9f, 0.9f, 0.1f );
 				glPointSize( 8 );
 			}
-			
+
 			// Draw the dot
 			glBegin( GL_POINTS );
 				GraphicsUtil.putVertex( v );
 //				GL11.glVertex2f( x, y );
 			glEnd();
-			
+
 			glColor3f( 1.0f, 1.0f, 1.0f );
 		}
-		
+
 		Graphics.get().leaveOrthoProjection();
 	}
-	
+
 //	private void drawMini( SpaceObject obj )
 //	{
-//		
+//
 //	}
-	
-	
+
+
 //	@Override
 //    public void receiveEvent( Event event )
 //    {
@@ -166,5 +166,5 @@ public class Minimap
     	this.width = (float)width;
     	halfWidth = this.width;
     }
-	
+
 }

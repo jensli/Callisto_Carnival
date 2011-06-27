@@ -6,7 +6,7 @@ import java.util.List;
 public class ColliderGroup extends DefaultCollider
 {
 	List<DefaultCollider> colliderList = new ArrayList<DefaultCollider>();
-	
+
 //	public void collideMe( GameObject me, GameObject other )
 //	{
 //		for ( Collider collider : colliderList ) {

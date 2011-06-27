@@ -17,23 +17,23 @@ import cc.event.Event;
  * registered as a receiver of that type of event, passing the event as
  * parameter.
  */
-public class EventHandler implements IEventHandler 
+public class EventHandler implements IEventHandler
 {
 	private static IEventHandler instance = new EventHandler();
-	private Map<Event.Cathegory, Set<EventReceiver>> receiverListMap 
+	private Map<Event.Cathegory, Set<EventReceiver>> receiverListMap
 			= new HashMap<Event.Cathegory, Set<EventReceiver>>();
-	
+
 	private EventHandler()
 	{
 		for ( Event.Cathegory type : Event.Cathegory.values() ) {
 			receiverListMap.put( type, new HashSet<EventReceiver>() );
 		}
 	}
-	
+
 	public static void reset() {
 		instance = new EventHandler();
 	}
-	
+
 	/**
 	 * Send an event to other objects.
 	 * @param event
@@ -44,21 +44,21 @@ public class EventHandler implements IEventHandler
 		if ( event == null ) {
 			throw new NullPointerException( "Can not post null as a event." );
 		}
-		
+
 		Collection<EventReceiver> receiverList = receiverListMap.get( event.getType() );
-		
+
 		for ( EventReceiver receiver : receiverList ) {
 			receiver.receiveEvent( event );
 		}
 	}
-	
-	public void postEvents( Iterable<Event> events ) 
+
+	public void postEvents( Iterable<Event> events )
 	{
 		for ( Event e : events ) {
 			postEvent( e );
 		}
 	}
-	
+
 	/**
 	 * Returns the single instance of this class.
 	 */
@@ -66,10 +66,10 @@ public class EventHandler implements IEventHandler
 	{
 		return instance;
 	}
-	
+
 	public void addEventReceiver( EventReceiver receiver, Event.Cathegory type )
 	{
 		receiverListMap.get( type ).add( receiver );
 	}
-	
+
 }

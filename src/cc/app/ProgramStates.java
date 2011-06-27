@@ -7,35 +7,35 @@ public class ProgramStates
 	public static interface ProgramState {
 		public void update();
 	}
-	
-	public static class MenuState implements ProgramState 
+
+	public static class MenuState implements ProgramState
 	{
 		@Override
-        public void update() 
+        public void update()
 		{
 	        // TODO Auto-generated method stub
-	        
+
         }
 	}
-	
-	public static class ClientGameState implements ProgramState 
+
+	public static class ClientGameState implements ProgramState
 	{
 		@Override
-        public void update() 
+        public void update()
 		{
 	        // TODO Auto-generated method stub
-	        
+
         }
 	}
-	
-	public static class ServerGameState extends ClientGameState 
+
+	public static class ServerGameState extends ClientGameState
 	{
 		@Override
-        public void update() 
+        public void update()
 		{
 	        // TODO Auto-generated method stub
-	        
+
         }
 	}
-	                                     
+
 }

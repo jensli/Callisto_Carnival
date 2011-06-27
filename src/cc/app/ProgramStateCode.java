@@ -5,8 +5,8 @@ public enum ProgramStateCode
 	RESTARTING,
 	EXITING( true ),
 	RUNNING;
-	
-	
+
+
 	private ProgramStateCode( boolean isStopping ) {
 	    this.isStopping = isStopping;
     }

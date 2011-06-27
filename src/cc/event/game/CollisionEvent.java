@@ -8,7 +8,7 @@ public class CollisionEvent extends Event
 {
 	private double collisionPower = 20.0;
 	private static final Cathegory type = Cathegory.GAME;
-	
+
 	private GameObject object;
 
 	public CollisionEvent(int i, int j, GameObject object)
@@ -17,7 +17,7 @@ public class CollisionEvent extends Event
 		super.setSenderID( j );
 		this.object = object;
 	}
-	
+
 	public double getCollisionPower()
     {
     	return collisionPower;
@@ -44,6 +44,6 @@ public class CollisionEvent extends Event
     {
     	return object;
     }
-	
+
 
 }

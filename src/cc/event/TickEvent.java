@@ -6,7 +6,7 @@ public class TickEvent extends Event
 {
 	private static final Cathegory type = Cathegory.NETWORK;
 	private double dT;
-	
+
 	{ setName( Event.TICK ); }
 
 	public TickEvent( double dT )
@@ -41,8 +41,8 @@ public class TickEvent extends Event
 		String parameter[] = parameters.split( " " );
 		dT = Double.valueOf( parameter[3] );
     }
-	
-	
-	
-	
+
+
+
+
 }
