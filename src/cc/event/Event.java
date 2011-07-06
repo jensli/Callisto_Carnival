@@ -39,8 +39,6 @@ public abstract class Event implements Cloneable
 	public static final int NO_SENDER = -1,
 		NO_RECEIVER = -1;
 
-
-
 	private String name;
 
 	private static HashMap<String, Event> eventMap = new HashMap<String, Event>();
@@ -65,32 +63,10 @@ public abstract class Event implements Cloneable
 	 */
 	public abstract void dispatch( EventReceiver receiver );
 
-	/**
-	 * The cathegory decides which group of receivers the event will be sent to.
-	 */
-	public abstract Cathegory getType();
-
 	public Event() {}
 
 	public Event( int newReceiverID ) {
 		receiverID = newReceiverID;
-	}
-
-	/**
-	 * Used to manufact StandardEvents
-	 */
-	public static StandardEvent make( StandardEvent event ) {
-		return event.clone();
-	}
-	/**
-	 * Used to manufact StandardEvents
-	 */
-	// TODO: Ful, ful, remove?
-	public static <TYPE> StandardValueEvent<TYPE> make( StandardValueEvent<TYPE> event, TYPE value )
-	{
-		StandardValueEvent<TYPE> newEvent = event.clone();
-		newEvent.setValue( value );
-		return newEvent;
 	}
 
 	/**
@@ -104,12 +80,13 @@ public abstract class Event implements Cloneable
 
 		String[] param = parameters.split( " ", 2 );
 		Event newEvent = eventMap.get( param[0] );
-//		Event newEvent = eventMap.get( param[0] ).clone();
 
 		if ( newEvent == null ) {
 			throw new RuntimeException( "Trying to deserialise unknown Event." );
 		}
+
 		newEvent = newEvent.clone();
+
 		newEvent.deserialize( parameters );
 
 		return newEvent;
@@ -149,7 +126,7 @@ public abstract class Event implements Cloneable
 		try {
 	        return ( Event ) super.clone();
         } catch ( CloneNotSupportedException e ) {
-	        throw new RuntimeException( e.getClass().getName() + " while trying to clone event.", e );
+	        throw new RuntimeException( e + " while trying to clone event.", e );
         }
 	}
 

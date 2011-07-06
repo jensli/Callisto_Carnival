@@ -29,12 +29,5 @@ public class StandardValueEvent<TYPE> extends StandardEvent
 		throw new UnsupportedOperationException( "Can not call dispatch on this event" );
 	}
 
-	@Override
-    @SuppressWarnings("unchecked")
-	public StandardValueEvent<TYPE> clone()
-	{
-		return (StandardValueEvent<TYPE>) super.clone();
-	}
-
 
 }

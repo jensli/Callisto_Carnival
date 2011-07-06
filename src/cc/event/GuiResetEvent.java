@@ -15,8 +15,6 @@ import cc.gui.Drawable;
 
 public class GuiResetEvent extends Event
 {
-	private static final Cathegory type = Cathegory.GUI;
-
 	private Player focusPlayer;
 	// This is just thee different way to do the same thing,
 	// experimenting
@@ -34,12 +32,6 @@ public class GuiResetEvent extends Event
 	    this.objectList = objectList;
 	    this.objectList2 = objectList2;
 
-    }
-
-	@Override
-    public Cathegory getType()
-    {
-		return type;
     }
 
 	@Override

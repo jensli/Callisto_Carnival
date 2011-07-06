@@ -20,8 +20,4 @@ public class ValueEvent<T> extends Event {
 		throw new UnsupportedOperationException( "Not implemented" );
 	}
 
-	@Override public Cathegory getType() {
-		throw new UnsupportedOperationException( "Not implemented" );
-	}
-
 }

@@ -5,8 +5,6 @@ import cc.event.handlers.EventReceiver;
 
 public class KillEvent extends Event
 {
-	private static final Cathegory type = Cathegory.GAME;
-
 	public KillEvent(int newReceiverID)
 	{
 		super(newReceiverID);
@@ -23,9 +21,4 @@ public class KillEvent extends Event
 		receiver.receiveKillEvent( this );
     }
 
-	@Override
-    public Cathegory getType()
-    {
-    	return type;
-    }
 }

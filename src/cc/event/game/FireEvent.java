@@ -9,7 +9,6 @@ import cc.event2.EventGroups;
 
 public class FireEvent extends Event
 {
-	private static final Cathegory type = Cathegory.GAME;
 	private boolean switchOn = false;
 
 	{ setName( Event.FIRE ); }
@@ -30,13 +29,6 @@ public class FireEvent extends Event
 	}
 
     @Override
-    public FireEvent clone()
-    {
-        FireEvent copy = (FireEvent)super.clone();
-        return copy;
-    }
-
-    @Override
 	public String serialize() {
 		return super.serialize() + " " + this.switchOn;
 	}
@@ -55,10 +47,6 @@ public class FireEvent extends Event
 		receiver.receiveFireEvent( this );
     }
 
-	@Override
-    public Cathegory getType() {
-    	return type;
-    }
 
 	public boolean isSwitchOn()
     {

@@ -8,7 +8,6 @@ import cc.event2.EventGroups;
 
 public class ThrustEvent extends Event
 {
-	private static final Cathegory type = Cathegory.GAME;
 	private  boolean switchOn;
 
 	{ setName( Event.THRUST ); }
@@ -32,21 +31,12 @@ public class ThrustEvent extends Event
 	}
 
 	@Override
-    public ThrustEvent clone() {
-		ThrustEvent copy = (ThrustEvent) super.clone();
-		return copy;
-	}
-	@Override
 	public String serialize() {
 		return "" + super.serialize() + " " + this.switchOn;
 	}
 	@Override
 	public void dispatch( EventReceiver receiver ) {
 		receiver.receiveThrustEvent( this );
-	}
-	@Override
-    public Cathegory getType() {
-		return type;
 	}
 	public boolean isSwitchOn() {
 		return switchOn;

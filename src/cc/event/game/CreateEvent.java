@@ -14,9 +14,6 @@ public class CreateEvent extends Event
 	private String serializedObject = null;
 
 
-	private final Cathegory type = Cathegory.GAME;
-
-
 	public CreateEvent(int newReceiverID)
 	{
 		super( newReceiverID );
@@ -44,9 +41,4 @@ public class CreateEvent extends Event
 		receiver.receiveCreateEvent( this );
 	}
 
-	@Override
-    public Cathegory getType()
-    {
-    	return type;
-    }
 }

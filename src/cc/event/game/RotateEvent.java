@@ -12,7 +12,6 @@ public class RotateEvent extends Event
 		RIGHT = false, LEFT = true;
 
 	private boolean rotateClockwise = false;
-	private static final Cathegory type = Cathegory.GAME;
 	private boolean switchOn = true;
 
 
@@ -56,11 +55,6 @@ public class RotateEvent extends Event
 		this.switchOn = Boolean.valueOf( parameter[4] );
 	}
 
-	@Override
-    public RotateEvent clone()
-	{
-		return ( RotateEvent ) super.clone();
-	}
 
 	@Override
 	public String serialize()
@@ -72,12 +66,6 @@ public class RotateEvent extends Event
     public void dispatch( EventReceiver receiver )
     {
 		receiver.receiveRotateEvent( this );
-    }
-
-	@Override
-    public Cathegory getType()
-    {
-    	return type;
     }
 
 	public boolean isSwitchOn()

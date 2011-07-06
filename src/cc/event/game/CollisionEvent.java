@@ -7,7 +7,6 @@ import cc.game.GameObject;
 public class CollisionEvent extends Event
 {
 	private double collisionPower = 20.0;
-	private static final Cathegory type = Cathegory.GAME;
 
 	private GameObject object;
 
@@ -32,12 +31,6 @@ public class CollisionEvent extends Event
     public void dispatch( EventReceiver receiver )
     {
 		receiver.receiveCollisionEvent( this );
-    }
-
-	@Override
-    public Cathegory getType()
-    {
-    	return type;
     }
 
 	public GameObject getObject()

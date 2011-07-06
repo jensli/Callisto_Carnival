@@ -6,7 +6,6 @@ import cc.event2.EventGroups;
 
 public class TickEvent extends Event
 {
-	private static final Cathegory type = Cathegory.NETWORK;
 	private double dT;
 
 	{ setName( Event.TICK ); }
@@ -20,17 +19,9 @@ public class TickEvent extends Event
     public void dispatch( EventReceiver receiver ) {
 		receiver.receiveTickEvent( this );
 	}
-	@Override
-	public Cathegory getType() {
-		return type;
-	}
+
 	public double getDt() {
 		return dT;
-	}
-	@Override
-    public TickEvent clone()
-	{
-		return (TickEvent) super.clone();
 	}
 
 	@Override

@@ -13,7 +13,6 @@ public class JoinEvent extends Event
 	String nick = "no nick";
 	boolean isBot = false;
 	boolean isMe = false;
-	private static final Cathegory type = Cathegory.NETWORK;
 
 	public JoinEvent( int playerID, String nick, boolean isBot, boolean isMe )
 	{
@@ -35,16 +34,6 @@ public class JoinEvent extends Event
 		this.isMe = Boolean.valueOf(parameter[5]);
 	}
 
-//	public Object clone()
-    @Override
-    public JoinEvent clone()
-    {
-        JoinEvent copy = (JoinEvent)super.clone();
-//        copy.nick = this.nick;
-//        copy.isMe =
-//        copy.isBot = this.isBot;
-        return copy;
-    }
 
 	@Override
     public String serialize()
@@ -58,10 +47,6 @@ public class JoinEvent extends Event
 	    receiver.receiveJoinEvent( this );
     }
 
-	@Override
-    public Cathegory getType() {
-		return type;
-	}
 	public String getNick() {
 		return nick;
 	}
