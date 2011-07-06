@@ -6,9 +6,19 @@ import cc.event2.EventGroups;
 
 public class TickEvent extends Event
 {
+	public static void setDt( double dT ) {
+		staticDt = dT;
+	}
+
+	private static double staticDt = 0.01;
+
 	private double dT;
 
-	{ setName( Event.TICK ); }
+
+	public TickEvent() {
+		super();
+		this.dT = staticDt;
+	}
 
 	public TickEvent( double dT )
 	{
@@ -24,16 +34,11 @@ public class TickEvent extends Event
 		return dT;
 	}
 
-	@Override
-    public String serialize() {
-	    return super.serialize() + " " + dT;
-    }
-	@Override
-    public void deserialize( String parameters ) {
-		super.deserialize( parameters );
-		String parameter[] = parameters.split( " " );
-		dT = Double.valueOf( parameter[3] );
-    }
+
+//    @Override
+//	public void toStringBuilder( StringBuilder b ) {
+//		No data sent, dT is statically set.
+//	}
 
 
 	@Override
@@ -41,5 +46,7 @@ public class TickEvent extends Event
 		return EventGroups.TICK;
 	}
 
-
+	@Override public String getName() {
+		return Event.TICK;
+	}
 }

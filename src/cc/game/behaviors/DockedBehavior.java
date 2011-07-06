@@ -60,7 +60,7 @@ public class DockedBehavior extends ControlledBehavior
 		oldMovementBehavior = ship.getMovementBehavior();
 
 		ship.getPhysModel().setVelocity( new Vec( 0, 0 ) );
-		ship.receiveEvent( new ThrustEvent( Event.SWITCH_OFF ) );
+		ship.receiveEvent( new ThrustEvent( false ) );
 		ship.getPhysModel().setRotation( 0.0 );
 
 		ship.setControlledBehavior( this );

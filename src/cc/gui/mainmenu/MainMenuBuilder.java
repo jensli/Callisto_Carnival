@@ -26,7 +26,7 @@ public class MainMenuBuilder
 	private EventHandler eventHandler;
 
 	public MainMenuBuilder( AppContext context ) {
-		eventHandler = context.getEventHandlerNew();
+		eventHandler = context.getEventHandler();
 		factory = new GuiFactory(
 				FengUtils.loadFont( "res/battlefield.ttf", 26 ),
 				FengUtils.loadFont( "res/battlefield.ttf", 20 ) );

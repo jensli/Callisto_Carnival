@@ -17,29 +17,30 @@ public class JoinEvent extends Event
 	public JoinEvent( int playerID, String nick, boolean isBot, boolean isMe )
 	{
 		super( playerID );
-		setName( Event.JOIN );
 
 		this.nick = nick;
 		this.isBot = isBot;
 		this.isMe = isMe;
 	}
 
-	@Override
-	public void deserialize( String parameters )
-	{
-		super.deserialize(parameters);
-		String parameter[] = parameters.split(" ");
-		this.nick = parameter[3];
-		this.isBot = Boolean.valueOf(parameter[4]);
-		this.isMe = Boolean.valueOf(parameter[5]);
+    @Override
+	public void toStringBuilder( StringBuilder b ) {
+    	super.toStringBuilder( b );
+    	b.append( " " )
+    	.append( nick ).append( " " )
+    	.append( isBot ).append( " " )
+    	.append( isMe );
 	}
 
-
 	@Override
-    public String serialize()
-	{
-		return super.serialize() + " " + this.nick + " " + this.isBot + " " + this.isMe;
+	protected int setFields( String[] data ) {
+		int i = super.setFields( data );
+		this.nick = data[ i++ ];
+		this.isBot = Boolean.parseBoolean( data[ i++ ] );
+		this.isMe = Boolean.parseBoolean( data[ i++ ] );
+		return i;
 	}
+
 
 	@Override
     public void dispatch( EventReceiver receiver )
@@ -65,4 +66,9 @@ public class JoinEvent extends Event
 	public GroupName getReceiverGroup() {
 		return EventGroups.JOIN;
 	}
+
+	@Override public String getName() {
+		return Event.JOIN;
+	}
+
 }

@@ -260,7 +260,7 @@ public class ClientApp implements Disposable
 
 	private void handleJoinEvent( JoinEvent event )
 	{
-        if (event.getReceiverID() == clientID ) {
+        if (event.getReceiverId() == clientID ) {
 			event.setMe( true );
 			logger.info( LogPlace.NET, "Adding the local human player" );
 		} else if ( event.isBot() ) {
@@ -272,7 +272,7 @@ public class ClientApp implements Disposable
 					new ValueEvent<String>( event.getNick() ) );
 		}
 
-		gameEngine.addPlayer( event.getReceiverID(), event.getNick(), event.isBot(), event.isMe() );
+		gameEngine.addPlayer( event.getReceiverId(), event.getNick(), event.isBot(), event.isMe() );
     }
 
 
@@ -633,10 +633,9 @@ public class ClientApp implements Disposable
 						}
 					} ),
 
-			new Sub( EventGroups.JOIN_MULTIPLAYER, StandardValueEvent.class,
-					new Receiver<StandardValueEvent<String>>() {
-						public void receive(
-								StandardValueEvent<String> event ) {
+			new Sub( EventGroups.JOIN_MULTIPLAYER, ValueEvent.class,
+					new Receiver<ValueEvent<String>>() {
+						public void receive( ValueEvent<String> event ) {
 							joinRemoteGame( event.getValue() );
 						}
 					} ),

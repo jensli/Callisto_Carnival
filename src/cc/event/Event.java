@@ -5,6 +5,7 @@ package cc.event;
  */
 
 import j.util.eventhandler.GroupName;
+import j.util.lists.Maps;
 
 import java.util.HashMap;
 
@@ -14,23 +15,17 @@ import cc.event.game.KillEvent;
 import cc.event.game.RotateEvent;
 import cc.event.game.ThrustEvent;
 import cc.event.handlers.EventReceiver;
+import cc.util.Util;
 
 
 
 
 public abstract class Event implements Cloneable
 {
-	public static final String TICK = "tick", ROTATE = "rotation", THRUST = "thrust",
+	public static final String TICK = "tick", ROTATE = "rot", THRUST = "thrust",
 		KILL = "kill", FIRE = "fire", REQUEST_ACTION = "req", CREATE_OBJECT = "create",
 		JOIN = "join", QUIT = "quit", REMOTE = "rem";
 
-	public enum Cathegory {
-		GAME, NETWORK, GUI, REQUEST, APPLICATION
-	}
-
-	public static final boolean
-		SWITCH_ON = true,
-		SWITCH_OFF = false;
 
 	// Identification of the event. Should be moved to a GameEvent subclass?
 	private int receiverID = Event.NO_RECEIVER,
@@ -39,20 +34,34 @@ public abstract class Event implements Cloneable
 	public static final int NO_SENDER = -1,
 		NO_RECEIVER = -1;
 
-	private String name;
+//	private String name;
 
-	private static HashMap<String, Event> eventMap = new HashMap<String, Event>();
+	private static Object[][] eventNameMap =
+		new Object[][] {
+			{ Event.ROTATE, new RotateEvent() },
+			{ Event.THRUST, new ThrustEvent() },
+			{ Event.KILL, new KillEvent() },
+			{ Event.CREATE_OBJECT, new CreateEvent( NO_RECEIVER ) },
+			{ Event.FIRE, new FireEvent( NO_RECEIVER ) },
+			{ Event.TICK, new TickEvent() },
+			{ Event.JOIN, new JoinEvent( NO_RECEIVER, "no nick", false, false) },
+			{ Event.QUIT, new QuitEvent() },
+		};
+
+	private static HashMap<String, Event> eventMap;
 
 	static {
-		// Initializing of the static eventMap
-		eventMap.put( Event.ROTATE, new RotateEvent() );
-		eventMap.put( Event.THRUST, new ThrustEvent() );
-		eventMap.put( Event.KILL, new KillEvent() );
-		eventMap.put( Event.CREATE_OBJECT, new CreateEvent( NO_RECEIVER ) );
-		eventMap.put( Event.FIRE, new FireEvent( NO_RECEIVER ) );
-		eventMap.put( Event.TICK, new TickEvent( 0.0 ) );
-		eventMap.put( Event.JOIN, new JoinEvent( NO_RECEIVER, "no nick", false, false) );
-		eventMap.put( Event.QUIT, new QuitEvent() );
+		eventMap = Maps.make( eventNameMap );
+
+//		// Initializing of the static eventMap
+//		eventMap.put( Event.ROTATE, new RotateEvent() );
+//		eventMap.put( Event.THRUST, new ThrustEvent() );
+//		eventMap.put( Event.KILL, new KillEvent() );
+//		eventMap.put( Event.CREATE_OBJECT, new CreateEvent( NO_RECEIVER ) );
+//		eventMap.put( Event.FIRE, new FireEvent( NO_RECEIVER ) );
+//		eventMap.put( Event.TICK, new TickEvent( 0.0 ) );
+//		eventMap.put( Event.JOIN, new JoinEvent( NO_RECEIVER, "no nick", false, false) );
+//		eventMap.put( Event.QUIT, new QuitEvent() );
 	}
 
 	/**
@@ -72,39 +81,40 @@ public abstract class Event implements Cloneable
 	/**
 	 * This is called when a new event is created from a serialized string.
 	 * Uses desirialize() internally.
-	 * @param parameters Event parameters. (event_name param_1 ... param_n)
+	 * @param eventData Event parameters. (event_name param_1 ... param_n)
 	 * @return newEvent The Event that has been called and everything worked.
 	 */
-	public static Event make( String parameters )
+	public static Event make( String eventData )
 	{
 
-		String[] param = parameters.split( " ", 2 );
+		String[] param = eventData.split( " " );
+
+		Util.verifyArg( param.length != 0, "Illegal event string" );
+
 		Event newEvent = eventMap.get( param[0] );
 
-		if ( newEvent == null ) {
-			throw new RuntimeException( "Trying to deserialise unknown Event." );
-		}
+		Util.verifyNotNull( newEvent, "Trying to deserialise unknown Event." );
 
 		newEvent = newEvent.clone();
 
-		newEvent.deserialize( parameters );
+		newEvent.setFields( param );
+
+//		newEvent.deserialize( eventData );
 
 		return newEvent;
 	}
 
-	/**
-	 * This sets an event from a given event string.
-	 * @param parameters A string with the events name, receiverID and other parameters
-	 *            		 separated with a space.
-	 */
-	public void deserialize( String parameters )
-	{
-		String resultArr[] = parameters.split( " " );
-		name = resultArr[0];
-		receiverID = Integer.valueOf( resultArr[1] );//.intValue();
-		senderID = Integer.valueOf( resultArr[2] );
+	public void fromString( String data ) {
+		String resultArr[] = data.split( " " );
+		setFields( resultArr );
 	}
 
+	protected int setFields( String[] data ) {
+		int i = 1;
+		receiverID = Integer.parseInt( data[ i++ ] );
+		senderID = Integer.parseInt( data[ i++ ] );
+		return i;
+	}
 
 
 	/**
@@ -113,7 +123,17 @@ public abstract class Event implements Cloneable
 	 */
 	public String serialize()
 	{
-		return getName() + " " + getReceiverID() + " " + getSenderID();
+		StringBuilder b = new StringBuilder();
+		toStringBuilder( b );
+		return b.toString();
+	}
+
+	public void toStringBuilder( StringBuilder b ) {
+		b.append( getName() )
+			.append( " " )
+			.append( getReceiverId() )
+			.append( " " )
+			.append( getSenderId() );
 	}
 
 	/**
@@ -130,7 +150,7 @@ public abstract class Event implements Cloneable
         }
 	}
 
-	public long getSenderID() {
+	public long getSenderId() {
 		return senderID;
 	}
 
@@ -142,26 +162,18 @@ public abstract class Event implements Cloneable
 		this.receiverID = receiverID;
 	}
 
-	public int getReceiverID() {
+	public int getReceiverId() {
 		return receiverID;
 	}
 
 	public String getName() {
-		return name;
+		throw new UnsupportedOperationException( "Trying to get receiver group from event type that has non set" );
 	}
 
 	public GroupName getReceiverGroup() {
-		return null;
+		throw new UnsupportedOperationException( "Trying to get receiver group from event type that has non set" );
 	}
 
-
-	public GroupName getRecveiverGroup() {
-		throw new UnsupportedOperationException( "Trying to get receiver group from event type that has no set" );
-	}
-
-	public void setName( String newName ) {
-		name = newName;
-	}
 }
 
 

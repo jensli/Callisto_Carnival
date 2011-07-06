@@ -46,7 +46,7 @@ public class GameDisplay // extends EventReceiver
 
 	public GameDisplay( AppContext context )
 	{
-		eventHandler  = context.getEventHandlerNew();
+		eventHandler  = context.getEventHandler();
 
 		gameScreen = new GameScreen();
 		minimap = new Minimap();

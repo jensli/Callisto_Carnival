@@ -8,11 +8,9 @@ public class KillEvent extends Event
 	public KillEvent(int newReceiverID)
 	{
 		super(newReceiverID);
-		setName( Event.KILL );
 	}
 	public KillEvent() {
 		super();
-		setName( Event.KILL );
 	}
 
 	@Override
@@ -21,4 +19,7 @@ public class KillEvent extends Event
 		receiver.receiveKillEvent( this );
     }
 
+	@Override public String getName() {
+		return Event.KILL;
+	}
 }

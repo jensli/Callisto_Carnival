@@ -53,6 +53,8 @@ public class ServerApp
 
 	private boolean gameRunning = false;
 
+	private final TickEvent tickEvent;
+
 	/**
 	 *
 	 * @param server
@@ -63,10 +65,14 @@ public class ServerApp
 	{
 		this.serverConnection = server;
 
+//		TickEvent.setDt( deltaTimeToSend );
+		tickEvent = new TickEvent();
+
 		if ( gameRunning ) {
 			timer.start();
 		}
 	}
+
 
 	/**
 	 * Called each program loop, receives events sent by clients and resends
@@ -78,7 +84,8 @@ public class ServerApp
 		if ( timer.retrieveTick() ) {
 			// TODO: Should send the events immediatly, only wait with the tick.
 			serverConnection.send( serverConnection.receive() );
-			serverConnection.send( new TickEvent( deltaTimeToSend ) );
+//			serverConnection.send( new TickEvent( deltaTimeToSend ) );
+			serverConnection.send( tickEvent );
 		}
 	}
 

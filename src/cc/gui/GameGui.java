@@ -34,7 +34,7 @@ public class GameGui
 		gameDisplay = new GameDisplay( context );
 		inputHandler = new GameInputHandler<Posting>();
 
-		this.eventHandler = context.getEventHandlerNew();
+		this.eventHandler = context.getEventHandler();
 
 		//		this.eventHandler = context.getEventHandler();
 		// For gui elements added to the game view
@@ -103,13 +103,13 @@ public class GameGui
 				null ),
 
 		new Bind( Keyboard.KEY_RIGHT,
-				new Posting( EventGroups.REQUEST, new RotateEvent( RotateEvent.RIGHT, true ) ),
-				new Posting( EventGroups.REQUEST, new RotateEvent( RotateEvent.RIGHT, false ) ),
+				new Posting( EventGroups.REQUEST, new RotateEvent( false, true ) ),
+				new Posting( EventGroups.REQUEST, new RotateEvent( false, false ) ),
 				null ),
 
 		new Bind( Keyboard.KEY_LEFT,
-				new Posting( EventGroups.REQUEST, new RotateEvent( RotateEvent.LEFT, true ) ),
-				new Posting( EventGroups.REQUEST, new RotateEvent( RotateEvent.LEFT, false ) ),
+				new Posting( EventGroups.REQUEST, new RotateEvent( true, true ) ),
+				new Posting( EventGroups.REQUEST, new RotateEvent( true, false ) ),
 				null ),
 
 		new Bind( Keyboard.KEY_UP,

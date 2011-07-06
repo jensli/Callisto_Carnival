@@ -5,13 +5,14 @@ import cc.event.Event;
 import cc.event.handlers.EventReceiver;
 import cc.event2.EventGroups;
 
-// Serialization not fixed!!! Has no data, no serializ!
-
 public class FireEvent extends Event
 {
 	private boolean switchOn = false;
 
-	{ setName( Event.FIRE ); }
+
+	@Override public String getName() {
+		return Event.FIRE;
+	}
 
 	public FireEvent(int newReceiverID)
 	{
@@ -28,18 +29,23 @@ public class FireEvent extends Event
 		this.switchOn = switchOn;
 	}
 
+
+
     @Override
-	public String serialize() {
-		return super.serialize() + " " + this.switchOn;
+	public void toStringBuilder( StringBuilder b ) {
+    	super.toStringBuilder( b );
+		b.append( " " )
+			.append( switchOn );
 	}
 
+
 	@Override
-	public void deserialize(String parameters)
-	{
-		super.deserialize(parameters);
-		String parameter[] = parameters.split( " " );
-		this.switchOn = Boolean.valueOf( parameter[3] );
+	protected int setFields( String[] data ) {
+		int index = super.setFields( data );
+		this.switchOn = Boolean.parseBoolean( data[ index++ ] );
+		return index;
 	}
+
 
 	@Override
     public void dispatch( EventReceiver receiver )
@@ -53,10 +59,10 @@ public class FireEvent extends Event
     	return switchOn;
     }
 
-	public void setSwitchOn( boolean switchOn )
-    {
-    	this.switchOn = switchOn;
-    }
+//	public void setSwitchOn( boolean switchOn )
+//    {
+//    	this.switchOn = switchOn;
+//    }
 
 	@Override
 	public GroupName getReceiverGroup() {

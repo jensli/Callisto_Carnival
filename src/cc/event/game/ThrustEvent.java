@@ -10,8 +10,6 @@ public class ThrustEvent extends Event
 {
 	private  boolean switchOn;
 
-	{ setName( Event.THRUST ); }
-
 	public ThrustEvent() {}
 
 	public ThrustEvent( boolean switchOn ) {
@@ -22,18 +20,22 @@ public class ThrustEvent extends Event
 		this.switchOn = switchOn;
 	}
 
-	@Override
-	public void deserialize(String parameters)
-	{
-		super.deserialize(parameters);
-		String parameter[] = parameters.split( " " );
-		this.switchOn = Boolean.valueOf( parameter[3] );
+    @Override
+	public void toStringBuilder( StringBuilder b ) {
+    	super.toStringBuilder( b );
+		b.append( " " )
+			.append( switchOn );
 	}
 
+
 	@Override
-	public String serialize() {
-		return "" + super.serialize() + " " + this.switchOn;
+	protected int setFields( String[] data ) {
+		int i = super.setFields( data );
+		this.switchOn = Boolean.parseBoolean( data[ i++ ] );
+		return i;
 	}
+
+
 	@Override
 	public void dispatch( EventReceiver receiver ) {
 		receiver.receiveThrustEvent( this );
@@ -49,5 +51,9 @@ public class ThrustEvent extends Event
 	@Override
 	public GroupName getReceiverGroup() {
 		return EventGroups.THRUST;
+	}
+
+	@Override public String getName() {
+		return Event.THRUST;
 	}
 }

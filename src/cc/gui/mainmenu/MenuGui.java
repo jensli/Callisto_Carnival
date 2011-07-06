@@ -25,7 +25,7 @@ public class MenuGui
 
 	public MenuGui( AppContext context )
 	{
-		this.eventHandler = context.getEventHandlerNew();
+		this.eventHandler = context.getEventHandler();
 
 		guiInputHandler = new GuiInputHandler();
 		menuDisplay = new MainMenuDisplay( context );

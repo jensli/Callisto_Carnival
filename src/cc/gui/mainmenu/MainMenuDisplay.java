@@ -22,7 +22,7 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.glu.GLU;
 
 import cc.app.AppContext;
-import cc.event.StandardValueEvent;
+import cc.event.ValueEvent;
 import cc.event2.EventGroups;
 import cc.gui.FadeOverlay;
 import cc.gui.Graphics;
@@ -58,16 +58,16 @@ public class MainMenuDisplay
 
 	private Sub playerJoinSub = new Sub(
 			EventGroups.PLAYER_JOINED,
-			StandardValueEvent.class,
-			new Receiver<StandardValueEvent<String>>() {
-				public void receive( StandardValueEvent<String> event ) {
+			ValueEvent.class,
+			new Receiver<ValueEvent<String>>() {
+				public void receive( ValueEvent<String> event ) {
 					playerList.addTextLine( event.getValue() );
 				}
 			});
 
 	public MainMenuDisplay( AppContext context )
 	{
-		eventHandler = context.getEventHandlerNew();
+		eventHandler = context.getEventHandler();
 		backgroundTexture = ResourceHandler.get().getTexture( Name.SPLASH );
 
 		eventHandler.addReceiver( playerJoinSub );
@@ -218,7 +218,7 @@ public class MainMenuDisplay
 			Logger.get().log( LogPlace.GUI, "Wait start good." );
 			openPopup( waitStartDialog );
 			eventHandler.post( EventGroups.JOIN_MULTIPLAYER,
-					new StandardValueEvent<String>( ipStr ) );
+					new ValueEvent<String>( ipStr ) );
 
 		} else {
 			Logger.get().log( LogPlace.GUI, "Wait start error." );

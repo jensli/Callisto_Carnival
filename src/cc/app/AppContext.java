@@ -17,7 +17,7 @@ public class AppContext
 	    this.logger = logger;
     }
 
-	public EventHandler getEventHandlerNew() {
+	public EventHandler getEventHandler() {
     	return eventHandlerNew;
     }
 

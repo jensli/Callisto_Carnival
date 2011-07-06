@@ -70,7 +70,7 @@ public class GameEngine extends EventReceiver
 		simulation = new Simulation();
 		createGame();
 
-		eventHandler = context.getEventHandlerNew();
+		eventHandler = context.getEventHandler();
 		eventHandler.addReceivers( subs );
 		subs = null;
 	}
@@ -253,7 +253,7 @@ public class GameEngine extends EventReceiver
 
 	private void routeToObject( Event event ) {
 //		simulation.storeEvent( event );
-		GameObject obj = simulation.getObject( event.getReceiverID() );
+		GameObject obj = simulation.getObject( event.getReceiverId() );
 
 		if ( obj != null ) {
 			obj.receiveEvent( event );
@@ -262,7 +262,7 @@ public class GameEngine extends EventReceiver
 
 	private void routeToPlayer( Event event )
 	{
-		GameObject obj = simulation.getObject( event.getReceiverID() );
+		GameObject obj = simulation.getObject( event.getReceiverId() );
 
 		if ( obj != null ) {
 			obj.receiveEvent( event );

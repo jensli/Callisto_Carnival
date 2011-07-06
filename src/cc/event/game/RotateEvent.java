@@ -8,14 +8,9 @@ import cc.event2.EventGroups;
 
 public class RotateEvent extends Event
 {
-	public static final boolean
-		RIGHT = false, LEFT = true;
-
 	private boolean rotateClockwise = false;
 	private boolean switchOn = true;
 
-
-	{ setName( Event.ROTATE ); }
 
 	public RotateEvent() {}
 
@@ -46,20 +41,23 @@ public class RotateEvent extends Event
 		return rotateClockwise;
 	}
 
-	@Override
-	public void deserialize( String parameters )
-	{
-		super.deserialize( parameters );
-		String parameter[] = parameters.split( " " );
-		this.rotateClockwise = Boolean.valueOf( parameter[3] );
-		this.switchOn = Boolean.valueOf( parameter[4] );
+    @Override
+	public void toStringBuilder( StringBuilder b ) {
+    	super.toStringBuilder( b );
+		b.append( " " )
+			.append( rotateClockwise ).append( " " )
+			.append( switchOn );
 	}
 
 
+
+
 	@Override
-	public String serialize()
-	{
-		return super.serialize() + " " + this.rotateClockwise + " " + this.switchOn;
+	protected int setFields( String[] data ) {
+		int i = super.setFields( data );
+		this.rotateClockwise = Boolean.parseBoolean( data[ i++ ] );
+		this.switchOn = Boolean.parseBoolean( data[ i++ ] );
+		return i;
 	}
 
 	@Override
@@ -83,5 +81,10 @@ public class RotateEvent extends Event
 	public GroupName getReceiverGroup() {
 		return EventGroups.ROTATE;
 	}
+
+	@Override public String getName() {
+		return Event.ROTATE;
+	}
+
 
 }
