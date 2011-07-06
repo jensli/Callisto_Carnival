@@ -3,8 +3,6 @@ package cc.gui.input;
 
 import org.lwjgl.opengl.Display;
 
-import cc.event.Event;
-import cc.event.EventType;
 import cc.event2.EventGlobals;
 import cc.event2.EventGroups;
 
@@ -20,7 +18,7 @@ public class InputHandlerHandler
 	public void update()
 	{
 		if ( Display.isCloseRequested() ) {
-			EventGlobals.getHandler().post( EventGroups.EXIT, Event.make( EventType.EXIT_PROGRAM ) );
+			EventGlobals.getHandler().postEmpty( EventGroups.EXIT );
 		}
 
 		bindingsHandler.update();

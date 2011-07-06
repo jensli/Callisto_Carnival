@@ -1,28 +1,26 @@
 package cc.app;
 
 import j.util.eventhandler.EventHandler;
-import cc.event.handlers.IEventHandler;
 import cc.util.logger.Logger;
 
+/**
+ * The objects are passed around between the application objects, carrying
+ * data that is common to them. That could be global but is here instead.
+ */
 public class AppContext
 {
-	private IEventHandler eventHandler;
 	private EventHandler eventHandlerNew;
 	private Logger logger;
 
-
-
-	public AppContext( IEventHandler eventHandler, EventHandler eventHandlerNew, Logger logger ) {
-	    this.eventHandler = eventHandler;
+	public AppContext( EventHandler eventHandlerNew, Logger logger ) {
 	    this.eventHandlerNew = eventHandlerNew;
 	    this.logger = logger;
     }
-	public IEventHandler getEventHandler() {
-    	return eventHandler;
-    }
+
 	public EventHandler getEventHandlerNew() {
     	return eventHandlerNew;
     }
+
 	public Logger getLogger() {
     	return logger;
     }

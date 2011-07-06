@@ -5,8 +5,6 @@ import java.util.List;
 
 import javax.swing.JOptionPane;
 
-import cc.event.EventFactory;
-import cc.event.handlers.EventHandler;
 import cc.event2.EventGlobals;
 import cc.game.GameFactory;
 import cc.gui.Graphics;
@@ -42,7 +40,7 @@ public class Bootstrapper
 	{
 		EventGlobals.init();
 
-		EventFactory.makeEventTypes();
+//		EventFactory.makeEventTypes();
 
 		Logger.get().log( LogPlace.APP, LogLevel.HIGH, "Starting program" );
 
@@ -69,7 +67,6 @@ public class Bootstrapper
 
 	public void resetGlobalState()
 	{
-		EventHandler.reset();
 		GameFactory.reset();
 	}
 

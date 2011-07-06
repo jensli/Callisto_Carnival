@@ -90,7 +90,7 @@ public class GameGui
 	}
 
 
-	private static Bind[] binds = new Bind[] {
+	private Bind[] binds = new Bind[] {
 
 		new Bind( Keyboard.KEY_Z,
 				new Posting( EventGroups.ZOOM_IN ),

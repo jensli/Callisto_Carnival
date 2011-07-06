@@ -28,8 +28,6 @@ import cc.util.logger.LogType;
 import cc.util.logger.Logger;
 
 
-
-
 /**
  * <p>
  * Class containing game logic.
@@ -71,7 +69,7 @@ public class GameEngine extends EventReceiver
 	{
 		simulation = new Simulation();
 		createGame();
-//		EventHandler.get().addEventReceiver( this, Event.Cathegory.GAME );
+
 		eventHandler = context.getEventHandlerNew();
 		eventHandler.addReceivers( subs );
 		subs = null;

@@ -34,12 +34,12 @@ import cc.comm.ClientSocketConnection;
 import cc.comm.Connection;
 import cc.comm.Host;
 import cc.event.Event;
-import cc.event.EventType;
 import cc.event.JoinEvent;
 import cc.event.QuitEvent;
 import cc.event.StandardEvent;
 import cc.event.StandardValueEvent;
 import cc.event.TickEvent;
+import cc.event.ValueEvent;
 import cc.event2.EventGlobals;
 import cc.event2.EventGroups;
 import cc.game.GameEngine;
@@ -103,7 +103,7 @@ public class ClientApp implements Disposable
 		logger = Logger.get().createPlaced( LogPlace.APP );
 		this.eventHandler = EventGlobals.getHandler();
 
-		appContext = new AppContext( null, eventHandler, logger );
+		appContext = new AppContext( eventHandler, logger );
 
 		menuGui = new MenuGui( appContext );
 		gameGui = new GameGui( appContext );
@@ -268,7 +268,8 @@ public class ClientApp implements Disposable
 		} else {
 			logger.info( LogPlace.NET, "Adding remote human player" );
 
-			eventHandler.post( EventGroups.GUI, Event.make( EventType.JOIN_GAME_NOTIFICATION, event.getNick() ) );
+			eventHandler.post( EventGroups.PLAYER_JOINED,
+					new ValueEvent<String>( event.getNick() ) );
 		}
 
 		gameEngine.addPlayer( event.getReceiverID(), event.getNick(), event.isBot(), event.isMe() );
