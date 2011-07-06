@@ -2,7 +2,8 @@ package cc.game;
 
 import cc.event.Event;
 import cc.event.game.CreateEvent;
-import cc.event.handlers.EventHandler;
+import cc.event2.EventGlobals;
+import cc.event2.EventGroups;
 import cc.game.objects.Ship;
 import cc.util.Random;
 
@@ -77,14 +78,16 @@ public class Player
 		controlledObject = ship;
 		setControlledID( controlledObject.getID() );
 
-		EventHandler.get().postEvent( new CreateEvent( controlledObject ) );
+
+		EventGlobals.getHandler().post( EventGroups.CREATE,
+				new CreateEvent( controlledObject ) );
 	}
 
 	/////////////////////////////////////////////////////////////////
 	/////////////////////////////////////////////////////////////////
-	/////
-	/////  SETTER AND GETTERS
-	/////
+	///
+	///  SETTER AND GETTERS
+	///
 	/////////////////////////////////////////////////////////////////
 	/////////////////////////////////////////////////////////////////
 

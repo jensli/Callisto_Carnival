@@ -102,7 +102,7 @@ public class MainMenuDisplay
 
 		display = new org.fenggui.Display( new LWJGLBinding() );
 
-		GuiBuilder builder = new GuiBuilder( context );
+		MainMenuBuilder builder = new MainMenuBuilder( context );
 
 		blockingContainer = builder.makeBlockingContainer( display.getSize() );
 		mainMenuDialog = builder.makeMainMenu( this );
@@ -220,7 +220,6 @@ public class MainMenuDisplay
 			eventHandler.post( EventGroups.JOIN_MULTIPLAYER,
 					new StandardValueEvent<String>( ipStr ) );
 
-//			EventHandler.get().postEvent( Event.make( EventType.JOIN_GAME, ipStr ) );
 		} else {
 			Logger.get().log( LogPlace.GUI, "Wait start error." );
 			openPopup( ipErrorDialog );

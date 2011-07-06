@@ -29,14 +29,22 @@ public final class EventGroups
 		ROTATE,
 		FIRE,
 		THRUST,
-		TICK;
+		CREATE,
+		KILL,
+		COLLISION;
+
 
 	@Parent("GUI")
 	public static GroupName
-		PLAYER_JOINED;
+		PLAYER_JOINED,
+		ZOOM_OUT,
+		ZOOM_STOP,
+		ZOOM_IN,
+		GUI_RESET;
 
 	@Parent("APP")
 	public static GroupName
+		TICK,
 		EXIT,
 		RESET,
 		PAUSE,
@@ -45,7 +53,9 @@ public final class EventGroups
 		CANCEL_JOIN,
 		HOST_MULTIPLAYER,
 		START_SINGLE_PLAYER,
-		START_MULTIPLAYER;
+		START_MULTIPLAYER,
+		QUIT,
+		JOIN;
 
 
 	// Initiate the GroupNames, reflexivly loop over them and create id string

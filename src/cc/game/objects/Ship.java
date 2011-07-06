@@ -2,7 +2,8 @@ package cc.game.objects;
 
 import cc.event.Event;
 import cc.event.game.CreateEvent;
-import cc.event.handlers.EventHandler;
+import cc.event2.EventGlobals;
+import cc.event2.EventGroups;
 import cc.game.GameFactory;
 import cc.game.GameObject;
 import cc.game.ObjectCathegory;
@@ -93,7 +94,7 @@ public class Ship extends GameObject
 		GameObject exp = GameFactory.get().createExplosion();
 		exp.getPhysModel().setPos( getPos() );
 
-		EventHandler.get().postEvent( new CreateEvent( exp ) );
+		EventGlobals.getHandler().post( EventGroups.CREATE, new CreateEvent( exp ) );
 	}
 
 	public ControlledBehavior getControlledBehavior() {

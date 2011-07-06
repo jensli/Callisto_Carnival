@@ -85,6 +85,7 @@ public abstract class Event implements Cloneable
 	/**
 	 * Used to manufact StandardEvents
 	 */
+	// TODO: Ful, ful, remove?
 	public static <TYPE> StandardValueEvent<TYPE> make( StandardValueEvent<TYPE> event, TYPE value )
 	{
 		StandardValueEvent<TYPE> newEvent = event.clone();
@@ -170,6 +171,10 @@ public abstract class Event implements Cloneable
 
 	public String getName() {
 		return name;
+	}
+
+	public GroupName getReceiverGroup() {
+		return null;
 	}
 
 

@@ -1,6 +1,8 @@
 package cc.event;
 
+import j.util.eventhandler.GroupName;
 import cc.event.handlers.EventReceiver;
+import cc.event2.EventGroups;
 
 public class TickEvent extends Event
 {
@@ -43,6 +45,10 @@ public class TickEvent extends Event
     }
 
 
+	@Override
+	public GroupName getReceiverGroup() {
+		return EventGroups.TICK;
+	}
 
 
 }

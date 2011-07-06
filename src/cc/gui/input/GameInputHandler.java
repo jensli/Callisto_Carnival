@@ -11,7 +11,6 @@ import java.util.Set;
 
 import org.lwjgl.input.Keyboard;
 
-import cc.event.Event;
 import cc.util.GraphicsUtil;
 
 
@@ -56,10 +55,10 @@ class KeyEvent
  * their key is pressed, then sends event
  */
 
-public class GameInputHandler
+public class GameInputHandler<T>
 {
 	// Which keycodes trigger which binding
-	Map<Integer, List<KeyBind>> bindList = new HashMap<Integer, List<KeyBind>>();
+	Map<Integer, List<KeyBind<T>>> bindList = new HashMap<Integer, List<KeyBind<T>>>();
 
 	// The keycodes for keys pressed down at the moment
 	Set<Integer> pressedKeys = new HashSet<Integer>();
@@ -118,27 +117,27 @@ public class GameInputHandler
 //
 //	}
 
-	public static void addIfNotNull( Collection<Event> list, Event e )
+	public static <T> void addIfNotNull( Collection<T> list, T e )
 	{
 		if ( e != null ) {
 			list.add( e );
 		}
 	}
 
-	public List<Event> update()
+	public List<T> update()
 	{
 		int pressedModifyers = readModifyers();
 
-		List<Event> generatedEvents = new LinkedList<Event>();
+		List<T> generatedEvents = new LinkedList<T>();
 
 		// Loop throught all binds, send start event if they are just pressed
 		// and stop event if the wore just released.
-		for ( Map.Entry<Integer, List<KeyBind>> entry : bindList.entrySet() ) {
+		for ( Map.Entry<Integer, List<KeyBind<T>>> entry : bindList.entrySet() ) {
 
 			int keyCode = entry.getKey();
 			boolean isKeyDown = Keyboard.isKeyDown( keyCode );
 
-			for ( KeyBind bind : entry.getValue() ) {
+			for ( KeyBind<T> bind : entry.getValue() ) {
 
 //				final KeyBind bind = entry.getValue();
 
@@ -192,28 +191,38 @@ public class GameInputHandler
 	}
 
 
-	public void addBind( int keyCode, KeyBind bind )
+	public void addBind( int keyCode, KeyBind<T> bind )
 	{
 		if ( !bindList.containsKey( keyCode ) ) {
-			bindList.put( keyCode, new LinkedList<KeyBind>() );
+			bindList.put( keyCode, new LinkedList<KeyBind<T>>() );
 		}
 		bindList.get( keyCode ).add( bind );
 	}
 
-	public void addStandardBind( int keyCode, Event onEvent ) {
-		addStandardBind( keyCode, onEvent, null );
+	public void addBind( KeyBind<T> bind ) {
+		addBind( bind.getKey(), bind );
 	}
 
-	public void addStandardBind( int keyCode, int mods, Event onEvent ) {
-		addStandardBind( keyCode, onEvent, null, null, mods );
+	public void addBinds( Iterable<? extends KeyBind<T>> binds ) {
+		for ( KeyBind<T> b : binds ) {
+			addBind( b.getKey(), b );
+		}
 	}
 
-	public void addStandardBind( int keyCode, Event onEvent, Event offEvent ) {
-		addStandardBind( keyCode, onEvent, offEvent, null, 0);
-	}
-
-	public void addStandardBind( int keyCode, Event onEvent, Event offEvent, Event holdEvent, int mods ) {
-		addBind( keyCode, new StandardBind( onEvent, offEvent, holdEvent, mods ) );
-	}
+//	public void addStandardBind( int keyCode, Event onEvent ) {
+//		addStandardBind( keyCode, onEvent, null );
+//	}
+//
+//	public void addStandardBind( int keyCode, int mods, Event onEvent ) {
+//		addStandardBind( keyCode, onEvent, null, null, mods );
+//	}
+//
+//	public void addStandardBind( int keyCode, Event onEvent, Event offEvent ) {
+//		addStandardBind( keyCode, onEvent, offEvent, null, 0);
+//	}
+//
+//	public void addStandardBind( int keyCode, Event onEvent, Event offEvent, Event holdEvent, int mods ) {
+//		addBind( keyCode, new StandardBind( onEvent, offEvent, holdEvent, mods ) );
+//	}
 }
 

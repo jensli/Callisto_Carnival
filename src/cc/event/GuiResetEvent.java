@@ -6,7 +6,6 @@ import cc.event.handlers.EventReceiver;
 import cc.game.GameObject;
 import cc.game.Player;
 import cc.gui.Drawable;
-import cc.gui.models.GraphicalModelIterator;
 
 
 /**
@@ -23,20 +22,18 @@ public class GuiResetEvent extends Event
 	// experimenting
 	private Collection<GameObject> objectList;
 	private Collection<? extends Drawable> objectList2;
-	private GraphicalModelIterator itr;
 
 
 
 
 	public GuiResetEvent( Player focusPlayer, Collection<GameObject> objectList,
-			Collection<? extends Drawable> objectList2, GraphicalModelIterator itr )
+			Collection<? extends Drawable> objectList2 )
     {
 	    super();
 	    this.focusPlayer = focusPlayer;
 	    this.objectList = objectList;
 	    this.objectList2 = objectList2;
 
-	    this.itr = itr;
     }
 
 	@Override
@@ -64,12 +61,6 @@ public class GuiResetEvent extends Event
 	{
 		return objectList2;
 	}
-
-	public GraphicalModelIterator getItr()
-    {
-    	return itr;
-    }
-
 
 
 }

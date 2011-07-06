@@ -1,6 +1,13 @@
 package cc.gui.game_display;
 
 
+import static org.lwjgl.opengl.GL11.GL_COLOR_BUFFER_BIT;
+import static org.lwjgl.opengl.GL11.GL_DEPTH_BUFFER_BIT;
+import static org.lwjgl.opengl.GL11.glClear;
+import static org.lwjgl.opengl.GL11.glColor3f;
+import static org.lwjgl.opengl.GL11.glLoadIdentity;
+import static org.lwjgl.opengl.GL11.glTranslated;
+
 import java.util.Collection;
 
 import cc.gui.BackgroundImage;
@@ -11,14 +18,12 @@ import cc.util.math.Vec;
 import cc.util.resources.Name;
 import cc.util.resources.ResourceHandler;
 
-import static org.lwjgl.opengl.GL11.*;
-
 
 /**
  * The where the acctual game is rendered, the object in space.
  * @author jens
  */
-public class GameScreen //extends EventReceiver
+public class GameScreen
 {
 	// The stars in the background
 	private BackgroundImage backgroundImage;

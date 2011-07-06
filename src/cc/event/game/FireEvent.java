@@ -1,7 +1,9 @@
 package cc.event.game;
 
+import j.util.eventhandler.GroupName;
 import cc.event.Event;
 import cc.event.handlers.EventReceiver;
+import cc.event2.EventGroups;
 
 // Serialization not fixed!!! Has no data, no serializ!
 
@@ -68,4 +70,8 @@ public class FireEvent extends Event
     	this.switchOn = switchOn;
     }
 
+	@Override
+	public GroupName getReceiverGroup() {
+		return EventGroups.FIRE;
+	}
 }

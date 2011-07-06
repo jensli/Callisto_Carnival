@@ -1,7 +1,8 @@
 package cc.game.behaviors;
 
 import cc.event.game.CreateEvent;
-import cc.event.handlers.EventHandler;
+import cc.event2.EventGlobals;
+import cc.event2.EventGroups;
 import cc.game.GameFactory;
 import cc.game.GameObject;
 import cc.game.PowerupType;
@@ -30,9 +31,8 @@ public class GeneratePowerupBehavior extends Behavior
     public void perform( GameObject controlled, double dT )
 	{
 		if ( Random.getGameRandom().nextDouble()  <= dT*freq ) {
-
 			Powerup p = GameFactory.get().createPowerup( controlled, powerupType );
-			EventHandler.get().postEvent( new CreateEvent( p ) );
+			EventGlobals.getHandler().post( EventGroups.CREATE, new CreateEvent( p ) );
 		}
     }
 

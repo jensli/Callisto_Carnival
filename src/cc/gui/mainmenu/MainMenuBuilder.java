@@ -20,12 +20,12 @@ import cc.event2.EventGroups;
 import cc.gui.FengUtils;
 import cc.gui.Graphics;
 
-public class GuiBuilder
+public class MainMenuBuilder
 {
 	private GuiFactory factory;
 	private EventHandler eventHandler;
 
-	public GuiBuilder( AppContext context ) {
+	public MainMenuBuilder( AppContext context ) {
 		eventHandler = context.getEventHandlerNew();
 		factory = new GuiFactory(
 				FengUtils.loadFont( "res/battlefield.ttf", 26 ),
@@ -242,6 +242,11 @@ public class GuiBuilder
 				mainMenu.openInstructionsDialog();
 			}
 		};
+		IButtonPressedListener resetLis = new IButtonPressedListener() {
+			public void buttonPressed( ButtonPressedEvent arg0 ) {
+				eventHandler.postEmpty( EventGroups.RESET );
+			}
+		};
 		IButtonPressedListener quitLis = new IButtonPressedListener() {
 			public void buttonPressed( ButtonPressedEvent arg0 ) {
 				eventHandler.postEmpty( EventGroups.EXIT );
@@ -255,6 +260,7 @@ public class GuiBuilder
 		con.addWidget( factory.makeButton( "Load saved game", emptyLis ) );
 		con.addWidget( factory.makeButton( "Settings", emptyLis ) );
 		con.addWidget( factory.makeButton( "Instructions", instLis ) );
+		con.addWidget( factory.makeButton( "Reset", resetLis ) );
 		con.addWidget( factory.makeButton( "Quit", quitLis ) );
 
 		window.pack();

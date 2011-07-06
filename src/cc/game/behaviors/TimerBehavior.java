@@ -3,7 +3,8 @@ package cc.game.behaviors;
 import j.util.functional.Action1;
 import cc.event.Event;
 import cc.event.game.KillEvent;
-import cc.event.handlers.EventHandler;
+import cc.event2.EventGlobals;
+import cc.event2.EventGroups;
 import cc.game.GameObject;
 import cc.game.objects.DeathFaderBehavior;
 
@@ -50,7 +51,6 @@ public class TimerBehavior extends Behavior
 
 		if (timeToLive <= 0.0 ) {
 			action.run( controlled );
-//			EventHandler.get().postEvent( new KillEvent( controlled.getID() ) );
 
 			if ( isRepeating ) {
 				timeToLive = initTime;
@@ -68,7 +68,8 @@ public class TimerBehavior extends Behavior
 	public static Action1<GameObject>
 		DEATH_ACTION = new Action1<GameObject>() {
 			public void run( GameObject arg ) {
-				EventHandler.get().postEvent( new KillEvent( arg.getID() ) );
+				EventGlobals.getHandler().post( EventGroups.KILL,
+						new KillEvent( arg.getID() ) );
 			}
 		};
 

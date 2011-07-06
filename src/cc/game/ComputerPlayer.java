@@ -115,19 +115,6 @@ public class ComputerPlayer implements GameDeamon
 			player.routeToObject( new FireEvent( player.getControlledID(), willFire ) );
 			fireOn = willFire;
 		}
-//		if ( willThrust != thrustOn )	{
-//			handler.postEvent( new ThrustEvent( getControlledID(), willThrust ) );
-//			thrustOn = willFire;
-//		}
-//		if ( willRotate != rotateOn )	{
-//			handler.postEvent( new RotateEvent(	getControlledID(), rotateClockwise, willRotate ) );
-//			rotateOn = willRotate;
-//		}
-//
-//		if ( willFire != fireOn ) {
-//			handler.postEvent( new FireEvent(getControlledID(), willFire ) );
-//			fireOn = willFire;
-//		}
 
 		willThrust = false;
 		willRotate = false;

@@ -1,7 +1,8 @@
 package cc.game.weapon;
 
 import cc.event.game.CreateEvent;
-import cc.event.handlers.EventHandler;
+import cc.event2.EventGlobals;
+import cc.event2.EventGroups;
 import cc.game.GameFactory;
 import cc.game.GameObject;
 import cc.game.PhysicalModel;
@@ -90,8 +91,7 @@ public class ProjectileGun extends Weapon
 		shotVel.normalize();
 		shot.getPhysModel().setForward( shotVel );
 
-		EventHandler.get().postEvent( new CreateEvent( shot ) );
-
+		EventGlobals.getHandler().post( EventGroups.CREATE, new CreateEvent( shot ) );
 		sound.play( 0.8f, 0.1f );
     }
 

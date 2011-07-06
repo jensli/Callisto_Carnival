@@ -1,6 +1,9 @@
 package cc.game;
 
 
+import static java.lang.Math.abs;
+import static java.lang.Math.sqrt;
+import j.util.eventhandler.EventHandler;
 import j.util.functional.Fun1;
 
 import java.util.ArrayList;
@@ -12,14 +15,12 @@ import java.util.Map;
 
 import cc.event.Event;
 import cc.event.game.CollisionEvent;
-import cc.event.handlers.EventHandler;
-import cc.event.handlers.IEventHandler;
+import cc.event2.EventGlobals;
+import cc.event2.EventGroups;
 import cc.game.behaviors.Behavior;
 import cc.gui.Drawable;
 import cc.util.math.Vec;
 import cc.util.math.VecMath;
-
-import static java.lang.Math.*;
 
 
 /**
@@ -265,9 +266,10 @@ public class Simulation
 
 		// TODO: Shoundnt this just pass the events to the GameEngine objects?
 		// No need to use the EventHandler?
-		IEventHandler handler = EventHandler.get();
+		EventHandler handler = EventGlobals.getHandler();
+
 		for ( Event event : eventsToSend ) {
-			handler.postEvent( event );
+			handler.post( EventGroups.COLLISION, event );
 		}
 	}
 

@@ -1,7 +1,9 @@
 package cc.event.game;
 
+import j.util.eventhandler.GroupName;
 import cc.event.Event;
 import cc.event.handlers.EventReceiver;
+import cc.event2.EventGroups;
 
 
 public class RotateEvent extends Event
@@ -89,5 +91,9 @@ public class RotateEvent extends Event
     }
 
 
+	@Override
+	public GroupName getReceiverGroup() {
+		return EventGroups.ROTATE;
+	}
 
 }

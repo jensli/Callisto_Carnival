@@ -1,21 +1,23 @@
 package cc.gui.game_display;
 
+import j.util.eventhandler.EventHandler;
+import j.util.eventhandler.NoArgReceiver;
+import j.util.eventhandler.Receiver;
+import j.util.eventhandler.Sub;
+
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Iterator;
-import java.util.LinkedList;
 
 import org.lwjgl.opengl.Display;
 
-import cc.event.Event;
+import cc.app.AppContext;
 import cc.event.GuiResetEvent;
-import cc.event.StandardValueEvent;
-import cc.event.handlers.EventHandler;
-import cc.event.handlers.EventReceiver;
+import cc.event2.EventGroups;
 import cc.game.GameObject;
 import cc.game.ObjectCathegory;
 import cc.game.Player;
 import cc.gui.FadeOverlay;
-import cc.gui.models.GraphicalModelIterator;
 import cc.util.math.Vec;
 
 
@@ -23,49 +25,52 @@ import cc.util.math.Vec;
  * Displays the game view = the acctual game, the minimap, the Hud with Armour, fuel etc.
  * Receives a GuiResetEvent to get a ref to the Player object te be able to read info there for
  * the Hud and the list of all GameObjects
- * @author jens
  */
 
-public class GameDisplay extends EventReceiver
+public class GameDisplay // extends EventReceiver
 {
 	private GameScreen gameScreen;
 	private Minimap minimap;
 	private Hud hud;
 	private FadeOverlay fadeOverlay;
 
-	private GraphicalModelIterator itr;
-
-	//	private Collection<GameObject> objectList_OLD = new LinkedList<GameObject>();
-
 	// Init to dummy list to avoid NullPointer
-	private Collection<GameObject> objectList = new LinkedList<GameObject>();
+	private Collection<GameObject> objectList = Collections.emptyList();
 
 	private GameObject focusObject = null;
 
 	private Player focusPlayer = new Player( "Dummy", -1 );
 
 	boolean hasPlayerFocus = true;
+	private EventHandler eventHandler;
 
-	public GameDisplay()
+	public GameDisplay( AppContext context )
 	{
-		EventHandler.get().addEventReceiver( this, Event.Cathegory.GUI );
+		eventHandler  = context.getEventHandlerNew();
 
 		gameScreen = new GameScreen();
 		minimap = new Minimap();
 		hud = new Hud();
 		fadeOverlay = new FadeOverlay( 0.0005 );
+
+		for ( Sub sub : subs ) {
+			eventHandler.addReceiver( sub );
+		}
+
+		subs = null;
 	}
+
 
 	public void update( double dT )
 	{
-		if ( !Display.isActive() ) {
-			return;
-		}
+//		if ( !Display.isActive() ) {
+//			return;
+//		}
 
 		Vec focusPoint = findFocusPoint();
 
 		gameScreen.draw( dT, focusPoint, objectList );
-		minimap.draw( focusPoint, itr, objectList );
+		minimap.draw( focusPoint, objectList );
 		hud.draw( focusPlayer );
 
 		fadeOverlay.update( dT );
@@ -137,25 +142,25 @@ public class GameDisplay extends EventReceiver
 		}
 	}
 
-	@Override
-    public void receiveEvent( Event event ) {
-		event.dispatch( this );
-	}
+//	@Override
+//    public void receiveEvent( Event event ) {
+//		event.dispatch( this );
+//	}
+//
+//	@Override
+//    public void receiveGuiResetEvent( GuiResetEvent event )
+//    {
+//		focusPlayer = event.getFocusPlayer();
+////		objectList_OLD = event.getObjectList();
+//		objectList = event.getObjectList();
+//		itr = event.getItr();
+//    }
 
-	@Override
-    public void receiveGuiResetEvent( GuiResetEvent event )
-    {
-		focusPlayer = event.getFocusPlayer();
-//		objectList_OLD = event.getObjectList();
-		objectList = event.getObjectList();
-		itr = event.getItr();
-    }
-
-	@Override
-    public void receiveZoomEvent( StandardValueEvent<Integer> event )
-	{
-		gameScreen.setZoom( event.getValue() );
-    }
+//	@Override
+//    public void receiveZoomEvent( StandardValueEvent<Integer> event )
+//	{
+//		gameScreen.setZoom( event.getValue() );
+//    }
 
 	public void activate() {
 		fadeOverlay.startFade();
@@ -164,4 +169,40 @@ public class GameDisplay extends EventReceiver
 	public void destroyDisplay() {
 //		Graphics.get().destroyDisplay();
 	}
+
+	private void guiReset( GuiResetEvent event ) {
+		focusPlayer = event.getFocusPlayer();
+		objectList = event.getObjectList();
+	}
+
+
+
+	private Sub[] subs = new Sub[] {
+			new Sub( EventGroups.ZOOM_IN, new NoArgReceiver() {
+				public void receive() {
+					gameScreen.setZoom( GameScreen.ZOOM_IN );
+				}
+			} ),
+			new Sub( EventGroups.ZOOM_OUT, new NoArgReceiver() {
+				public void receive() {
+					gameScreen.setZoom( GameScreen.ZOOM_OUT );
+				}
+			} ),
+			new Sub( EventGroups.ZOOM_STOP, new NoArgReceiver() {
+				public void receive() {
+					gameScreen.setZoom( GameScreen.STOP_ZOOM );
+				}
+			} ),
+			new Sub( EventGroups.GUI_RESET,
+					GuiResetEvent.class,
+					new Receiver<GuiResetEvent>() {
+						public void receive( GuiResetEvent event ) {
+							guiReset( event );
+						}
+			} ),
+
+			// TODO:
+	};
+
+
 }

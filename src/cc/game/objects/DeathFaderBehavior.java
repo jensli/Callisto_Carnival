@@ -1,7 +1,8 @@
 package cc.game.objects;
 
 import cc.event.game.KillEvent;
-import cc.event.handlers.EventHandler;
+import cc.event2.EventGlobals;
+import cc.event2.EventGroups;
 import cc.game.GameObject;
 import cc.game.behaviors.Behavior;
 import cc.util.Color;
@@ -22,7 +23,7 @@ public class DeathFaderBehavior extends Behavior
 		c.a -= fadeSpeed*dT;
 
 		if ( c.a <= 0.0 ) {
-			EventHandler.get().postEvent( new KillEvent( controlled.getID() ) );
+			EventGlobals.getHandler().post( EventGroups.KILL, new KillEvent( controlled.getID() ) );
 		}
 	}
 }

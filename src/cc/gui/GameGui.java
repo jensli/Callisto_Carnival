@@ -1,16 +1,15 @@
 package cc.gui;
 
 import j.util.eventhandler.EventHandler;
-import j.util.functional.Action0;
+import j.util.eventhandler.Posting;
 
+import java.util.Arrays;
 import java.util.List;
 
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.Display;
 
 import cc.app.AppContext;
-import cc.event.Event;
-import cc.event.EventType;
 import cc.event.QuitEvent;
 import cc.event.game.FireEvent;
 import cc.event.game.KillEvent;
@@ -18,86 +17,48 @@ import cc.event.game.RotateEvent;
 import cc.event.game.ThrustEvent;
 import cc.event2.EventGroups;
 import cc.gui.game_display.GameDisplay;
-import cc.gui.game_display.GameScreen;
 import cc.gui.input.GameInputHandler;
 
 public class GameGui
 {
 	private GameDisplay gameDisplay;
 
-	private GameInputHandler bindingInputHandler;
-//	private IEventHandler eventHandler;
+	private GameInputHandler<Posting> inputHandler;
+
 	private EventHandler eventHandler;
 
 //	private GUIInputHandler guiInputHandler;
 
 	public GameGui( AppContext context )
 	{
-		gameDisplay = new GameDisplay();
-		bindingInputHandler = new GameInputHandler();
+		gameDisplay = new GameDisplay( context );
+		inputHandler = new GameInputHandler<Posting>();
 
 		this.eventHandler = context.getEventHandlerNew();
-//		this.eventHandler = context.getEventHandler();
+
+		//		this.eventHandler = context.getEventHandler();
 		// For gui elements added to the game view
 //		guiInputHandler = new GUIInputHandler();
-		init();
+		inputHandler.addBinds( Arrays.asList( binds ) );
+		binds = null;
 	}
 
-	public void init()
-	{
-		// Init the key bindings for the game
-		Event zoomIn = Event.make( EventType.ZOOM, GameScreen.ZOOM_IN ),
-			zoomOut = Event.make( EventType.ZOOM, GameScreen.ZOOM_OUT ),
-			stopZoom = Event.make( EventType.ZOOM, GameScreen.STOP_ZOOM ),
-			thrustOn = Event.make( EventType.REQUEST, new ThrustEvent( Event.SWITCH_ON ) ),
-			thrustOff = Event.make( EventType.REQUEST, new ThrustEvent( Event.SWITCH_OFF ) ),
-			turnRightOn = Event.make( EventType.REQUEST, new RotateEvent( RotateEvent.RIGHT, Event.SWITCH_ON ) ),
-			turnRightOff = Event.make( EventType.REQUEST, new RotateEvent( RotateEvent.RIGHT, Event.SWITCH_OFF ) ),
-			turnLeftOn = Event.make( EventType.REQUEST, new RotateEvent( RotateEvent.LEFT, Event.SWITCH_ON ) ),
-			turnLeftOff = Event.make( EventType.REQUEST, new RotateEvent( RotateEvent.LEFT, Event.SWITCH_OFF ) ),
-			fireOn = Event.make( EventType.REQUEST, new FireEvent( Event.SWITCH_ON ) ),
-			fireOff = Event.make( EventType.REQUEST, new FireEvent( Event.SWITCH_OFF ) ),
-			kill = Event.make( EventType.REQUEST, new KillEvent() ),
-			paus = Event.make( EventType.PAUSE ),
-			restart = Event.make( EventType.RESTART );
-
-		bindingInputHandler.addStandardBind( Keyboard.KEY_RIGHT, turnRightOn, turnRightOff );
-		bindingInputHandler.addStandardBind( Keyboard.KEY_LEFT, turnLeftOn, turnLeftOff );
-		bindingInputHandler.addStandardBind( Keyboard.KEY_UP, thrustOn, thrustOff );
-		bindingInputHandler.addStandardBind( Keyboard.KEY_Z, zoomIn, stopZoom );
-		bindingInputHandler.addStandardBind( Keyboard.KEY_X, zoomOut, stopZoom );
-		bindingInputHandler.addStandardBind( Keyboard.KEY_SPACE, fireOn, fireOff );
-
-		bindingInputHandler.addStandardBind( Keyboard.KEY_ESCAPE, new QuitEvent() );
-		bindingInputHandler.addStandardBind( Keyboard.KEY_P, paus );
-		bindingInputHandler.addStandardBind( Keyboard.KEY_K, kill  );
-
-		bindingInputHandler.addStandardBind( Keyboard.KEY_R, EventType.makeGuiEvent( new Action0() {
-			public void run() { gameDisplay.resetFocusObject(); }
-		}) );
-		bindingInputHandler.addStandardBind( Keyboard.KEY_Q, restart );
-
-		bindingInputHandler.addStandardBind( Keyboard.KEY_TAB, EventType.makeGuiEvent( new Action0() {
-			public void run() { gameDisplay.nextFocusObject(); }
-		}) );
-
-	}
 
 
 	public void update( double localDT )
 	{
 		if ( Display.isCloseRequested() ) {
 			// TODO: remove
-//			eventHandler.postEvent( Event.make( EventType.EXIT_PROGRAM ) );
 			eventHandler.postEmpty( EventGroups.EXIT );
 			return;
 		}
 
 		gameDisplay.update( localDT );
 
-		List<Event> events = bindingInputHandler.update();
-		for ( Event e : events ) {
-			eventHandler.post( e.getRecveiverGroup(), e );
+		List<Posting> events = inputHandler.update();
+
+		for ( Posting p : events ) {
+			eventHandler.post( p );
 		}
 
 		// TODO:
@@ -127,6 +88,46 @@ public class GameGui
 	{
 //		gameDisplay.destroyDisplay();
 	}
+
+
+	private static Bind[] binds = new Bind[] {
+
+		new Bind( Keyboard.KEY_Z,
+				new Posting( EventGroups.ZOOM_IN ),
+				new Posting( EventGroups.ZOOM_STOP ),
+				null ),
+
+		new Bind( Keyboard.KEY_X,
+				new Posting( EventGroups.ZOOM_OUT ),
+				new Posting( EventGroups.ZOOM_STOP ),
+				null ),
+
+		new Bind( Keyboard.KEY_RIGHT,
+				new Posting( EventGroups.REQUEST, new RotateEvent( RotateEvent.RIGHT, true ) ),
+				new Posting( EventGroups.REQUEST, new RotateEvent( RotateEvent.RIGHT, false ) ),
+				null ),
+
+		new Bind( Keyboard.KEY_LEFT,
+				new Posting( EventGroups.REQUEST, new RotateEvent( RotateEvent.LEFT, true ) ),
+				new Posting( EventGroups.REQUEST, new RotateEvent( RotateEvent.LEFT, false ) ),
+				null ),
+
+		new Bind( Keyboard.KEY_UP,
+				new Posting( EventGroups.REQUEST, new ThrustEvent( true ) ),
+				new Posting( EventGroups.REQUEST, new ThrustEvent( false ) ),
+				null ),
+
+		new Bind( Keyboard.KEY_SPACE,
+				new Posting( EventGroups.REQUEST, new FireEvent( true ) ),
+				new Posting( EventGroups.REQUEST, new FireEvent( false ) ),
+				null ),
+
+		new Bind( Keyboard.KEY_K, new Posting( EventGroups.REQUEST, new KillEvent() ), null, null ),
+
+		new Bind( Keyboard.KEY_R, new Posting( EventGroups.RESET ), null, null ),
+
+		new Bind( Keyboard.KEY_ESCAPE, new Posting( EventGroups.QUIT, new QuitEvent() ), null, null ),
+	};
 
 
 }

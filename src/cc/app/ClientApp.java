@@ -23,6 +23,7 @@ package cc.app;
 import j.util.eventhandler.NoArgReceiver;
 import j.util.eventhandler.Receiver;
 import j.util.eventhandler.Sub;
+import j.util.util.Util;
 
 import java.io.IOException;
 import java.net.InetAddress;
@@ -107,99 +108,11 @@ public class ClientApp implements Disposable
 		menuGui = new MenuGui( appContext );
 		gameGui = new GameGui( appContext );
 
-		initEventSubscriptions();
-
-		programState = MENU;
-	}
-
-	private void initEventSubscriptions()
-	{
-
-
 		eventHandler.addReceivers( Arrays.asList( recs  ) );
 		recs = null;
 
-// 		eventHandler.addReceiver( EventGroups.REQUEST,
-//				(new StandardValueEvent<Event>(){ public void dispatch( EventReceiver receiver ) {}
-//
-//		}).getClass(),
-//				new Receiver<StandardValueEvent<Event>>() {
-//					@Override public void receive( StandardValueEvent<Event> event ) {
-//						handleRequestEvent( event );
-//				} } );
-//
-//
-//		eventHandler.addReceiver( EventGroups.APP_COMMAND, QuitEvent.class,
-//				new Receiver<QuitEvent>() {
-//					@Override public void receive( QuitEvent event ) {
-//			            programState.finish(); // this state should be a game state
-//			            setState( MENU );
-//				} } );
-//
-//		eventHandler.addReceiver( EventGroups.EXIT,
-//				new NoArgReceiver() {
-//					@Override public void receive() {
-//			            handleExitEvent();
-//                } } );
-//
-//
-//		eventHandler.addReceiver( EventGroups.RESET,
-//				new NoArgReceiver() {
-//					@Override public void receive() {
-//			            handleExitEvent();
-//			            stateCode = ProgramStateCode.RESTARTING;
-//                } } );
-
-
-//		eventHandler.addReceiver(
-//				EventGroups.PAUSE,
-//				new NoArgReceiver() { @Override public void receive() { pauseGame(); } } );
-//
-//		eventHandler.addReceiver( EventGroups.NET, JoinEvent.class,
-//				new Receiver<JoinEvent>() {
-//					@Override public void receive(JoinEvent event) {
-//			            handleJoinEvent( event );
-//                } } );
-//
-//
-//		eventHandler.addReceiver(
-//				EventGroups.GAME, TickEvent.class,
-//				new Receiver<TickEvent>() {
-//					@Override public void receive(TickEvent event) {
-//			            programState.tickState( event.getDt() );
-//                } } );
-//
-//		eventHandler.addReceiver( EventGroups.CANCEL_HOST,
-//				new NoArgReceiver() {
-//					@Override public void receive() {
-//			            logger.info( "Canceling hosting game" );
-//			            host.stopListening();
-//					} } );
-//
-//		eventHandler.addReceiver( EventGroups.START_SINGLE_PLAYER,
-//				new NoArgReceiver() {
-//					@Override public void receive() {
-//			            startSinglePlayer();
-//					} } );
-//
-//		eventHandler.addReceiver( EventGroups.JOIN_MULTIPLAYER, EventType.JOIN_GAME.getClass(),
-//				new Receiver<StandardValueEvent<String>> () {
-//					@Override public void receive( StandardValueEvent<String> event ) {
-//			            joinRemoteGame( event.getValue() );
-//					} } );
-//
-//		eventHandler.addReceiver( EventGroups.START_MULTI_PLAYER,
-//				new NoArgReceiver() {
-//					@Override public void receive() {
-//			            startMultiplayer();
-//					} } );
-
-		// addEventReceiver( receiver, Event.Cathegory.REQUEST );
-//		eventHandler.addEventReceiver( receiver, Event.Cathegory.NETWORK );
-//		eventHandler.addEventReceiver( receiver, Event.Cathegory.APPLICATION );
-
+		programState = MENU;
 	}
-
 
     private final ProgramState
 		MENU = new MenuState(),
@@ -276,8 +189,15 @@ public class ClientApp implements Disposable
 
         @Override
         public void exit() {
-        	closeConnections();
+        	cleanGameState();
         }
+	}
+
+	private void cleanGameState()
+	{
+		closeConnections();
+		serverApp = null;
+		gameEngine = null;
 	}
 
 	public class HostGameState extends ClientGameState
@@ -303,6 +223,9 @@ public class ClientApp implements Disposable
         } catch ( IOException e ) {
         	Logger.get().log( LogPlace.APP, LogType.WARNING, "closeConnection(): Error while ending connection to server" );
         }
+
+        host = null;
+        serverConnection = null;
 	}
 
 //  Game state for running without the sever app
@@ -324,7 +247,6 @@ public class ClientApp implements Disposable
 		logger.info( "Entering main loop" );
 
 		localTimer.start();
-
 		programState.enter();
 
 		while ( isProgramRunning ) {
@@ -358,23 +280,23 @@ public class ClientApp implements Disposable
 	 * First they are turned into real events, then they are set with the sender as the local player.
 	 * Then they are sent to the Server game (either on local or remote machine) throught the serverConnection.
 	 */
-	private void handleRequestEvent( StandardValueEvent<Event> requestEvent )
+	private void handleRequestEvent( Event event )
 	{
-        Event eventToSend = requestEvent.getValue();
 		GameObject obj = gameEngine.getPlayerObject();
 
-		if ( obj == null || eventToSend == null ) {
+		Util.verifyNotNull( event );
+		if ( obj == null ) {
 			return;
 		}
 
-		eventToSend.setReceiverID( obj.getID() );
-		eventToSend.setSenderID( gameEngine.getLocalPlayerID() );
+		event.setReceiverID( obj.getID() );
+		event.setSenderID( gameEngine.getLocalPlayerID() );
 
 		// For the cheap game mode, just post the events
 		//		eventHandler.postEvent( eventToSend );
 
 		// For the real game mode, send evnets through the connection to the ServerApp
-		serverConnection.send( eventToSend );
+		serverConnection.send( event );
     }
 
 	/**
@@ -385,9 +307,7 @@ public class ClientApp implements Disposable
 	{
 		try {
 			for ( Event event : serverConnection.receive() ) {
-				// TODO:
-//				eventHandler.postEvent( event );
-				eventHandler.post( EventGroups.GAME, event );
+				eventHandler.post( event.getReceiverGroup(), event );
 			}
 		} catch ( IOException exc ) {
 			logger.log( LogPlace.NET, LogType.ERROR, "Error while trying to receive events from server. " + exc );
@@ -414,14 +334,17 @@ public class ClientApp implements Disposable
 	 */
 	public void startSinglePlayer()
 	{
-//		if ( gameRunning ) {
-//			throw new RuntimeException( "Calling startSinglePlayer() when game is allready running.");
-//		}
+		// TODO: Way does this happend? Does it?
+		if ( gameEngine != null ) {
+			logger.warn( "gameEngine not null, has game been started twise?" );
+			return;
+		}
+
 		setupLocalServer();
 		host.stopListening();
 		gameStart( true );
 
-		// Commented out to test powerups uninterrupted
+		// Create AI players
 		serverConnection.send( new JoinEvent( clientID + 1, "Plupp 1", true, false ) );
 		serverConnection.send( new JoinEvent( clientID + 2, "Plupp 2", true, false ) );
 		serverConnection.send( new JoinEvent( clientID + 3, "Plupp 3", true, false ) );
@@ -438,7 +361,7 @@ public class ClientApp implements Disposable
 	 */
 	private void gameStart( boolean hosting )
 	{
-		gameEngine = new GameEngine();
+		gameEngine = new GameEngine( appContext );
 		serverConnection.send( new JoinEvent( clientID, "Plupp", false, false ) );
 	}
 
@@ -453,9 +376,11 @@ public class ClientApp implements Disposable
 
 	public void cancelHosting()
 	{
+		// TODO: Polish multiplayer connection
 	}
 	public void cancelJoining()
 	{
+		// TODO: Polish multiplayer connection
 	}
 
 	public void startMultiplayer()
@@ -528,7 +453,7 @@ public class ClientApp implements Disposable
 		}
 
 		Graphics.get().dispose();
-		Logger.get().log( LogPlace.APP, LogLevel.HIGH, "Exiting program" );
+		logger.info( "Exiting program" );
 		Logger.get().dispose();
 	}
 
@@ -539,14 +464,16 @@ public class ClientApp implements Disposable
     	this.programState = newState;
     }
 
-	private void handleExitEvent() {
+	private void handleExitEvent()
+	{
 	    programState.finish();
 	    isProgramRunning = false;
 	    stateCode = ProgramStateCode.EXITING;
     }
 
 
-	private void pauseGame() {
+	private void pauseGame()
+	{
 	    boolean newGameRunning = !serverApp.isGameRunning();
 	    serverApp.setGameRunning( newGameRunning );
 	    gameEngine.setGameRunning( newGameRunning );
@@ -612,7 +539,7 @@ public class ClientApp implements Disposable
 		@Override public void receiveJoinMultiplayerEvent( StandardValueEvent<String> event ) {
 			joinRemoteGame( event.getValue() );
 		}
-		@Override public void receiveStartMultiplayerEvent( StandardEvent event ) {
+		public void receiveStartMultiplayerEvent( StandardEvent event ) {
 			startMultiplayer();
 		}
 	}; // End EventReceiver
@@ -620,62 +547,64 @@ public class ClientApp implements Disposable
 
 	private Sub[] recs = new Sub[] {
 
-			new Sub( EventGroups.APP, QuitEvent.class,
+			new Sub( EventGroups.QUIT, QuitEvent.class,
 					new Receiver<QuitEvent>() {
-						@Override public void receive( QuitEvent event ) {
+						public void receive( QuitEvent event ) {
 							programState.finish(); // this state should be a game state
 							setState( MENU );
 						}
 					} ),
 
 			new Sub( EventGroups.REQUEST,
-					EventType.REQUEST.getClass(),
-						new Receiver<StandardValueEvent<Event>>() {
-							@Override public void receive(
-									StandardValueEvent<Event> event ) {
+					Event.class,
+						new Receiver<Event>() {
+							public void receive( Event event ) {
 								handleRequestEvent( event );
 							}
 						} ),
 
 			new Sub( EventGroups.EXIT,
 					new NoArgReceiver() {
-						@Override public void receive() {
+						public void receive() {
 							handleExitEvent();
 						}
 					} ),
 
 			new Sub( EventGroups.RESET,
 					new NoArgReceiver() {
-						@Override public void receive() {
+						public void receive() {
 							handleExitEvent();
 							stateCode = ProgramStateCode.RESTARTING;
 						}
 				} ),
 
+
+			new Sub( EventGroups.TICK,
+					TickEvent.class,
+					new Receiver<TickEvent>() {
+						public void receive( TickEvent event ) {
+							programState.tickState( event.getDt() );
+						}
+					} ),
+
+
 			new Sub( EventGroups.PAUSE,
 					new NoArgReceiver() {
-						@Override public void receive() {
+						public void receive() {
 							pauseGame();
 						}
 					} ),
 
 			new Sub( EventGroups.NET, JoinEvent.class,
 					new Receiver<JoinEvent>() {
-						@Override public void receive( JoinEvent event ) {
+						public void receive( JoinEvent event ) {
 							handleJoinEvent( event );
-						}
-					} ),
-
-			new Sub( EventGroups.GAME, TickEvent.class,
-					new Receiver<TickEvent>() {
-						@Override public void receive( TickEvent event ) {
-							programState.tickState( event.getDt() );
 						}
 					} ),
 
 			new Sub( EventGroups.CANCEL_HOST,
 					new NoArgReceiver() {
-						@Override public void receive() {
+						public void receive() {
 							logger.info( "Canceling hosting game" );
 							host.stopListening();
 						}
@@ -683,29 +612,29 @@ public class ClientApp implements Disposable
 
 			new Sub( EventGroups.START_SINGLE_PLAYER,
 					new NoArgReceiver() {
-						@Override public void receive() {
+						public void receive() {
 							startSinglePlayer();
 						}
 					} ),
 
 			new Sub( EventGroups.HOST_MULTIPLAYER,
 					new NoArgReceiver() {
-						@Override public void receive() {
+						public void receive() {
 							hostMultiplayer();
 						}
 					} ),
 
-			new Sub( EventGroups.JOIN_MULTIPLAYER, EventType.JOIN_GAME.getClass(),
-					new Receiver<StandardValueEvent<String>>() {
-						@Override public void receive(
-								StandardValueEvent<String> event ) {
-							joinRemoteGame( event.getValue() );
+			new Sub( EventGroups.JOIN, JoinEvent.class ,
+					new Receiver<JoinEvent>() {
+						public void receive(
+								JoinEvent event ) {
+							handleJoinEvent( event );
 						}
 					} ),
 
-			new Sub( EventGroups.JOIN_MULTIPLAYER, EventType.JOIN_GAME.getClass(),
+			new Sub( EventGroups.JOIN_MULTIPLAYER, StandardValueEvent.class,
 					new Receiver<StandardValueEvent<String>>() {
-						@Override public void receive(
+						public void receive(
 								StandardValueEvent<String> event ) {
 							joinRemoteGame( event.getValue() );
 						}
@@ -713,7 +642,7 @@ public class ClientApp implements Disposable
 
 			new Sub( EventGroups.START_MULTIPLAYER,
 					new NoArgReceiver() {
-						@Override public void receive() {
+						public void receive() {
 							startMultiplayer();
 						}
 					} ),

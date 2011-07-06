@@ -1,6 +1,8 @@
 package cc.event;
 
+import j.util.eventhandler.GroupName;
 import cc.event.handlers.EventReceiver;
+import cc.event2.EventGroups;
 
 /**
  * Singnals that a player should be added to the game
@@ -73,4 +75,9 @@ public class JoinEvent extends Event
 		this.isMe = isMe;
 	}
 
+
+	@Override
+	public GroupName getReceiverGroup() {
+		return EventGroups.JOIN;
+	}
 }

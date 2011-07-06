@@ -1,10 +1,20 @@
 package cc.gui.game_display;
 
 import static java.lang.Math.abs;
-import static org.lwjgl.opengl.GL11.*;
+import static org.lwjgl.opengl.GL11.GL_POINTS;
+import static org.lwjgl.opengl.GL11.GL_POINT_SMOOTH;
+import static org.lwjgl.opengl.GL11.GL_QUADS;
+import static org.lwjgl.opengl.GL11.GL_TEXTURE_2D;
+import static org.lwjgl.opengl.GL11.glBegin;
+import static org.lwjgl.opengl.GL11.glColor3f;
+import static org.lwjgl.opengl.GL11.glDisable;
+import static org.lwjgl.opengl.GL11.glEnable;
+import static org.lwjgl.opengl.GL11.glEnd;
+import static org.lwjgl.opengl.GL11.glPointSize;
+import static org.lwjgl.opengl.GL11.glTexCoord2f;
+import static org.lwjgl.opengl.GL11.glVertex2f;
 
 import java.util.Collection;
-
 
 import org.lwjgl.opengl.GL11;
 
@@ -13,7 +23,6 @@ import cc.game.Player;
 import cc.game.objects.Ship;
 import cc.gui.Graphics;
 import cc.gui.models.GraphicalModel;
-import cc.gui.models.GraphicalModelIterator;
 import cc.util.GraphicsUtil;
 import cc.util.Texture;
 import cc.util.math.Vec;
@@ -53,7 +62,7 @@ public class Minimap
 	}
 
 
-	public void draw( Vec focusPoint, GraphicalModelIterator itr, Collection<GameObject> objectList )
+	public void draw( Vec focusPoint, Collection<GameObject> objectList )
 	{
 //		Vector2d focusPoint = focusPlayer.getControlledObject().getPosition();
 
@@ -84,7 +93,6 @@ public class Minimap
 		Vec v = new Vec();
 
 		// Draw dots on radar
-//		for ( GraphicalModel model = itr.first(); itr.isValid(); model = itr.next() ) {
 		for ( GameObject obj : objectList ) {
 
 			GraphicalModel model = obj.getGraphicalModel();

@@ -47,17 +47,4 @@ public class PlasmaShot extends Shot
 		dieSound.play( 1, 0.7f );
     }
 
-//	public static Action1<GameObject>
-//		DEATH_ACTION = new Action1<GameObject>() {
-//			public void run( GameObject arg ) {
-//				EventHandler.get().postEvent( new KillEvent( arg.getID() ) );
-//			}
-//		};
-//		public static Action1<GameObject> FADE_ACTION = new Action1<GameObject>() {
-//			public void run( GameObject arg ) {
-//				arg.addExtraBehavior( new DeathFaderBehavior( 0.02 ) );
-//			}
-//		};
-
-
 }

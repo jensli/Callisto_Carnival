@@ -1,11 +1,18 @@
 package cc.game;
 
+import j.util.eventhandler.EventHandler;
+import j.util.eventhandler.Receiver;
+import j.util.eventhandler.Sub;
+import j.util.util.Util;
+
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
+import cc.app.AppContext;
 import cc.event.Event;
 import cc.event.GuiResetEvent;
 import cc.event.game.CollisionEvent;
@@ -14,9 +21,8 @@ import cc.event.game.FireEvent;
 import cc.event.game.KillEvent;
 import cc.event.game.RotateEvent;
 import cc.event.game.ThrustEvent;
-import cc.event.handlers.EventHandler;
 import cc.event.handlers.EventReceiver;
-import cc.gui.models.GraphicalModelIterator;
+import cc.event2.EventGroups;
 import cc.util.logger.LogPlace;
 import cc.util.logger.LogType;
 import cc.util.logger.Logger;
@@ -55,34 +61,42 @@ public class GameEngine extends EventReceiver
 	 // The id of the player that plays on this machine
 	private int localPlayerID = Player.NO_PLAYER;
 
+	private EventHandler eventHandler;
+
 
 	/**
 	 * Sets up a working game and fills it with objects.
 	 */
-	public GameEngine()
+	public GameEngine( AppContext context )
 	{
 		simulation = new Simulation();
 		createGame();
-		EventHandler.get().addEventReceiver( this, Event.Cathegory.GAME );
+//		EventHandler.get().addEventReceiver( this, Event.Cathegory.GAME );
+		eventHandler = context.getEventHandlerNew();
+		eventHandler.addReceivers( subs );
+		subs = null;
 	}
 
 	// Update the game state, move all game objects and check for collisions,
 	// update players.
 	public void update( double dT )
 	{
-		if ( gameRunning ) {
-			double adjustedDT  = dT*timeConstant;
-
-			for ( Player player : playerList.values() ) {
-				player.update( adjustedDT );
-			}
-
-			for ( GameDeamon deamon : deamonList ) {
-				deamon.update( simulation, adjustedDT );
-			}
-
-			simulation.update( adjustedDT );
+		if ( !gameRunning ) {
+			return;
 		}
+
+		double adjustedDT  = dT*timeConstant;
+
+		for ( Player player : playerList.values() ) {
+			player.update( adjustedDT );
+		}
+
+		for ( GameDeamon deamon : deamonList ) {
+			deamon.update( simulation, adjustedDT );
+		}
+
+		simulation.update( adjustedDT );
+
 	}
 
 	/**
@@ -101,10 +115,7 @@ public class GameEngine extends EventReceiver
 	@Override
 	public void receiveEvent( Event event )
 	{
-		if ( event == null ) {
-			Logger.get().log( LogPlace.GAME, LogType.WARNING, "Null event in ClientGame.reciveEvent(...)" );
-			return;
-		}
+		Util.verifyNotNull( event );
 
 		event.dispatch( this );
 	}
@@ -145,41 +156,14 @@ public class GameEngine extends EventReceiver
 			// how to send the object list.
 
 			// Send an event to the GUI that there is a player that can be showed.
-			EventHandler.get().postEvent(
-					new GuiResetEvent( player, simulation.getObjectList(), simulation.getDrawableList(),
-					new GraphicalModelIterator( simulation.getObjectList() ) ) );
+
+			eventHandler.post( EventGroups.GUI_RESET,
+					new GuiResetEvent( player,
+							simulation.getObjectList(),
+							simulation.getDrawableList() ) );
 		}
 	}
 
-
-//	public void addPlayer( int playerID, String nick, boolean isBot, boolean isMe )
-//	{
-//
-//		if ( playerList.containsKey( playerID ) ) {
-//			System.out.println( "Player " + playerID + " already in the list!" );
-//			return;
-//			// throw new Error("Player already in player list!");
-//		}
-//
-//		Player player;
-//
-//		if ( isBot ) {
-//			player = new ComputerPlayer( simulation, getPlayerList() );
-//		} else {
-//			player = new Player( simulation );
-//		}
-//
-//		player.setPlayerID( playerID );
-//		playerList.put( playerID, player );
-//
-//		if ( isMe ) {
-//			localPlayer = playerID;
-//			EventHandler.getInstance().postEvent(
-//					new GuiEvent( player, simulation.getObjectList(),
-//					new GraphicalModelIterator( simulation.getObjectList() ) ) );
-//		}
-//
-//	}
 
 
 	/**
@@ -229,7 +213,14 @@ public class GameEngine extends EventReceiver
 		gameRunning = newGameRunning;
 	}
 
-
+	private List<Sub> subs = Arrays.asList(
+			new Sub( EventGroups.GAME,
+					Event.class,
+					new Receiver<Event>() {
+						public void receive( Event event ) {
+							event.dispatch( GameEngine.this );
+						}
+				} ) );
 
 	@Override
 	public void receiveCollisionEvent( CollisionEvent event ) {

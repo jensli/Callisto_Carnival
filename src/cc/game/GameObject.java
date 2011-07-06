@@ -3,8 +3,9 @@ package cc.game;
 import cc.event.Event;
 import cc.event.game.CollisionEvent;
 import cc.event.game.KillEvent;
-import cc.event.handlers.EventHandler;
 import cc.event.handlers.EventReceiver;
+import cc.event2.EventGlobals;
+import cc.event2.EventGroups;
 import cc.game.behaviors.Behavior;
 import cc.game.collision.Collider;
 import cc.gui.Drawable;
@@ -88,7 +89,7 @@ public class GameObject extends EventReceiver implements Drawable
 	public void update( double dT )
 	{
 		if ( life <= 0.0 ) {
-			EventHandler.get().postEvent( new KillEvent( this.getID() ) );
+			EventGlobals.getHandler().post( EventGroups.KILL, new KillEvent( this.getID() ) );
 		}
 
 		movementBehavior.perform( this, dT );
