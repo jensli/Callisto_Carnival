@@ -8,6 +8,8 @@ import cc.game.behaviors.FadeInBehavior;
 import cc.game.behaviors.FreeFloatBehavior;
 import cc.game.behaviors.OrbitBehavior;
 import cc.game.behaviors.TimerBehavior;
+import cc.gui.models.GraphicalModel;
+import cc.gui.models.GraphicalModelGroup;
 import cc.gui.models.TextureSquare;
 import cc.util.Color;
 import cc.util.Texture;
@@ -30,7 +32,7 @@ public class Powerup extends GameObject
 		setMovementBehavior( orbit );
 		setCollider( type.getCollider() );
 		getGraphicalModel().setColor( type.getColor() );
-		getGraphicalModel().getColor().a = 0;
+		getGraphicalModel().getColor().setA( 0 );
 	}
 
 
@@ -47,8 +49,17 @@ public class Powerup extends GameObject
 		setMovementBehavior( FreeFloatBehavior.make() );
 
 		setCollideGroup( GameObject.COLLIDE_GROUP_2 );
-		setGraphicalModel( new TextureSquare( this, texture, 0.3 ) );
-		addExtraBehavior( new FadeInBehavior( 2 ) );
+
+		GraphicalModelGroup group = new GraphicalModelGroup( this );
+
+		GraphicalModel tex = new TextureSquare( this, texture, 0.3 ),
+			fade = new FadeInBehavior( this, 2 );
+
+		group.add( tex );
+		group.add( fade );
+
+		setGraphicalModel( group );
+
 
 		deathTimerBehavior = TimerBehavior.makeDeathFader( 5.0, 0.2 );
     }

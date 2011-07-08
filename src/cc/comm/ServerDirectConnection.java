@@ -2,6 +2,7 @@ package cc.comm;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 
 import cc.event.Event;
@@ -42,6 +43,8 @@ public class ServerDirectConnection implements Connection {
 
 	public List<Event> receive()
 	{
+		if ( inBuf.isEmpty() ) return Collections.emptyList();
+
 		ArrayList<Event> rec = new ArrayList<Event>();
 
 		synchronized(inBuf) {
@@ -75,7 +78,11 @@ public class ServerDirectConnection implements Connection {
 	 */
 	protected List<Event> getSent()
 	{
-		List<Event> rec = new ArrayList<Event>();
+		if ( outBuf.isEmpty() ) {
+			return Collections.emptyList();
+		}
+
+		List<Event> rec = new LinkedList<Event>();
 
 		synchronized (outBuf) {
 			rec.addAll(outBuf);

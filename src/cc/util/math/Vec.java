@@ -1,6 +1,8 @@
 package cc.util.math;
 
-import static java.lang.Math.*;
+import static java.lang.Math.PI;
+import static java.lang.Math.cos;
+import static java.lang.Math.sin;
 import j.util.functional.Action1;
 
 /**
@@ -13,7 +15,7 @@ public class Vec extends VecMathVector2d
 //	public static Vec tempVector = new Vec();
     static final long serialVersionUID = 1L;
 
-    private static final Vec
+    public static final Vec
     	LEFT = new Vec( 1, 0 ),
     	RIGHT = new Vec( -1, 0 ),
     	UP = new Vec( 0, 1 ),

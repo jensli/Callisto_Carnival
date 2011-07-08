@@ -19,7 +19,7 @@ public class FreeFloatBehavior extends Behavior
 	@Override
     public void perform( GameObject controlled, double dT )
 	{
-		controlled.getPhysModel().accelerate( super.getSimulation().calcGravitation( controlled ) );
+		controlled.getPhysModel().accelerate( getSimulation().calcGravitation( controlled ) );
 	}
 
 	@Override

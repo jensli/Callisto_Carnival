@@ -160,7 +160,7 @@ public class ComputerPlayer implements GameDeamon
         Vec targetV = this.getTargetVector( intV, me, target );
 
         double fromAngle = this.getAngle(me.getPhysModel().getForward());
-        double toAngle = this.normalizeAngle(getAngle(targetV) + Math.sin(inaccuracy) * inaccuracyMul );
+        double toAngle = normalizeAngle(getAngle(targetV) + Math.sin(inaccuracy) * inaccuracyMul );
 
         //System.out.println( "from: "+ toDegres( fromAngle ) + "to: "+ toDegres( toAngle ) );
 
@@ -178,7 +178,7 @@ public class ComputerPlayer implements GameDeamon
 
 		double dirAngle = this.getAngle( obj.getPhysModel().getForward() );
 		double velAngle = this.getAngle( obj.getPhysModel().getVel() );
-		velAngle = this.normalizeAngle( velAngle - Math.PI );
+		velAngle = normalizeAngle( velAngle - Math.PI );
 
 		if ( getShortestAngleDistance( dirAngle, velAngle ) < angleDiff ) {
 			willThrust = true;
@@ -279,7 +279,7 @@ public class ComputerPlayer implements GameDeamon
 		}
 
 		newAngle += gAngle;
-		newAngle = this.normalizeAngle(newAngle);
+		newAngle = normalizeAngle(newAngle);
 
 		double oldAngle = this.getAngle( obj.getPhysModel().getForward() );
 		rotateClockwise = this.isShortWayClockwise( oldAngle, newAngle );
@@ -334,14 +334,14 @@ public class ComputerPlayer implements GameDeamon
 
 	private double getAngle( Vec vec )
 	{
-		double angle = vec.angle( new Vec( 1.0, 0.0 ) );
+		double angle = vec.angle( Vec.LEFT );
 		if ( vec.y < 0.0 ) {
 			angle = Math.PI*2.0 - angle;
 		}
 		return normalizeAngle(angle);
 	}
 
-	private double normalizeAngle( double angle )
+	private static double normalizeAngle( double angle )
 	{
 		while ( angle < 0 ) angle += Math.PI*2.0;
 		return angle;

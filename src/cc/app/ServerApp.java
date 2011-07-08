@@ -30,26 +30,7 @@ public class ServerApp
 {
 	private ConnectionServer serverConnection;
 
-	// fast looping timing
-//	private double timeConst =  0.0000009;
-//	private static final double timeConst =  0.009;
-
-	// For multiplayer, slow looping
-	private int tickIntervalMicros = 20000;
-	private double deltaTimeToSend = 0.01;
-
-
-//	private static final double timeConst =  0.0000002;
-//	private static final double deltaTimeToSend = tickIntervalMicros * timeConst;
-//	private double deltaTimeToSend = tickIntervalMicros*timeConst;
-//	private double deltaTimeToSend = 0.03;
-
-	// For singelplayer, fast loop, vync timing
-//	private static int tickIntervalMicros = 1;
-//	private double deltaTimeToSend = 0.01;
-
-
-	private Timer timer = new Timer( tickIntervalMicros );
+	private Timer timer = new Timer( 20000 );
 
 	private boolean gameRunning = false;
 
@@ -65,7 +46,6 @@ public class ServerApp
 	{
 		this.serverConnection = server;
 
-//		TickEvent.setDt( deltaTimeToSend );
 		tickEvent = new TickEvent();
 
 		if ( gameRunning ) {
@@ -73,6 +53,9 @@ public class ServerApp
 		}
 	}
 
+	public void setTickIntervalMicros( int tickIntervalMicros ) {
+		timer.setTickInterval( tickIntervalMicros );
+	}
 
 	/**
 	 * Called each program loop, receives events sent by clients and resends

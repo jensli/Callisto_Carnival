@@ -6,7 +6,6 @@ import cc.game.GameObject;
 import cc.util.EllipseOrbit;
 import cc.util.math.CyclicDouble;
 import cc.util.math.Vec;
-import cc.util.math.VecMath;
 
 /**
  * Makes the GameObject revolve around another GameObject.
@@ -58,7 +57,6 @@ public class OrbitBehavior extends Behavior
 
 		this.motherObject = mother;
 		this.speed = 10/revolvTime;
-//		cyclePos = startingAngle / (2*Math.PI);
 
 		cyclePos = new CyclicDouble( startingAngle / (2*Math.PI), 1.0 );
 	}
@@ -69,17 +67,25 @@ public class OrbitBehavior extends Behavior
 		cyclePos.inc( speed*dT );
 
 		orbit.setCenter( motherObject.getPos() );
-		Vec deltaV = orbit.calcVector( cyclePos.value() );
+//		Vec deltaV = orbit.calcVector( cyclePos.value() );
 
+		orbit.setProgress( cyclePos.value() );
+
+		Vec deltaV = controlled.getPhysModel().getVel();
+		deltaV.set( orbit.getPos() );
 		deltaV.sub( controlled.getPos() );
 		deltaV.scale( 1/dT );
 
-		controlled.getPhysModel().setVelocity( deltaV );
+//		controlled.getPhysModel().setVelocity( deltaV );
 
 		if ( isFaceMother ) {
-			Vec newForward = VecMath.sub( controlled.getPos(), motherObject.getPos() );
+			Vec newForward = controlled.getPhysModel().getForward();
+			newForward.setSub( controlled.getPos(), motherObject.getPos() );
 			newForward.normalize();
-			controlled.getPhysModel().setForward( newForward );
+
+//			Vec newForward = VecMath.sub( controlled.getPos(), motherObject.getPos() );
+//			newForward.normalize();
+//			controlled.getPhysModel().setForward( newForward );
 		}
 	}
 

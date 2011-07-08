@@ -1,0 +1,8 @@
+GameScreen.draw() -> glClear()
+Här läggs 75% av tiden.
+
+
+Minne:
+Perm gen: 12 Mb
+Låg nivå: 5-17 Mb
+Hög nivå: 18-35 Mb

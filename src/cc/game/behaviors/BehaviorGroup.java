@@ -1,9 +1,9 @@
 package cc.game.behaviors;
 
 
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.LinkedList;
+import j.util.lists.IterCacheList;
+
+import java.util.ArrayList;
 
 import cc.event.Event;
 import cc.game.GameObject;
@@ -12,7 +12,10 @@ import cc.util.Util;
 
 public class BehaviorGroup extends Behavior
 {
-	private Collection<Behavior> behaviorList = new LinkedList<Behavior>();
+//	private List<Behavior> behaviorList = new ArrayList<Behavior>();
+	private IterCacheList<Behavior> behaviorList =
+		new IterCacheList<Behavior>( new ArrayList<Behavior>( 3 ) );
+
 
 	public BehaviorGroup( Behavior... behaviors )
 	{
@@ -24,18 +27,15 @@ public class BehaviorGroup extends Behavior
 	@Override
 	public void perform( GameObject controlled, double dT )
 	{
-		Iterator<Behavior> itr = behaviorList.iterator();
-
-		while ( itr.hasNext() ) {
-
-			Behavior behavior = itr.next();
+		for ( Behavior behavior : behaviorList ) {
 
 			behavior.perform( controlled, dT );
 
 			if ( behavior.isFinished() ) {
-				itr.remove();
+				behaviorList.removeCurrent();
 			}
 		}
+
 	}
 
 	@Override

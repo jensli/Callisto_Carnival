@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
-import java.util.ArrayList;
 import java.util.List;
 
 import cc.event.Event;
@@ -46,16 +45,25 @@ public class ServerSocketConnection implements Connection
 		client.close();
 	}
 
+
 	public List<Event> receive() throws IOException
 	{
-		ArrayList<Event> rec = new ArrayList<Event>();
-		String line;
-
-		while ( ( line = inStream.readLine() ) != null ) {
-			rec.add( Event.make( line ) );
-		}
-
-		return rec;
+		return CommUtil.lazyReadThread( inStream );
+//		String line = inStream.readLine();
+//		if ( line == null ) return Collections.emptyList();
+//		String line2 = inStream.readLine();
+//		if ( line2 == null ) return Collections.singletonList( Event.make( line ) );
+//
+//		List<Event> rec = new LinkedList<Event>();
+//
+//		rec.add( Event.make( line ) );
+//		rec.add( Event.make( line2 ) );
+//
+//		while ( ( line = inStream.readLine() ) != null ) {
+//			rec.add( Event.make( line ) );
+//		}
+//
+//		return rec;
 	}
 
 

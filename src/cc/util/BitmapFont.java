@@ -81,7 +81,27 @@ public class BitmapFont {
 	 * @param x The x coordinate to draw the text at (int pixels)
 	 * @param y The y coordinate to draw the text at (in pixels)
 	 */
-	public void drawString(String text, float x, float y) {
+	public float drawString(CharSequence t1, CharSequence t2, float x, float y) {
+		float dx = drawString( t1, x, y );
+		return drawString( t2, x, y, dx );
+	}
+
+	public float drawString(CharSequence t1, CharSequence t2, CharSequence t3, float x, float y) {
+		float dx = drawString( t1, t2, x, y );
+		return drawString( t3, x, y, dx );
+	}
+
+	public float drawString(CharSequence t1, CharSequence t2, CharSequence t3, CharSequence t4, float x, float y) {
+		float dx = drawString( t1, t2, t3, x, y );
+		return drawString( t4, x, y, dx );
+	}
+
+	public float drawString(CharSequence text, float x, float y ) {
+		return drawString( text, x, y, 0 );
+	}
+
+
+	public float drawString(CharSequence text, float x, float y, float dx) {
 		// bind the font text so we can render quads with the characters
 		// on
 		texture.bind();
@@ -114,7 +134,6 @@ public class BitmapFont {
 					float u = ((c % charactersAcross) * characterWidthInTexture);
 					float v = 1 - ((c / charactersAcross) * characterHeightInTexture);
 					v -= font * 0.5f;
-					float dx = i*spacing;
 
 					// setup the quad
 					GL11.glTexCoord2f( u, v );
@@ -143,6 +162,8 @@ public class BitmapFont {
 //
 //					GL11.glTexCoord2f( u + characterWidthInTexture, v );
 //					GL11.glVertex2f( x + dx + characterWidth, y + characterHeight );
+
+					dx += spacing;
 				}
 
 			GL11.glEnd();
@@ -151,6 +172,8 @@ public class BitmapFont {
 
 		// reset the blending
 		GL11.glDisable(GL11.GL_BLEND);
+
+		return dx;
 	}
 
 	public float getFontSize()

@@ -27,6 +27,17 @@ public class Timer
 		timeLeft = tickInterval;
 	}
 
+
+	public long getTickInterval() {
+		return tickInterval;
+	}
+
+	public void setTickInterval( long tickInterval ) {
+		this.tickInterval = tickInterval;
+	}
+
+
+
 	public Timer()
 	{
 		tickInterval = Integer.MAX_VALUE;

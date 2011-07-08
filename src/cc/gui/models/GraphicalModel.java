@@ -7,6 +7,7 @@ import cc.util.math.Vec;
 public abstract class GraphicalModel
 {
 	private GameObject object;
+	private boolean isFinished = false;
 
 	public static final GraphicalModel EMPTY = new EmptyGraphicalModel();
 
@@ -45,13 +46,18 @@ public abstract class GraphicalModel
 
 	public boolean isFinished()
 	{
-		return false;
+		return isFinished;
 	}
 
 //	public Vec getForward()
 //    {
 //	    return object.getPhysModel().getForward();
 //    }
+
+	public void setFinished( boolean isFinished ) {
+		this.isFinished = isFinished;
+	}
+
 
 	public Vec getPosition()
     {

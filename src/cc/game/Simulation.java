@@ -3,13 +3,13 @@ package cc.game;
 
 import static java.lang.Math.abs;
 import static java.lang.Math.sqrt;
-import j.util.eventhandler.EventHandler;
 import j.util.functional.Fun1;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
-import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -36,8 +36,13 @@ public class Simulation
 		MASS_THRESHOLD = 0.1,
 		GRAVITATION_CONST = 200000.0;
 
+	// The main list of GameObjects in the game
 	private Map<Integer, GameObject> objectMap = new HashMap<Integer, GameObject>();
-//	private List<SpaceObject> objectList = new LinkedList<SpaceObject>();
+
+	// Cache to make iteration throught the objects faster. It turned out that
+	// HashMap iterators what the largest part of the garbage.
+	private GameObject[] objectCache = new GameObject[0];
+
 
 	// Objects to create is cached until next update to avoid concurrent modifications
 	// of the objectMap
@@ -71,6 +76,9 @@ public class Simulation
     }
 
 	private double totalRunTime = 0;
+
+	// Temp vector to save an allocation when calculating the gravity.
+	private static final Vec tempGrav = new Vec();
 
 	public Simulation()
 	{
@@ -113,7 +121,8 @@ public class Simulation
 	 */
 	public void update( double dT )
 	{
-		for ( GameObject obj : objectMap.values() ) {
+
+		for ( GameObject obj : objectCache ) {
 
 			// Event store not used. (Why?)
 //			if ( eventStore.containsKey( obj ) ) {   // Send events to object
@@ -124,33 +133,41 @@ public class Simulation
 
 			obj.update( dT );
 
-			if ( !obj.isAlive() ) {  // Kill object
-				obj.onDeath();
+			// Check is object should be killed
+			if ( !obj.isAlive() ) {
 				toRemoveList.add( obj );
 			}
 		}
 
 		// Remove dead objects
 		for ( GameObject obj : toRemoveList ) {
+			obj.onDeath();
 			objectMap.remove( obj.getID() );
 		}
 
-		toRemoveList.clear();
-
-		checkCollisions();
+		// Collisions
+		List<Event> collisions = checkCollisions( objectCache );
+		EventGlobals.getHandler().post( EventGroups.COLLISION, collisions );
 
 		// Add created objects
 		for ( GameObject objectToCreate : toCreateList ) {
-
 			objectMap.put( objectToCreate.getID(), objectToCreate );
 			objectToCreate.onCreate();
 		}
-		toCreateList.clear();
 
+		Collection<GameObject> objects = objectMap.values();
+
+		// Recreate the cache array if somethings has changed.
+		// This is probably faster that iterating through the map.
+		if ( !toRemoveList.isEmpty() || !toCreateList.isEmpty() ) {
+			objectCache = objects.toArray( new GameObject[ objects.size() ]  );
+		}
+
+		toRemoveList.clear();
+		toCreateList.clear();
 
 		totalRunTime += dT;
 	}
-
 
 	// NOT USED!!! (Why?)
 //	public void storeEvent( Event event )
@@ -212,49 +229,37 @@ public class Simulation
 	/**
 	 * Checks if any of the GameObjects in the simulation have collided
 	 */
-	public void checkCollisions()
+	public static List<Event> checkCollisions( GameObject[] objs )
 	{
 		// All detected collsions are stored here and sent when checking of all
 		// objects has finished.
-		List<Event> eventsToSend = new ArrayList<Event>();
+		List<Event> eventsToSend = Collections.emptyList();
 
 		GameObject obj1, obj2;
-		Iterator<GameObject> itr1,	itr2;
 
-		Collection<GameObject> objectCollection = objectMap.values();
-		itr1 = objectCollection.iterator();
-
-		if ( !itr1.hasNext() ) {
-			return;
-		}
-
-		while ( true ) {
+		for ( int i = 0; i < objs.length; i++ )  {
 			// Placed here to make sure we quit in time, considering itr2 assignmet below.
 			// We want to quit this loop when there is ONE elemtent LEFT in the list.
-			obj1 = itr1.next();
+			obj1 = objs[ i ];
 
-			if ( !itr1.hasNext() ) {
-				break;
-			}
 			// Skip if objects belong to collide groups which cant collide
 			if ( obj1.getCollideGroup() == GameObject.COLLIDE_GROUP_0
 			        || obj1.getCollideGroup() == GameObject.COLLIDE_GROUP_1 ) {
 				continue;
 			}
 
-			itr2 = objectCollection.iterator();
-			// Loop to the right pos in the list, skipping objects that this obj
-			// already has been checked against
-			while ( itr2.next() != obj1 ) ;
-
-			while ( itr2.hasNext() ) {
-				obj2 = itr2.next();
+			for ( int j = i + 1; j < objs.length; j++ ) {
+				obj2 = objs[ j ];
 				// Skip if objects belong to collide groups which cant collide
 				if ( obj2.getCollideGroup() == GameObject.COLLIDE_GROUP_0 ) {
 					continue;
 				}
 
 				if ( hasCollided( obj1, obj2 ) ) {
+
+					if ( eventsToSend.isEmpty() ) {
+						eventsToSend = new LinkedList<Event>();
+					}
 
 					eventsToSend.add( new CollisionEvent( obj1.getID(), obj2.getID(), obj2 ) );
 					eventsToSend.add( new CollisionEvent( obj2.getID(), obj1.getID(), obj1 ) );
@@ -264,35 +269,30 @@ public class Simulation
 		} // End of first while
 
 
-		// TODO: Shoundnt this just pass the events to the GameEngine objects?
-		// No need to use the EventHandler?
-		EventHandler handler = EventGlobals.getHandler();
-
-		for ( Event event : eventsToSend ) {
-			handler.post( EventGroups.COLLISION, event );
-		}
+		return eventsToSend;
 	}
 
 
 	public Vec calcGravitation( GameObject obj )
 	{
-		return calcGravitation( obj, objectMap );
+		return calcGravitation( obj, objectCache );
 	}
 
-	public static Vec calcGravitation( GameObject obj, Map<Integer, GameObject> objectMap )
+	public static Vec calcGravitation( GameObject obj, GameObject[] objects )
 	{
 		double
 			maxDistanceSqr = 1.0,
 			maxForce = 0.0;
 
 		final Vec
-			tempGrav = new Vec(),
 			objPos = obj.getPhysModel().getPos(),
 			gravitation = new Vec();
 
+		tempGrav.zero();
+
 		// First calculate a value so we can compare the magnitude of
 		// the grav forces
-		for ( GameObject listObj : objectMap.values() ) {
+		for ( GameObject listObj : objects ) {
 
 			// Skip calculating for this object if its to small of if listObj and obj are to close
 			if ( abs( listObj.getPhysModel().getMass() ) < MASS_THRESHOLD ||
@@ -320,49 +320,5 @@ public class Simulation
 		return gravitation;
 	}
 
-
-
 }
 
-
-// Gravity without "only strongest" calculation (?)
-//public Vector2d gravitatioFor( GameObject obj )
-//{
-//	double
-//		distance,
-//		forceMagnetude,
-//		listObjMass,
-//		maxForce = 0.0;
-//
-//	Vector2d
-//		dPos,
-//		gravitation  = new Vector2d();
-//
-//	for ( GameObject listObj : objectMap.values() ) {
-//
-//		// Skip calculating for this object if its to small or to near
-//		listObjMass = listObj.getMass();
-//		if ( Math.abs( listObjMass ) < 0.1 ) {
-//			continue;
-//		}
-//		dPos = listObj.getPosition();
-//		if ( dPos.epsilonEquals( obj.getPosition(), 0.1 ) ) {
-//			continue;
-//		}
-//
-//		dPos.sub( obj.getPosition() );
-//		distance = dPos.lengthSquared();
-//		forceMagnetude = ( GRAVITATION_CONST * listObjMass ) / ( distance );
-//
-//		if ( forceMagnetude > maxForce ) {
-//			maxForce = forceMagnetude;
-//			dPos.scale( forceMagnetude / Math.sqrt( distance ) );  // divide by distance to normalize
-//			gravitation.set( dPos );
-//		}
-//
-////		dPos.scale( forceMagnetude / distance );  // divide by distance to normalize
-////		gravitation.add( dPos );
-//	}
-//
-//	return gravitation;
-//}

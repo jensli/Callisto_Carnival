@@ -1,19 +1,21 @@
 package cc.gui.models;
 
 
-import java.util.Iterator;
-import java.util.LinkedList;
+import j.util.lists.IterCacheList;
+
+import java.util.ArrayList;
 import java.util.List;
 
 import cc.game.GameObject;
 import cc.util.Color;
-import cc.util.Util;
 import cc.util.math.Vec;
 
 
 public class GraphicalModelGroup extends GraphicalModel
 {
-	private List<GraphicalModel> modelList = new LinkedList<GraphicalModel>();
+	private List<GraphicalModel> modelList = new ArrayList<GraphicalModel>( 2 );
+	private IterCacheList<GraphicalModel> modelIterable = new IterCacheList<GraphicalModel>( modelList );
+//	private IndexIterator<GraphicalModel> itr = new IndexIterator<GraphicalModel>( modelList );
 
 	public GraphicalModelGroup(GameObject obj )
 	{
@@ -23,40 +25,44 @@ public class GraphicalModelGroup extends GraphicalModel
 	@Override
 	public void draw( Vec pos, Vec forward )
 	{
-		for ( GraphicalModel model : modelList ) {
+		for ( GraphicalModel model : modelIterable ) {
 			model.draw( pos, forward );
 		}
-
 	}
 
 	@Override
     public void update( double dT )
     {
-		Iterator<GraphicalModel> itr = modelList.iterator();
+//		Iterator<GraphicalModel> itr = modelList.iterator();
+//		itr.setToStart();
+//
+//		while ( itr.hasNext() ) {
+//
+//			GraphicalModel model = itr.next();
+//
+//			model.update( dT );
+//
+//			if ( model.isFinished() ) {
+//				itr.remove();
+//			}
+//		}
 
-		while ( itr.hasNext() ) {
-
-			GraphicalModel model = itr.next();
-
+		for ( GraphicalModel model : modelIterable ) {
 			model.update( dT );
 
 			if ( model.isFinished() ) {
-				itr.remove();
+				modelIterable.removeCurrent();
 			}
 		}
-
-//		for ( GraphicalModel model : modelList ) {
-//			model.update( dT );
-//
-//		}
 
     }
 
 
-
+	/**
+	 * TODO: Hack warning! Should fix this.
+	 */
 	@Override
     public Color getColor() {
-	    // TODO Auto-generated method stub
 	    return modelList.get( 0 ).getColor();
     }
 
@@ -67,14 +73,15 @@ public class GraphicalModelGroup extends GraphicalModel
 		return this;
     }
 
+
+	public void add( GraphicalModel model ) {
+		modelList.add( model );
+	}
+
 	public void add( GraphicalModel... models )
 	{
 		for ( GraphicalModel model : models ) {
-
-			Util.verifyArg( !modelList.contains( model ), "Cannot add a model to a group twise" );
-			Util.verifyArg( model != this, "Cannot add a model group to itself" );
-
-			modelList.add( model );
+			add( model );
 		}
 	}
 

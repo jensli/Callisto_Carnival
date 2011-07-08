@@ -6,24 +6,23 @@ import cc.event2.EventGroups;
 
 public class TickEvent extends Event
 {
+	private static double staticDt = Double.NaN;
+
+//	private double dT;
+
 	public static void setDt( double dT ) {
 		staticDt = dT;
 	}
 
-	private static double staticDt = 0.01;
-
-	private double dT;
-
 
 	public TickEvent() {
 		super();
-		this.dT = staticDt;
 	}
 
-	public TickEvent( double dT )
-	{
-		this.dT = dT;
-	}
+//	public TickEvent( double dT )
+//	{
+//		dT = dT;
+//	}
 
 	@Override
     public void dispatch( EventReceiver receiver ) {
@@ -31,7 +30,7 @@ public class TickEvent extends Event
 	}
 
 	public double getDt() {
-		return dT;
+		return staticDt;
 	}
 
 

@@ -26,7 +26,7 @@ public class PhysicalModel
 		this.move( dT );
 		this.rotate( dT );
 
-		acceleration.set( 0, 0 );
+		acceleration.zero();
 	}
 
 	protected void accelerate( double dT )

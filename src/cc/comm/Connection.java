@@ -51,4 +51,5 @@ public interface Connection extends Closeable
 	 * @throws IOException
 	 */
 	public abstract void close() throws IOException;
+
 }

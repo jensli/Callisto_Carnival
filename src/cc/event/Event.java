@@ -34,8 +34,6 @@ public abstract class Event implements Cloneable
 	public static final int NO_SENDER = -1,
 		NO_RECEIVER = -1;
 
-//	private String name;
-
 	private static Object[][] eventNameMap =
 		new Object[][] {
 			{ Event.ROTATE, new RotateEvent() },
@@ -51,17 +49,8 @@ public abstract class Event implements Cloneable
 	private static HashMap<String, Event> eventMap;
 
 	static {
+		// Initializing of the static eventMap
 		eventMap = Maps.make( eventNameMap );
-
-//		// Initializing of the static eventMap
-//		eventMap.put( Event.ROTATE, new RotateEvent() );
-//		eventMap.put( Event.THRUST, new ThrustEvent() );
-//		eventMap.put( Event.KILL, new KillEvent() );
-//		eventMap.put( Event.CREATE_OBJECT, new CreateEvent( NO_RECEIVER ) );
-//		eventMap.put( Event.FIRE, new FireEvent( NO_RECEIVER ) );
-//		eventMap.put( Event.TICK, new TickEvent( 0.0 ) );
-//		eventMap.put( Event.JOIN, new JoinEvent( NO_RECEIVER, "no nick", false, false) );
-//		eventMap.put( Event.QUIT, new QuitEvent() );
 	}
 
 	/**

@@ -12,7 +12,6 @@
 
 package cc.util.math;
 
-import java.lang.Math;
 
 
 /**
@@ -84,8 +83,7 @@ public abstract class Tuple2d implements java.io.Serializable, Cloneable {
      */
     public Tuple2d()
     {
-	this.x = 0.0;
-	this.y = 0.0;
+    	zero();
     }
 
 
@@ -98,6 +96,10 @@ public abstract class Tuple2d implements java.io.Serializable, Cloneable {
     {
 	this.x = x;
 	this.y = y;
+    }
+
+    public void zero() {
+    	set( 0, 0 );
     }
 
 

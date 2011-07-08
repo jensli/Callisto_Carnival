@@ -6,6 +6,7 @@ import java.net.Socket;
 import java.net.SocketTimeoutException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 
 import cc.event.Event;
@@ -155,12 +156,18 @@ public class ConnectionServer
 	 */
 	public List<Event> receive()
 	{
-		ArrayList<Event> received = new ArrayList<Event>();
+		List<Event> received = Collections.emptyList();
 
 		synchronized(clients) {
 			for (Connection client : clients) {
 				try {
-					received.addAll( client.receive() );
+					List<Event> l = client.receive();
+
+					if ( !l.isEmpty() && received.isEmpty() ) {
+						received = new LinkedList<Event>();
+					}
+
+					received.addAll( l );
 				} catch (IOException e) {
 					e.printStackTrace();
 				}

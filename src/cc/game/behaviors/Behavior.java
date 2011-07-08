@@ -50,7 +50,7 @@ public abstract class Behavior extends EventReceiver
 	{
 		simulation = newSimulation;
 	}
-	protected Simulation getSimulation()
+	protected static Simulation getSimulation()
 	{
 		return simulation;
 	}

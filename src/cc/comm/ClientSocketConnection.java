@@ -7,7 +7,6 @@ import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
-import java.util.LinkedList;
 import java.util.List;
 
 import cc.event.Event;
@@ -69,14 +68,15 @@ public class ClientSocketConnection implements Connection
 
 	public List<Event> receive() throws IOException
 	{
-		String line;
-		List<Event> received = new LinkedList<Event>();
-
-		while ( ( line = inputThread.readLine() ) != null ) {
-			received.add( Event.make( line ) );
-		}
-
-		return received;
+		return CommUtil.lazyReadThread( inputThread );
+//		String line;
+//		List<Event> received = new LinkedList<Event>();
+//
+//		while ( ( line = inputThread.readLine() ) != null ) {
+//			received.add( Event.make( line ) );
+//		}
+//
+//		return received;
 	}
 
 	public void send(List<Event> events)

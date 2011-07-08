@@ -59,7 +59,8 @@ public class Ship extends GameObject
 		ps.setController( controlledBehavior );
 		group.add( ps );
 
-		addExtraBehavior( new FadeInBehavior( 2 ) );
+		group.add( new FadeInBehavior( this, 2 ) );
+//		addExtraBehavior( new FadeInBehavior( 2 ) );
 
 
 		setGraphicalModel( group );

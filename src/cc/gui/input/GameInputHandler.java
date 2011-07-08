@@ -1,6 +1,9 @@
 package cc.gui.input;
 
 
+import j.util.lists.IterCacheList;
+
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -58,7 +61,7 @@ class KeyEvent
 public class GameInputHandler<T>
 {
 	// Which keycodes trigger which binding
-	Map<Integer, List<KeyBind<T>>> bindList = new HashMap<Integer, List<KeyBind<T>>>();
+	Map<Integer, ArrayList<KeyBind<T>>> bindList = new HashMap<Integer, ArrayList<KeyBind<T>>>();
 
 	// The keycodes for keys pressed down at the moment
 	Set<Integer> pressedKeys = new HashSet<Integer>();
@@ -124,6 +127,8 @@ public class GameInputHandler<T>
 		}
 	}
 
+	private IterCacheList<KeyBind<T>> bindIterable = new IterCacheList<KeyBind<T>>();
+
 	public List<T> update()
 	{
 		int pressedModifyers = readModifyers();
@@ -132,12 +137,13 @@ public class GameInputHandler<T>
 
 		// Loop throught all binds, send start event if they are just pressed
 		// and stop event if the wore just released.
-		for ( Map.Entry<Integer, List<KeyBind<T>>> entry : bindList.entrySet() ) {
+		for ( Map.Entry<Integer, ? extends List<KeyBind<T>>> entry : bindList.entrySet() ) {
 
 			int keyCode = entry.getKey();
 			boolean isKeyDown = Keyboard.isKeyDown( keyCode );
 
-			for ( KeyBind<T> bind : entry.getValue() ) {
+			for ( KeyBind<T> bind : bindIterable.withList( entry.getValue() ) ) {
+//			for ( KeyBind<T> bind : entry.getValue() ) {
 
 //				final KeyBind bind = entry.getValue();
 
@@ -194,9 +200,10 @@ public class GameInputHandler<T>
 	public void addBind( int keyCode, KeyBind<T> bind )
 	{
 		if ( !bindList.containsKey( keyCode ) ) {
-			bindList.put( keyCode, new LinkedList<KeyBind<T>>() );
+			bindList.put( keyCode, new ArrayList<KeyBind<T>>() );
 		}
 		bindList.get( keyCode ).add( bind );
+		bindList.get( keyCode ).trimToSize();
 	}
 
 	public void addBind( KeyBind<T> bind ) {

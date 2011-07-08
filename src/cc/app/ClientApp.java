@@ -98,6 +98,27 @@ public class ClientApp implements Disposable
 
 	private AppContext appContext;
 
+	// For multiplayer, slow looping
+	private int tickIntervalMicros = 20000;
+	private double dtToSend = 0.01;
+
+	// fast looping timing
+//	private double timeConst =  0.0000009;
+//	private static final double timeConst =  0.009;
+
+
+//	private static final double timeConst =  0.0000002;
+//	private static final double deltaTimeToSend = tickIntervalMicros * timeConst;
+//	private double deltaTimeToSend = tickIntervalMicros*timeConst;
+//	private double deltaTimeToSend = 0.03;
+
+	// For singelplayer, fast loop, vync timing
+//	private static int tickIntervalMicros = 1;
+//	private double deltaTimeToSend = 0.01;
+
+
+
+
 	public ClientApp( StartArgs args )
 	{
 		logger = Logger.get().createPlaced( LogPlace.APP );
@@ -110,6 +131,8 @@ public class ClientApp implements Disposable
 
 		eventHandler.addReceivers( Arrays.asList( recs  ) );
 		recs = null;
+
+		TickEvent.setDt( dtToSend );
 
 		programState = MENU;
 	}
@@ -315,7 +338,6 @@ public class ClientApp implements Disposable
 		}
 	}
 
-
 	/**
 	 * Creates a host, connecting itself to it.
 	 * Used in Singeplayer games and when hosting multiplayer games.
@@ -326,8 +348,11 @@ public class ClientApp implements Disposable
 		host = new Host();
 		serverApp = new ServerApp( host.getServer() );
 
+		serverApp.setTickIntervalMicros( tickIntervalMicros );
+
 		// Connect yourself to the (local) server
 		serverConnection = host.connectLocalClient();
+
 	}
 
 	/**
