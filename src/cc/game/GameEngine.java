@@ -3,7 +3,7 @@ package cc.game;
 import j.util.eventhandler.EventHandler;
 import j.util.eventhandler.Receiver;
 import j.util.eventhandler.Sub;
-import j.util.util.Util;
+import j.util.util.Asserts;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -113,7 +113,7 @@ public class GameEngine extends EventReceiver
 	@Override
 	public void receiveEvent( Event event )
 	{
-		Util.verifyNotNull( event );
+		Asserts.notNull( event );
 
 		event.dispatch( this );
 	}

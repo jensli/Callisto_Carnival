@@ -1,9 +1,9 @@
 package cc.game.behaviors;
 
+import j.util.util.Util;
 import cc.game.GameObject;
 import cc.gui.models.GraphicalModel;
 import cc.util.Color;
-import cc.util.Util;
 import cc.util.math.Vec;
 
 public class FadeInBehavior extends GraphicalModel

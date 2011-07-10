@@ -26,19 +26,20 @@ import cc.event.ValueEvent;
 import cc.event2.EventGroups;
 import cc.gui.FadeOverlay;
 import cc.gui.Graphics;
+import cc.util.CcUtil;
 import cc.util.Texture;
-import cc.util.Util;
 import cc.util.logger.LogPlace;
 import cc.util.logger.Logger;
 import cc.util.resources.Name;
 import cc.util.resources.ResourceHandler;
 
 
-
+/**
+ * Handles the gui widgets that make up the main menu.
+ */
 public class MainMenuDisplay
 {
 	private Texture backgroundTexture;
-
 	private Window mainMenuDialog;
 	private Window hostGameDialog;
 	private Window joinGameDialog;
@@ -100,7 +101,7 @@ public class MainMenuDisplay
 	{
 		Graphics.get().pushAllGL();
 
-		display = new org.fenggui.Display( new LWJGLBinding() );
+		display = new Display( new LWJGLBinding() );
 
 		MainMenuBuilder builder = new MainMenuBuilder( context );
 
@@ -214,7 +215,7 @@ public class MainMenuDisplay
 	{
 		closePopup();
 
-		if ( Util.isIpAddress( ipStr ) ) {
+		if ( CcUtil.isIpAddress( ipStr ) ) {
 			Logger.get().log( LogPlace.GUI, "Wait start good." );
 			openPopup( waitStartDialog );
 			eventHandler.post( EventGroups.JOIN_MULTIPLAYER,

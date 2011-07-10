@@ -2,12 +2,12 @@ package cc.game.behaviors;
 
 
 import j.util.lists.IterCacheList;
+import j.util.util.Asserts;
 
 import java.util.ArrayList;
 
 import cc.event.Event;
 import cc.game.GameObject;
-import cc.util.Util;
 
 
 public class BehaviorGroup extends Behavior
@@ -48,8 +48,8 @@ public class BehaviorGroup extends Behavior
 
 	public void add( Behavior b )
 	{
-		Util.verifyNotNull( b, "Behavior.add: b"  );
-		Util.verifyArg( !b.isEmpty(), "Can not add the empty behavior to BehaviorGroup" );
+		Asserts.notNull( b, "Behavior.add: b"  );
+		Asserts.arg( !b.isEmpty(), "Can not add the empty behavior to BehaviorGroup" );
 
 		behaviorList.add( b );
     }

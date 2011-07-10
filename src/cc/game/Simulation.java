@@ -3,7 +3,6 @@ package cc.game;
 
 import static java.lang.Math.abs;
 import static java.lang.Math.sqrt;
-import j.util.functional.Fun1;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -13,7 +12,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import cc.event.Event;
 import cc.event.game.CollisionEvent;
 import cc.event2.EventGlobals;
 import cc.event2.EventGroups;
@@ -62,18 +60,6 @@ public class Simulation
 //		}
 //	} );
 
-	private final Fun1<GameObject, Vec> gravCalcer = new Fun1<GameObject, Vec>() {
-		@Override public Vec run( GameObject arg ) {
-			return calcGravitation( arg );
-		}
-	};
-
-	/**
-	 * Returns a Func1 wich objects can use to calc their gravity
-	 */
-	public Fun1<GameObject, Vec> getGravCalcer() {
-    	return gravCalcer;
-    }
 
 	private double totalRunTime = 0;
 
@@ -146,7 +132,7 @@ public class Simulation
 		}
 
 		// Collisions
-		List<Event> collisions = checkCollisions( objectCache );
+		List<CollisionEvent> collisions = checkCollisions( objectCache );
 		EventGlobals.getHandler().post( EventGroups.COLLISION, collisions );
 
 		// Add created objects
@@ -229,11 +215,11 @@ public class Simulation
 	/**
 	 * Checks if any of the GameObjects in the simulation have collided
 	 */
-	public static List<Event> checkCollisions( GameObject[] objs )
+	public static List<CollisionEvent> checkCollisions( GameObject[] objs )
 	{
 		// All detected collsions are stored here and sent when checking of all
 		// objects has finished.
-		List<Event> eventsToSend = Collections.emptyList();
+		List<CollisionEvent> eventsToSend = Collections.emptyList();
 
 		GameObject obj1, obj2;
 
@@ -249,6 +235,7 @@ public class Simulation
 			}
 
 			for ( int j = i + 1; j < objs.length; j++ ) {
+
 				obj2 = objs[ j ];
 				// Skip if objects belong to collide groups which cant collide
 				if ( obj2.getCollideGroup() == GameObject.COLLIDE_GROUP_0 ) {
@@ -258,37 +245,36 @@ public class Simulation
 				if ( hasCollided( obj1, obj2 ) ) {
 
 					if ( eventsToSend.isEmpty() ) {
-						eventsToSend = new LinkedList<Event>();
+						eventsToSend = new LinkedList<CollisionEvent>();
 					}
 
 					eventsToSend.add( new CollisionEvent( obj1.getID(), obj2.getID(), obj2 ) );
 					eventsToSend.add( new CollisionEvent( obj2.getID(), obj1.getID(), obj1 ) );
 				}
-			} // End of second while
 
-		} // End of first while
+			} // End of second for
+
+		} // End of first for
 
 
 		return eventsToSend;
 	}
 
 
-	public Vec calcGravitation( GameObject obj )
+	public void calcGravitation( GameObject obj, Vec v )
 	{
-		return calcGravitation( obj, objectCache );
+		calcGravitation( obj, objectCache, v );
 	}
 
-	public static Vec calcGravitation( GameObject obj, GameObject[] objects )
+	public static void calcGravitation( GameObject obj, GameObject[] objects, Vec result )
 	{
 		double
 			maxDistanceSqr = 1.0,
 			maxForce = 0.0;
 
-		final Vec
-			objPos = obj.getPhysModel().getPos(),
-			gravitation = new Vec();
+		Vec objPos = obj.getPhysModel().getPos();
 
-		tempGrav.zero();
+		result.zero();
 
 		// First calculate a value so we can compare the magnitude of
 		// the grav forces
@@ -310,14 +296,12 @@ public class Simulation
 			if ( forceMagnetude > maxForce ) {
 				maxDistanceSqr = distanceSqr;
 				maxForce = forceMagnetude;
-				gravitation.set( tempGrav );
+				result.set( tempGrav );
 			}
 		}
 
 		// Second scale the largest of the grav forces to the right size
-		gravitation.scale( GRAVITATION_CONST * maxForce / sqrt( maxDistanceSqr ) );  // divide by distance to normalize
-
-		return gravitation;
+		result.scale( GRAVITATION_CONST * maxForce / sqrt( maxDistanceSqr ) );  // divide by distance to normalize
 	}
 
 }

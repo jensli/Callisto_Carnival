@@ -5,6 +5,7 @@ import static java.lang.Math.cos;
 import static java.lang.Math.round;
 import static java.lang.Math.sin;
 import static java.lang.Math.sqrt;
+import j.util.util.Asserts;
 import cc.util.math.Vec;
 /**
  * This class describes an elliptical orbit. It stores data about the path
@@ -30,7 +31,7 @@ public class EllipseOrbit
 
 	public EllipseOrbit( Vec center, Vec dir, double perihelionDist, double aphelionDist )
 	{
-		Util.verifyArgInRange( ecce, 0, 0.9999999, "ecce" );
+		Asserts.verifyArgInRange( ecce, 0, 0.9999999, "ecce" );
 
 		this.center.set( center );
 	    this.major = (perihelionDist + aphelionDist) / 2;
@@ -90,7 +91,7 @@ public class EllipseOrbit
 	{
     	final double
 			V_in = 2*PI*d,
-			V_eff = Util.sinSmoothIter( V_in, smoothFactor, (int) round( smoothFactor * 5 ) ),
+			V_eff = CcUtil.sinSmooth( V_in, smoothFactor, (int) round( smoothFactor * 5 ) ),
 	    	x = cos( V_eff ) * major - major*ecce,  // Last term is the correction to place the focus right
 	    	y = sin( V_eff ) * minor;
 

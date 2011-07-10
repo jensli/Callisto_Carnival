@@ -1,11 +1,11 @@
 package cc.comm;
 
 import j.util.lists.Queue;
+import j.util.util.Util;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 
-import cc.util.Util;
 
 
 /**
@@ -128,12 +128,6 @@ public class InputThread
 	    	Util.close( in );
 	    }
 
-//	    // Close stream on exit
-//	    try {
-//	    	in.close();
-//	    } catch (IOException e) {
-//	    	e.printStackTrace();
-//	    }
     }
 
 }

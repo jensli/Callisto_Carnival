@@ -7,7 +7,10 @@ public class Quad
 
 	public Quad()
 	{
-		;
+		this.p1 = new Vec();
+		this.p2 = new Vec();
+		this.p3 = new Vec();
+		this.p4 = new Vec();
 	}
 
 	public Quad( Vec p1, Vec p2, Vec p3, Vec p4 ) {
@@ -23,6 +26,13 @@ public class Quad
 		this.p2 = new Vec( q.p2 );
 		this.p3 = new Vec( q.p3 );
 		this.p4 = new Vec( q.p4 );
+	}
+
+	public void set( Quad q ) {
+	    this.p1.set( q.p1 );
+	    this.p2.set( q.p2 );
+	    this.p3.set( q.p3 );
+	    this.p4.set( q.p4 );
 	}
 
 	public void rotateAround( Vec p, Vec dir )

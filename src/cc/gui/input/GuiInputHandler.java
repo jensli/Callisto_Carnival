@@ -15,8 +15,8 @@ public class GuiInputHandler
 		readBufferedMouse( display );
 	}
 
-	public void readBufferedKeyboard( Display desk ) {
-
+	public void readBufferedKeyboard( Display desk )
+	{
 	      //check keys, buffered
 	      Keyboard.poll();
 

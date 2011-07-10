@@ -32,6 +32,7 @@ public class GameDisplay // extends EventReceiver
 	private GameScreen gameScreen;
 	private Minimap minimap;
 	private Hud hud;
+	private NoticeArea noticeArea;
 	private FadeOverlay fadeOverlay;
 
 	// Init to dummy list to avoid NullPointer
@@ -44,7 +45,7 @@ public class GameDisplay // extends EventReceiver
 	boolean hasPlayerFocus = true;
 	private EventHandler eventHandler;
 
-	public GameDisplay( AppContext context )
+	public GameDisplay( AppContext context, org.fenggui.Display display )
 	{
 		eventHandler  = context.getEventHandler();
 
@@ -52,6 +53,7 @@ public class GameDisplay // extends EventReceiver
 		minimap = new Minimap();
 		hud = new Hud();
 		fadeOverlay = new FadeOverlay( 0.0005 );
+		noticeArea = new NoticeArea();
 
 		for ( Sub sub : subs ) {
 			eventHandler.addReceiver( sub );
@@ -72,6 +74,7 @@ public class GameDisplay // extends EventReceiver
 		gameScreen.draw( dT, focusPoint, objectList );
 		minimap.draw( focusPoint, objectList );
 		hud.draw( focusPlayer );
+		noticeArea.draw( null );
 
 		fadeOverlay.update( dT );
 		fadeOverlay.draw();

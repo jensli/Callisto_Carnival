@@ -37,12 +37,13 @@ public class ComputerPlayer implements GameDeamon
 		inaccuracyAdd = 0.1,
 		inaccuracyMul = 0.1;
 
-	private final int
-		navMode = 0,
-		breakMode = 1,
-		termMode = 2;
+	private enum Mode {
+		NAV,
+		BREAK,
+		TERM,
+	}
 
-	private int mode = navMode;
+	private Mode mode = Mode.NAV;
 
 	private GameObject target = null;
 	private double inaccuracy = 0;
@@ -51,7 +52,8 @@ public class ComputerPlayer implements GameDeamon
 
 	private Player player;
 
-	protected Simulation simulation;
+	private Simulation simulation;
+	private Vec tempGrav = new Vec();
 
 	private boolean rotateOn = false,
 		thrustOn = false,
@@ -129,17 +131,15 @@ public class ComputerPlayer implements GameDeamon
 			return;
 		}
 
-		Vec g = getGravitation(obj);
-		if ( g == null ) {
-			throw new RuntimeException("g = null!");
-		}
+		simulation.calcGravitation( obj, tempGrav );
+
 
 		switch ( mode ) {
-			case navMode: navigateAI( obj, g );
+			case NAV: navigateAI( obj, tempGrav );
 				break;
-			case breakMode: breakAI( obj, g );
+			case BREAK: breakAI( obj, tempGrav );
 				break;
-			case termMode: terminateAI( obj, g );
+			case TERM: terminateAI( obj, tempGrav );
 				break;
 		}
 	}
@@ -147,12 +147,15 @@ public class ComputerPlayer implements GameDeamon
 
 	private void terminateAI(GameObject me, Vec g)
 	{
-		if ( target == null ) setMode(navMode);
-		if ( !this.isTarget( me, target ) ) setMode(navMode);
-        if ( g.length() < lowGrav ) setMode(navMode);
-        if ( g.length() > highGrav ) setMode(navMode);
+		if ( target == null ||
+				!this.isTarget( me, target ) ||
+				g.length() < lowGrav ||
+				g.length() > highGrav ) {
 
-        if ( mode == navMode ) {
+			setMode( Mode.NAV );
+		}
+
+        if ( mode == Mode.NAV ) {
         	return;
         }
 
@@ -173,7 +176,7 @@ public class ComputerPlayer implements GameDeamon
 	}
 
 
-	private void breakAI(GameObject obj, Vec g)
+	private void breakAI( GameObject obj, Vec g )
 	{
 
 		double dirAngle = this.getAngle( obj.getPhysModel().getForward() );
@@ -187,10 +190,10 @@ public class ComputerPlayer implements GameDeamon
 			rotateClockwise = this.isShortWayClockwise( dirAngle, velAngle );
 		}
 		if ( obj.getPhysModel().getVel().length() < medVelosity ) {
-			setMode(navMode);
+			setMode( Mode.NAV );
 		}
         if ( g.length() > highGrav ) {
-        	setMode(navMode);
+        	setMode( Mode.NAV );
         }
 	}
 
@@ -265,7 +268,7 @@ public class ComputerPlayer implements GameDeamon
 
 		if ( (g.length() > lowGrav) && (g.length() < highGrav) ) {
 			target = this.findTarget( obj );
-			if ( target != null ) setMode( termMode );
+			if ( target != null ) setMode( Mode.TERM );
 		}
 
 		double gAngle = this.getAngle( g );
@@ -295,7 +298,7 @@ public class ComputerPlayer implements GameDeamon
 
 
 		if ( (obj.getPhysModel().getVel().length() > maxVelosity) && (g.length() < lowGrav ) ) {
-			setMode(breakMode);
+			setMode( Mode.BREAK );
 		}
 
 		//System.out.println( "ga:"+toDegres(gAngle)+ " na:" +toDegres(newAngle) );
@@ -315,7 +318,7 @@ public class ComputerPlayer implements GameDeamon
 		}
 	}
 
-	private void setMode( int mode )
+	private void setMode( Mode mode )
 	{
 //		String modeName = "Unknown"; // AI Debug code
 //		if ( mode == navMode ) modeName = "navigation";
@@ -324,12 +327,6 @@ public class ComputerPlayer implements GameDeamon
 //		System.out.println( "AI: Going into " + modeName + " mode." );
 
 		this.mode = mode;
-	}
-
-	private Vec getGravitation( GameObject obj )
-	{
-		// This makes it calculate gravitation twise, but what the hell!
-		return simulation.calcGravitation( obj );
 	}
 
 	private double getAngle( Vec vec )

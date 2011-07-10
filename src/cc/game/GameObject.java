@@ -1,5 +1,6 @@
 package cc.game;
 
+import j.util.util.Util;
 import cc.event.Event;
 import cc.event.game.CollisionEvent;
 import cc.event.game.KillEvent;
@@ -10,12 +11,16 @@ import cc.game.behaviors.Behavior;
 import cc.game.collision.Collider;
 import cc.gui.Drawable;
 import cc.gui.models.GraphicalModel;
-import cc.util.Util;
 import cc.util.math.Vec;
 
 
 public class GameObject extends EventReceiver implements Drawable
 {
+	public enum CollideGroup {
+		GROUP_1,
+		GROUP_2,
+		GROUP_3,
+	}
 	public static final int
 		// Can't collide with anything
 		COLLIDE_GROUP_0 = 0,

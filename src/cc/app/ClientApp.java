@@ -20,10 +20,11 @@ package cc.app;
 
 
 
+import j.util.eventhandler.EventHandler;
 import j.util.eventhandler.NoArgReceiver;
 import j.util.eventhandler.Receiver;
 import j.util.eventhandler.Sub;
-import j.util.util.Util;
+import j.util.util.Asserts;
 
 import java.io.IOException;
 import java.net.InetAddress;
@@ -36,8 +37,6 @@ import cc.comm.Host;
 import cc.event.Event;
 import cc.event.JoinEvent;
 import cc.event.QuitEvent;
-import cc.event.StandardEvent;
-import cc.event.StandardValueEvent;
 import cc.event.TickEvent;
 import cc.event.ValueEvent;
 import cc.event2.EventGlobals;
@@ -78,7 +77,7 @@ public class ClientApp implements Disposable
 	private GameGui gameGui;
 	private MenuGui menuGui;
 
-	private j.util.eventhandler.EventHandler eventHandler;
+	private EventHandler eventHandler;
 
 	private ProgramState programState;
 
@@ -308,7 +307,7 @@ public class ClientApp implements Disposable
 	{
 		GameObject obj = gameEngine.getPlayerObject();
 
-		Util.verifyNotNull( event );
+		Asserts.notNull( event );
 		if ( obj == null ) {
 			return;
 		}
@@ -504,71 +503,6 @@ public class ClientApp implements Disposable
 	    serverApp.setGameRunning( newGameRunning );
 	    gameEngine.setGameRunning( newGameRunning );
     }
-
-
-	@SuppressWarnings( "unused" ) private cc.event.handlers.EventReceiver receiver = new cc.event.handlers.EventReceiver()
-	{
-		@Override public void receiveEvent( Event event ) {
-			event.dispatch( this );
-		}
-
-		@Override
-		public void receiveExitProgramEvent( StandardEvent event ) {
-			programState.finish();
-			isProgramRunning = false;
-			stateCode = ProgramStateCode.EXITING;
-		}
-
-		@Override
-		public void receivePauseEvent( StandardEvent event )
-		{
-			boolean newGameRunning = !serverApp.isGameRunning();
-			serverApp.setGameRunning( newGameRunning );
-			gameEngine.setGameRunning( newGameRunning );
-		}
-
-		// Maybe this shound become when a player quits the game, tells the other
-		// players but the game goes on.
-		@Override
-		public void receiveQuitEvent( QuitEvent event ) {
-			programState.finish(); // this state should be a game state
-			setState( MENU );
-		}
-		@Override public void receiveResetEvent( StandardEvent event ) {
-			receiveExitProgramEvent( event );
-			stateCode = ProgramStateCode.RESTARTING;
-		}
-		@Override public void receiveHostGameEvent( StandardEvent event ) {
-			hostMultiplayer();
-		}
-		@Override public void receiveJoinEvent( JoinEvent event ) {
-			handleJoinEvent( event );
-		}
-		@Override public void receiveRequestEvent( StandardValueEvent<Event> requestEvent ) {
-			handleRequestEvent( requestEvent );
-		}
-		@Override public void receiveTickEvent( TickEvent event ) {
-			programState.tickState( event.getDt() );
-		}
-
-		////////////////////////////////////////////////////////////////////////
-		// Events from the GUI
-		////////////////////////////////////////////////////////////////////////
-
-		@Override public void receiveCancelHostGameEvent( StandardEvent event ) {
-			logger.info( "Canceling hosting game" );
-			host.stopListening();
-		}
-		@Override public void receiveStartSingelplayerEvent( StandardEvent event ) {
-			startSinglePlayer();
-		}
-		@Override public void receiveJoinMultiplayerEvent( StandardValueEvent<String> event ) {
-			joinRemoteGame( event.getValue() );
-		}
-		public void receiveStartMultiplayerEvent( StandardEvent event ) {
-			startMultiplayer();
-		}
-	}; // End EventReceiver
 
 
 	private Sub[] recs = new Sub[] {

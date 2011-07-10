@@ -6,6 +6,7 @@ import j.util.eventhandler.Posting;
 import java.util.Arrays;
 import java.util.List;
 
+import org.fenggui.render.lwjgl.LWJGLBinding;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.Display;
 
@@ -18,12 +19,17 @@ import cc.event.game.ThrustEvent;
 import cc.event2.EventGroups;
 import cc.gui.game_display.GameDisplay;
 import cc.gui.input.GameInputHandler;
+import cc.gui.input.GuiInputHandler;
 
 public class GameGui
 {
 	private GameDisplay gameDisplay;
 
 	private GameInputHandler<Posting> inputHandler;
+	private GuiInputHandler guiInputHandler;
+
+
+	private org.fenggui.Display display;
 
 	private EventHandler eventHandler;
 
@@ -31,10 +37,12 @@ public class GameGui
 
 	public GameGui( AppContext context )
 	{
-		gameDisplay = new GameDisplay( context );
+		gameDisplay = new GameDisplay( context, display );
 		inputHandler = new GameInputHandler<Posting>();
-
+		guiInputHandler = new GuiInputHandler();
 		this.eventHandler = context.getEventHandler();
+		display = new org.fenggui.Display( new LWJGLBinding() );
+
 
 		//		this.eventHandler = context.getEventHandler();
 		// For gui elements added to the game view
@@ -56,6 +64,8 @@ public class GameGui
 		gameDisplay.update( localDT );
 
 		List<Posting> events = inputHandler.update();
+
+		guiInputHandler.update( display );
 
 		for ( Posting p : events ) {
 			eventHandler.post( p );

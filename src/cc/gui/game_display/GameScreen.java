@@ -8,12 +8,13 @@ import static org.lwjgl.opengl.GL11.glColor3f;
 import static org.lwjgl.opengl.GL11.glLoadIdentity;
 import static org.lwjgl.opengl.GL11.glTranslated;
 
+import j.util.util.Util;
+
 import java.util.Collection;
 
 import cc.gui.BackgroundImage;
 import cc.gui.Drawable;
 import cc.util.Texture;
-import cc.util.Util;
 import cc.util.math.Vec;
 import cc.util.resources.Name;
 import cc.util.resources.ResourceHandler;

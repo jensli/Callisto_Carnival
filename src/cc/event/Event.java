@@ -6,6 +6,7 @@ package cc.event;
 
 import j.util.eventhandler.GroupName;
 import j.util.lists.Maps;
+import j.util.util.Asserts;
 
 import java.util.HashMap;
 
@@ -15,7 +16,6 @@ import cc.event.game.KillEvent;
 import cc.event.game.RotateEvent;
 import cc.event.game.ThrustEvent;
 import cc.event.handlers.EventReceiver;
-import cc.util.Util;
 
 
 
@@ -78,11 +78,11 @@ public abstract class Event implements Cloneable
 
 		String[] param = eventData.split( " " );
 
-		Util.verifyArg( param.length != 0, "Illegal event string" );
+		Asserts.arg( param.length != 0, "Illegal event string" );
 
 		Event newEvent = eventMap.get( param[0] );
 
-		Util.verifyNotNull( newEvent, "Trying to deserialise unknown Event." );
+		Asserts.notNull( newEvent, "Trying to deserialise unknown Event." );
 
 		newEvent = newEvent.clone();
 

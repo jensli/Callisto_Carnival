@@ -1,8 +1,19 @@
 package cc.gui.models;
 
-import static cc.util.GraphicsUtil.*;
-import static java.lang.Math.*;
-import static org.lwjgl.opengl.GL11.*;
+import static cc.util.GraphicsUtil.applyTranslation;
+import static cc.util.GraphicsUtil.putVertex;
+import static java.lang.Math.PI;
+import static java.lang.Math.sin;
+import static org.lwjgl.opengl.GL11.GL_POLYGON;
+import static org.lwjgl.opengl.GL11.GL_TEXTURE_2D;
+import static org.lwjgl.opengl.GL11.GL_TEXTURE_BIT;
+import static org.lwjgl.opengl.GL11.glBegin;
+import static org.lwjgl.opengl.GL11.glDisable;
+import static org.lwjgl.opengl.GL11.glEnd;
+import static org.lwjgl.opengl.GL11.glPopAttrib;
+import static org.lwjgl.opengl.GL11.glPopMatrix;
+import static org.lwjgl.opengl.GL11.glPushAttrib;
+import static org.lwjgl.opengl.GL11.glPushMatrix;
 import cc.game.GameObject;
 import cc.util.Color;
 import cc.util.GraphicsUtil;
@@ -21,7 +32,8 @@ public class CometModel extends GraphicalModel
 	length = 300000,
 		tailAngle = 0.1 * PI;
 
-	private Quad shape;
+	private Quad shape,
+		temp = new Quad();
 
 	private GameObject mother;
 
@@ -63,14 +75,14 @@ public class CometModel extends GraphicalModel
 
 		Vec v = VecMath.sub( getObject().getPos(), mother.getPos() );
 
-		Quad q = new Quad( shape );
+		temp.set( shape );
 
 		final double dist = v.length();
-		q.p3.scale( length / dist );
-		q.p4.scale( length / dist );
+		temp.p3.scale( length / dist );
+		temp.p4.scale( length / dist );
 
 		v.normalize();
-		q.rotate( v );
+		temp.rotate( v );
 
 		glPushAttrib( GL_TEXTURE_BIT );
 
@@ -83,12 +95,12 @@ public class CometModel extends GraphicalModel
 		glBegin( GL_POLYGON );
 
 			GraphicsUtil.setColor( color );
-			putVertex( q.p1 );
-			putVertex( q.p2 );
+			putVertex( temp.p1 );
+			putVertex( temp.p2 );
 
 			GraphicsUtil.setColor( transColor );
-			putVertex( q.p3 );
-			putVertex( q.p4 );
+			putVertex( temp.p3 );
+			putVertex( temp.p4 );
 
 		glEnd();
 
