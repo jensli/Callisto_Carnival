@@ -1,11 +1,12 @@
 package cc.gui;
 
 import org.fenggui.Display;
-import org.fenggui.render.lwjgl.LWJGLBinding;
+import org.fenggui.binding.render.lwjgl.LWJGLBinding;
 
 
 public class GameMenu
 {
+	@SuppressWarnings( "unused" )
 	private Display display;
 
 

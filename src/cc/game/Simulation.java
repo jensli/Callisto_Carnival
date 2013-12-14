@@ -61,8 +61,6 @@ public class Simulation
 //	} );
 
 
-	private double totalRunTime = 0;
-
 	// Temp vector to save an allocation when calculating the gravity.
 	private static final Vec tempGrav = new Vec();
 
@@ -151,8 +149,6 @@ public class Simulation
 
 		toRemoveList.clear();
 		toCreateList.clear();
-
-		totalRunTime += dT;
 	}
 
 	// NOT USED!!! (Why?)

@@ -6,7 +6,7 @@ import j.util.eventhandler.Posting;
 import java.util.Arrays;
 import java.util.List;
 
-import org.fenggui.render.lwjgl.LWJGLBinding;
+import org.fenggui.binding.render.lwjgl.LWJGLBinding;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.Display;
 
@@ -26,6 +26,8 @@ public class GameGui
 	private GameDisplay gameDisplay;
 
 	private GameInputHandler<Posting> inputHandler;
+
+	@SuppressWarnings( "unused" )
 	private GuiInputHandler guiInputHandler;
 
 
@@ -65,11 +67,9 @@ public class GameGui
 
 		List<Posting> events = inputHandler.update();
 
-		guiInputHandler.update( display );
+//		guiInputHandler.update( display );
 
-		for ( Posting p : events ) {
-			eventHandler.post( p );
-		}
+		eventHandler.post( events );
 
 		// TODO:
 //		guiInputHandler.update(  null );

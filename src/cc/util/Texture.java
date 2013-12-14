@@ -3,7 +3,7 @@ package cc.util;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 
-import org.fenggui.render.ITexture;
+import org.fenggui.binding.render.ITexture;
 import org.fenggui.theme.xml.IXMLStreamableException;
 import org.fenggui.theme.xml.InputOutputStream;
 import org.lwjgl.opengl.GL11;

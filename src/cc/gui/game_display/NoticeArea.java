@@ -18,7 +18,7 @@ public class NoticeArea {
 	public void draw( Display display )
 	{
 		Graphics.get().enterOrthoProjection();
-		display.display();
+//		display.display();
 		Graphics.get().leaveOrthoProjection();
 	}
 

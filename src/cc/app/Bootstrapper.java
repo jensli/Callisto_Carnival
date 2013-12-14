@@ -1,5 +1,7 @@
 package cc.app;
 
+import j.util.util.Util;
+
 import java.util.LinkedList;
 import java.util.List;
 
@@ -9,7 +11,6 @@ import cc.app.StartArgs.CommandLineError;
 import cc.event2.EventGlobals;
 import cc.game.GameFactory;
 import cc.gui.Graphics;
-import cc.util.CcUtil;
 import cc.util.logger.LogLevel;
 import cc.util.logger.LogPlace;
 import cc.util.logger.LogType;
@@ -18,11 +19,11 @@ import cc.util.logger.Logger;
 
 public class Bootstrapper
 {
-	private RunMode runMode = RunMode.NORMAL;
+	private RunMode runMode = RunMode.DEBUG;
 
 	// For the fullscreen query popup dialog
 	public final DoFullscreen STANDARD_FULLSCREEN_OPT = DoFullscreen.NO;
-	private boolean queryFullscreen = false;
+	private boolean queryFullscreen = true;
 
 
 	private enum DoFullscreen {
@@ -65,18 +66,20 @@ public class Bootstrapper
 			return STANDARD_FULLSCREEN_OPT;
 		}
 
-		switch ( JOptionPane.showConfirmDialog( null,
+		int dialogResult = JOptionPane.showConfirmDialog( null,
 				"Do you want to run the game in fullscreen mode (recommended)?",
-				"Callisto Carnival", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE ) ) {
+				"Callisto Carnival", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE );
+
+		switch ( dialogResult ) {
 			case JOptionPane.NO_OPTION: return DoFullscreen.NO;
 			case JOptionPane.YES_OPTION: return DoFullscreen.YES;
 			default: return DoFullscreen.CANCEL;
 		}
-
 	}
 
 	public void resetGlobalState()
 	{
+		EventGlobals.init();
 		GameFactory.reset();
 	}
 
@@ -127,7 +130,7 @@ public class Bootstrapper
 			System.err.println( "The program as encountered an irrecoverable error and will exit.\n Details:" );
 			tbl.printStackTrace();
         } finally {
-        	CcUtil.dispose( app );
+        	Util.dispose( app );
 		}
 	}
 
@@ -146,7 +149,6 @@ public class Bootstrapper
 	public static void main(String[] args) throws Exception
 	{
 		Bootstrapper b = new Bootstrapper( args );
-
 		b.run();
 	}
 
@@ -188,7 +190,7 @@ class StartArgs
 
 		public CommandLineError( List<String> errors )
 		{
-			super( "Error parsing commandline args. Illegal args: " + errors );
+			super( "Error parsing command line args. Illegal args: " + errors );
 		}
 	}
 }

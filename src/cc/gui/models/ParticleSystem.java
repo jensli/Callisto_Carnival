@@ -1,6 +1,8 @@
 package cc.gui.models;
 
-import static org.lwjgl.opengl.GL11.*;
+import static org.lwjgl.opengl.GL11.GL_DEPTH_BUFFER_BIT;
+import static org.lwjgl.opengl.GL11.glPopAttrib;
+import static org.lwjgl.opengl.GL11.glPushAttrib;
 
 import org.lwjgl.opengl.GL11;
 
@@ -43,7 +45,7 @@ public class ParticleSystem extends GraphicalModel
 		sizeDec = 10,
 		alphaDec = 10;
 
-	private float timeBetweenParticles = 0.002f,
+	private float timeBetweenParticles = 0.0005f,
 		timeToParticle = 0.0f;
 
 
@@ -53,7 +55,7 @@ public class ParticleSystem extends GraphicalModel
 	 *
 	 * @param count The number of particles to be rendered
 	 */
-	public ParticleSystem( GameObject obj, Texture texture, int count)
+	public ParticleSystem( GameObject obj, Texture texture, int count )
 	{
 		super( obj );
 		this.texture = texture;

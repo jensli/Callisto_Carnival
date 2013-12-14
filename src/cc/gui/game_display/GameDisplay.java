@@ -32,6 +32,7 @@ public class GameDisplay // extends EventReceiver
 	private GameScreen gameScreen;
 	private Minimap minimap;
 	private Hud hud;
+	@SuppressWarnings( "unused" )
 	private NoticeArea noticeArea;
 	private FadeOverlay fadeOverlay;
 
@@ -65,6 +66,7 @@ public class GameDisplay // extends EventReceiver
 
 	public void update( double dT )
 	{
+		// Commented out to be able to se both windows when trying network
 //		if ( !Display.isActive() ) {
 //			return;
 //		}
@@ -74,7 +76,7 @@ public class GameDisplay // extends EventReceiver
 		gameScreen.draw( dT, focusPoint, objectList );
 		minimap.draw( focusPoint, objectList );
 		hud.draw( focusPlayer );
-		noticeArea.draw( null );
+//		noticeArea.draw( null );
 
 		fadeOverlay.update( dT );
 		fadeOverlay.draw();

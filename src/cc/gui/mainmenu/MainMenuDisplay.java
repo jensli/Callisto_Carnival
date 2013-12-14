@@ -15,9 +15,9 @@ import j.util.util.Pair;
 import org.fenggui.Container;
 import org.fenggui.Display;
 import org.fenggui.IWidget;
-import org.fenggui.composites.TextArea;
-import org.fenggui.composites.Window;
-import org.fenggui.render.lwjgl.LWJGLBinding;
+import org.fenggui.binding.render.lwjgl.LWJGLBinding;
+import org.fenggui.composite.TextArea;
+import org.fenggui.composite.Window;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.glu.GLU;
 
@@ -62,7 +62,7 @@ public class MainMenuDisplay
 			ValueEvent.class,
 			new Receiver<ValueEvent<String>>() {
 				public void receive( ValueEvent<String> event ) {
-					playerList.addTextLine( event.getValue() );
+					playerList.getTextEditor().addContentAtEnd( event.getValue() );
 				}
 			});
 

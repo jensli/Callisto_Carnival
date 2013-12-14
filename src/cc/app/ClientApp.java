@@ -25,6 +25,7 @@ import j.util.eventhandler.NoArgReceiver;
 import j.util.eventhandler.Receiver;
 import j.util.eventhandler.Sub;
 import j.util.util.Asserts;
+import j.util.util.Disposable;
 
 import java.io.IOException;
 import java.net.InetAddress;
@@ -46,7 +47,6 @@ import cc.game.GameObject;
 import cc.gui.GameGui;
 import cc.gui.Graphics;
 import cc.gui.mainmenu.MenuGui;
-import cc.util.Disposable;
 import cc.util.Random;
 import cc.util.Timer;
 import cc.util.logger.LogLevel;
@@ -510,6 +510,7 @@ public class ClientApp implements Disposable
 			new Sub( EventGroups.QUIT, QuitEvent.class,
 					new Receiver<QuitEvent>() {
 						public void receive( QuitEvent event ) {
+						    logger.info("Receive  quit");
 							programState.finish(); // this state should be a game state
 							setState( MENU );
 						}
@@ -526,6 +527,7 @@ public class ClientApp implements Disposable
 			new Sub( EventGroups.EXIT,
 					new NoArgReceiver() {
 						public void receive() {
+						    logger.info("Exit event");
 							handleExitEvent();
 						}
 					} ),

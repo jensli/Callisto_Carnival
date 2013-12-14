@@ -1,5 +1,6 @@
 package cc.gui.game_display;
 
+import static cc.util.GraphicsUtil.putVertex;
 import static java.lang.Math.abs;
 import static org.lwjgl.opengl.GL11.GL_POINTS;
 import static org.lwjgl.opengl.GL11.GL_POINT_SMOOTH;
@@ -23,7 +24,6 @@ import cc.game.Player;
 import cc.game.objects.Ship;
 import cc.gui.Graphics;
 import cc.gui.models.GraphicalModel;
-import cc.util.GraphicsUtil;
 import cc.util.Texture;
 import cc.util.math.Vec;
 import cc.util.resources.Name;
@@ -73,7 +73,6 @@ public class Minimap
 
 		GL11.glTranslatef( (float)pos.x, (float)pos.y, 0 );
 
-
 		// Draw radar background
 		glBegin( GL_QUADS );
 			glTexCoord2f( 0, 0 );
@@ -89,28 +88,22 @@ public class Minimap
 		glDisable( GL_TEXTURE_2D );
 		glEnable( GL_POINT_SMOOTH );
 
-
 		Vec v = new Vec();
 
 		// Draw dots on radar
 		for ( GameObject obj : objectList ) {
 
 			GraphicalModel model = obj.getGraphicalModel();
-			float x = (float) (model.getPosition().x - focusPoint.x),
-			y = (float) (model.getPosition().y - focusPoint.y);
 
 			v.setSub( obj.getPos(), focusPoint );
 
 			// Continue if object is to far away to been seen on the minimap
-			if ( abs(v.x) > VIEW_DIST || abs(v.y) > VIEW_DIST ||
+			if ( abs( v.x ) > VIEW_DIST || abs( v.y ) > VIEW_DIST ||
 					obj.getPos().distance( focusPoint ) > VIEW_DIST) {
 				continue;
 			}
 
 			v.scale( MINIFY_FACTOR );
-
-			x *= MINIFY_FACTOR;
-			y *= MINIFY_FACTOR;
 
 			double radius = model.getRadius();
 
@@ -132,8 +125,7 @@ public class Minimap
 
 			// Draw the dot
 			glBegin( GL_POINTS );
-				GraphicsUtil.putVertex( v );
-//				GL11.glVertex2f( x, y );
+				putVertex( v );
 			glEnd();
 
 			glColor3f( 1.0f, 1.0f, 1.0f );
@@ -141,25 +133,6 @@ public class Minimap
 
 		Graphics.get().leaveOrthoProjection();
 	}
-
-//	private void drawMini( SpaceObject obj )
-//	{
-//
-//	}
-
-
-//	@Override
-//    public void receiveEvent( Event event )
-//    {
-//		event.route( this );
-//    }
-//
-//	@Override
-//    public void receiveGuiEvent( GuiEvent event )
-//    {
-//		focusPlayer = event.getFocusPlayer();
-//		objectList = event.getObjectList();
-//    }
 
 
 	public void setHeight( double height )

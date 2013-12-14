@@ -7,11 +7,15 @@ import j.util.util.Pair;
 import org.fenggui.Container;
 import org.fenggui.Label;
 import org.fenggui.TextEditor;
-import org.fenggui.composites.TextArea;
-import org.fenggui.composites.Window;
+import org.fenggui.appearance.TextAppearance;
+import org.fenggui.binding.render.Font;
+import org.fenggui.binding.render.text.ITextRenderer;
+import org.fenggui.composite.TextArea;
+import org.fenggui.composite.Window;
 import org.fenggui.event.ButtonPressedEvent;
 import org.fenggui.event.IButtonPressedListener;
 import org.fenggui.layout.RowLayout;
+import org.fenggui.text.content.factory.simple.TextStyle;
 import org.fenggui.util.Dimension;
 import org.fenggui.util.Point;
 
@@ -73,7 +77,8 @@ public class MainMenuBuilder
 		Container lowerContainer = new Container( new RowLayout( true ) );
 
 		TextArea playerList = new TextArea();
-		playerList.getTextEditor().getAppearance().setFont( factory.getFont1() );
+		setFont( playerList.getTextEditor().getAppearance(), factory.getFont1() );
+//		playerList.getTextEditor().getAppearance().setFont( factory.getFont1() );
 		playerList.getTextEditor().setEnabled( false );
 		playerList.setMinSize( 50, 100 );
 
@@ -87,6 +92,17 @@ public class MainMenuBuilder
 		window.pack();
 
 		return Pair.make( window, playerList );
+	}
+
+
+	public static void setFont( TextAppearance appearance, Font font ) {
+	    TextStyle def = new TextStyle();
+//	    def.getTextStyleEntry(TextStyle.DEFAULTSTYLEKEY).setColor(color);
+	    appearance.addStyle(TextStyle.DEFAULTSTYLEKEY, def);
+	    ITextRenderer renderer = appearance.getRenderer(ITextRenderer.DEFAULTTEXTRENDERERKEY).copy();
+	    renderer.setFont(font);
+	    appearance.addRenderer(ITextRenderer.DEFAULTTEXTRENDERERKEY, renderer);
+
 	}
 
 	public Window makeInstructionsDialog( final MainMenuDisplay mainMenu )
@@ -111,12 +127,14 @@ public class MainMenuBuilder
 		};
 
 		TextArea textArea = new TextArea();
-		textArea.getTextEditor().getAppearance().setFont( factory.getFont1() );
+		setFont( textArea.getTextEditor().getAppearance(), factory.getFont1() );
+//		textArea.getTextEditor().getAppearance().setFont( factory.getFont1() );
 		textArea.getTextEditor().setEnabled( false );
 		textArea.setMinSize( 800, 300 );
 
 		for ( String line : text ) {
-			textArea.addTextLine( line );
+			textArea.getTextEditor().addContentAtEnd( line );
+//			textArea.addTextLine( line );
 		}
 
 		mainContainer.addWidget( textArea );
@@ -159,11 +177,12 @@ public class MainMenuBuilder
 
 		Label label = factory.makeLabel( "Enter the IP address of the host: " );
 
-		final TextEditor addressBox = new TextEditor( false );
-		addressBox.getAppearance().setFont( factory.getFont1() );
+		final TextEditor addressBox = new TextEditor();
+		setFont( addressBox.getAppearance(), factory.getFont1() );
+//		addressBox.getAppearance().setFont( factory.getFont1() );
 		addressBox.setMinSize( 50, 30 );
 		addressBox.setText( "127.0.0.1" );
-		addressBox.setSelectOnFocus( true );
+//		addressBox.setSelectOnFocus( true );
 
 		Container buttonContainer = new Container( new RowLayout( true ) );
 

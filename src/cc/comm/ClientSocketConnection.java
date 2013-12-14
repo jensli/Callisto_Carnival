@@ -21,7 +21,7 @@ import cc.util.logger.Logger;
  * Used if you're on a LAN connection and the
  * Host is on another computer.
  *
- * @author Bj�rn
+ * @author Bjorn
  *
  */
 
@@ -47,7 +47,7 @@ public class ClientSocketConnection implements Connection
 
 	public ClientSocketConnection( InetAddress addr ) throws UnknownHostException, IOException
 	{
-		Socket socket = new Socket( addr, ConnectionServer.LISTEN_PORT );
+		socket = new Socket( addr, ConnectionServer.LISTEN_PORT );
 		socket.setTcpNoDelay( true );
 
 		inputThread = new InputThread( new BufferedReader( new InputStreamReader( socket.getInputStream() ) ) );

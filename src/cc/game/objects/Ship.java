@@ -55,7 +55,7 @@ public class Ship extends GameObject
 		ts.getColor().a = 0;
 		group.add( ts );
 
-		ParticleSystem ps = new ParticleSystem( this, flameTexture, 250 );
+		ParticleSystem ps = new ParticleSystem( this, flameTexture, 500 );
 		ps.setController( controlledBehavior );
 		group.add( ps );
 

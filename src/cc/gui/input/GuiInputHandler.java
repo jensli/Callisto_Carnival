@@ -1,7 +1,8 @@
 package cc.gui.input;
 
 import org.fenggui.Display;
-import org.fenggui.render.lwjgl.EventHelper;
+import org.fenggui.binding.render.lwjgl.EventHelper;
+import org.fenggui.event.mouse.MouseButton;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 
@@ -41,15 +42,16 @@ public class GuiInputHandler
 		int x = Mouse.getX();
 		int y = Mouse.getY();
 
+		@SuppressWarnings( "unused" )
 		boolean hitGUI = false;
 		// @todo the click count is not considered in LWJGL! #
 
 		if ( lastButtonDown != -1 && Mouse.isButtonDown( lastButtonDown ) ) {
-			hitGUI |= desk.fireMouseDraggedEvent( x, y, EventHelper.getMouseButton( lastButtonDown ) );
+			hitGUI |= desk.fireMouseDraggedEvent( x, y, EventHelper.getMouseButton( lastButtonDown ), 1 );
 		} else {
 
 			if ( Mouse.getDX() != 0 || Mouse.getDY() != 0 ) {
-				hitGUI |= desk.fireMouseMovedEvent( x, y );
+				hitGUI |= desk. fireMouseMovedEvent( x, y, MouseButton.LEFT, 1 );
 			}
 			if ( lastButtonDown != -1 ) {
 				hitGUI |= desk.fireMouseReleasedEvent( x, y, EventHelper.getMouseButton( lastButtonDown ), 1 );

@@ -6,7 +6,7 @@ import java.awt.FontFormatException;
 import java.io.IOException;
 import java.io.InputStream;
 
-import org.fenggui.render.Font;
+import org.fenggui.binding.render.Font;
 import org.fenggui.util.fonttoolkit.FontFactory;
 
 

@@ -4,13 +4,6 @@ package cc.util;
 
 public class CcUtil
 {
-	public static void dispose( Disposable d )
-	{
-		if ( d != null ) {
-			d.dispose();
-		}
-	}
-
 	private static final String IP_REGEX = "^\\s*(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\s*$";
 
 	public static boolean isIpAddress( String s ) {
